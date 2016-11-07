@@ -5,6 +5,7 @@ Version: 0.1
 Date: 2016-11-07
 Author: byapparov@gmail.com
 Maintainer: Bulat Yapparov <byapparov@gmail.com>
+Depends: bigrquery, aws.s3, RPostgreSQL
 Description: Wrappers for connections with ERP, S3, BigQuery and other common MADE data sources.
 License: GPL-2
 LazyData: TRUE
