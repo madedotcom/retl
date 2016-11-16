@@ -1,5 +1,9 @@
 library(bigrquery)
 
+# Required environment variables to use BigQuery helper functions:
+# BIGQUERY_PROJECT - name of the project in BigQuery.
+# BIGQUERY_DATASET - name of the default dataset in BigQuery.
+
 createPartitionTable <- function(table, sql = NULL, file = NULL, existing.dates = NULL, missing.dates = NULL) {
   # Creates partition in specified table in BigQuery.
   #
@@ -132,4 +136,30 @@ getLastID <- function(table, field) {
   }
   return(res)
 }
+
+bqTableExists <- function(table.name) {
+  res <- exists_table(Sys.getenv("BIGQUERY_PROJECT"),
+                      dataset = Sys.getenv("BIGQUERY_DATASET"),
+                      table = table.name)
+  return(res)
+}
+
+bqDeleteTable <- function(table.name) {
+  res <- delete_table(project = Sys.getenv("BIGQUERY_PROJECT"),
+                      dataset = Sys.getenv("BIGQUERY_DATASET"),
+                      table = table.name)
+  return(res)
+}
+
+bqCreateTable <- function(sql, table.name) {
+  # Creates table from the given SQL.
+  res <- query_exec(query = sql,
+                    project = Sys.getenv("BIGQUERY_PROJECT"),
+                    default_dataset = Sys.getenv("BIGQUERY_DATASET"),
+                    destination_table = paste0(Sys.getenv("BIGQUERY_DATASET"), ".", table.name),
+                    max_pages = 1,
+                    page_size = 1)
+  return(res)
+}
+
 

@@ -18,7 +18,6 @@ s3PutFile <- function (df, file.name=df, path="",
 s3CopyFile <- function(source.path, target.name) {
   if(missing(target.name)) {
     target.name <- basename(source.path)
-    print(target.name)
   }
   bucket <- Sys.getenv("AWS_S3_BUCKET")
   root = Sys.getenv("AWS_S3_ROOT")
