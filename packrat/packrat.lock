@@ -10,8 +10,8 @@ Hash: be2967bcff307e561d9ba17faf03205c
 
 Package: DBI
 Source: CRAN
-Version: 0.4-1
-Hash: 6524d5c5d30ff74084ac028eeb19eb1b
+Version: 0.5-1
+Hash: 375869004db963f9915f2b8a49b4a718
 
 Package: R6
 Source: CRAN
@@ -21,6 +21,7 @@ Hash: 712773a3439bd32db5c40938e1a9aac2
 Package: RPostgreSQL
 Source: CRAN
 Version: 0.4-1
+Hash: 42460e37a21dc9e3f1f47c7d8d210592
 Requires: DBI
 
 Package: Rcpp
