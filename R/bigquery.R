@@ -165,13 +165,11 @@ bqCreateTable <- function(sql, table.name) {
 getExistingPartitionDates <- function(table) {
   # Gets vector of existing partition dates for a given table.
 
-  if(!exists_table(project = Sys.getenv("BIGQUERY_PROJECT"),
-                   dataset = Sys.getenv("BIGQUERY_CRM_DATASET"),
-                   table = table)) {
+  if(!bqTableExists(table)) {
     return(NULL)
   }
 
-  dataset <- Sys.getenv("BIGQUERY_CRM_DATASET")
+  dataset <- Sys.getenv("BIGQUERY_DATASET")
 
   sql <- paste0("SELECT partition_id from [", dataset , ".", table, "$__PARTITIONS_SUMMARY__];")
   res <- query_exec(query = sql,
