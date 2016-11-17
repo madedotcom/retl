@@ -4,6 +4,29 @@ library(bigrquery)
 # BIGQUERY_PROJECT - name of the project in BigQuery.
 # BIGQUERY_DATASET - name of the default dataset in BigQuery.
 
+getExistingPartitionDates <- function(table) {
+  project <- Sys.getenv("BIGQUERY_PROJECT")
+  dataset <- Sys.getenv("BIGQUERY_DATASET")
+
+  if(!exists_table(project = project,
+                   dataset = dataset,
+                   table = table)) {
+    return(NULL)
+  }
+
+
+  sql <- paste0("SELECT partition_id from [", dataset , ".", table, "$__PARTITIONS_SUMMARY__];")
+  res <- query_exec(query = sql,
+                    project = project)
+  if(nrow(res) > 0) {
+    return(res$partition_id)
+  }
+  else {
+    return(NULL)
+  }
+
+}
+
 createPartitionTable <- function(table, sql = NULL, file = NULL, existing.dates = NULL, missing.dates = NULL) {
   # Creates partition in specified table in BigQuery.
   #
