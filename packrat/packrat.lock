@@ -76,13 +76,6 @@ Source: CRAN
 Version: 2.2
 Hash: 4533829fb0026bd0dea77ba8f1612d37
 
-Package: devtools
-Source: CRAN
-Version: 1.12.0
-Hash: bbad95109ae75cbb14099281cda43af2
-Requires: digest, git2r, httr, jsonlite, memoise, rstudioapi, whisker,
-    withr
-
 Package: digest
 Source: CRAN
 Version: 0.6.10
