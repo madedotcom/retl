@@ -185,23 +185,36 @@ bqCreateTable <- function(sql, table.name) {
   return(res)
 }
 
-getExistingPartitionDates <- function(table) {
-  # Gets vector of existing partition dates for a given table.
 
-  if(!bqTableExists(table)) {
-    return(NULL)
-  }
+bqGetData <- function(sql = NULL, file = NULL, ...) {
+  # Wrapper function to load data from BigQuery.
 
-  dataset <- Sys.getenv("BIGQUERY_DATASET")
-
-  sql <- paste0("SELECT partition_id from [", dataset , ".", table, "$__PARTITIONS_SUMMARY__];")
-  res <- query_exec(query = sql,
-                    project = Sys.getenv("BIGQUERY_PROJECT"))
-  if(nrow(res) > 0) {
-    return(res$partition_id)
+  if(!missing(file)) { # Gets sql from file.
+    return(bqExecuteFile(file, ...))
   }
   else {
-    return(NULL)
+    return(dbExecuteQuery(sql, ...))
+  }
+}
+
+bqExecuteFile <- function(file, ...) {
+  # Function to load data from BigQuery using file with SQL.
+
+  sql <-  paste(readLines(file), collapse="\n")
+  res <- bqExecuteSql(sql, ...)
+  return(res)
+}
+
+bqExecuteSql <- function(sql, ...) {
+  if(length(list(...)) > 0) { # template requires parameters.
+    sql <- sprintf(sql, ...)
+  } else { # template does not have parameteres.
+    sql <- sql
   }
 
+  res <- query_exec(sql,
+                    project = Sys.getenv("BIGQUERY_PROJECT"),
+                    default_dataset = Sys.getenv("BIGQUERY_DATASET"),
+                    max_pages = Inf)
+  return(res)
 }
