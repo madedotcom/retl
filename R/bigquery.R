@@ -128,10 +128,9 @@ createRangeTable <- function(table, sql = NULL, file = NULL) {
 
 library(stringr)
 
-getExistingDates <- function(dataset, table.prefix) {
+getExistingDates <- function(bq.dataset, table.prefix, bq.project = Sys.getenv("BIGQUERY_PROJECT")) {
   # Gets list of dates for which date range table exists.
-  project <- Sys.getenv("BIGQUERY_PROJECT")
-  tables <- list_tables(project, dataset, 10000)
+  tables <- list_tables(bq.project, bq.dataset, 10000)
   matches <- tables[grepl(table.prefix, tables)]
   res <- str_extract(matches,"\\d{8}")
   return(res)
@@ -148,11 +147,11 @@ getMissingDates <- function(start.date, end.date, existing.dates) {
 }
 
 
-getLastID <- function(table, field) {
-  dataset <- Sys.getenv("BIGQUERY_DATASET")
-  sql.tempalte <- "SELECT MAX(%1$s) as ID FROM %2$s.%3$s"
-  sql <- sprintf(sql.tempalte, field, dataset, table)
-  res <- query_exec(sql, project = Sys.getenv("BIGQUERY_PROJECT"))
+getLastID <- function(bq.table, field, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
+                                       bq.dataset =  Sys.getenv("BIGQUERY_DATASET")) {
+  sql.tempalte <- "SELECT MAX(%1$s) as ID FROM [%2$s.%3$s]"
+  sql <- sprintf(sql.tempalte, field, bq.dataset, bq.table)
+  res <- query_exec(sql, project = bq.project)
   res <- head(res$ID, 1)
   if(is.na(res)) {
     res <- 0
@@ -167,19 +166,18 @@ bqTableExists <- function(table.name) {
   return(res)
 }
 
-bqDeleteTable <- function(table.name) {
-  res <- delete_table(project = Sys.getenv("BIGQUERY_PROJECT"),
-                      dataset = Sys.getenv("BIGQUERY_DATASET"),
-                      table = table.name)
+bqDeleteTable <- function(bq.table, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
+                                      bq.dataset = Sys.getenv("BIGQUERY_DATASET")) {
+  res <- delete_table(project = bq.project, dataset = bq.dataset, table = bq.table)
   return(res)
 }
 
-bqCreateTable <- function(sql, table.name) {
+bqCreateTable <- function(sql, bq.table, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
+                          bq.dataset = Sys.getenv("BIGQUERY_DATASET")) {
   # Creates table from the given SQL.
   res <- query_exec(query = sql,
-                    project = Sys.getenv("BIGQUERY_PROJECT"),
-                    default_dataset = Sys.getenv("BIGQUERY_DATASET"),
-                    destination_table = paste0(Sys.getenv("BIGQUERY_DATASET"), ".", table.name),
+                    project = bq.project, default_dataset = bq.dataset,
+                    destination_table = paste0(bq.dataset, ".", bq.table),
                     max_pages = 1,
                     page_size = 1)
   return(res)
@@ -217,4 +215,75 @@ bqExecuteSql <- function(sql, ...) {
                     default_dataset = Sys.getenv("BIGQUERY_DATASET"),
                     max_pages = Inf)
   return(res)
+}
+
+
+gaGetShop <- function(ga.properties, property) {
+  # Gets the shop code from the GA properties vector.
+  #
+  # Parameters:
+  #   ga.properties - named vector of Google Analytics properties.
+  #                   Names are ISO2 codes of the country.
+  #   property - is a property in Google Analytics.
+
+  shops <- names(ga.properties)
+  names(shops) <- ga.properties
+  return(shops[as.character(property)])
+}
+
+
+bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL, existing.dates = NULL, missing.dates = NULL) {
+  # Creates partition in specified table in BigQuery.
+  #
+  # Parameters:
+  #   table - name of the new table
+  #   sql - source for the table as string.
+  #   file - source for the tabel as file.
+  # Note: sql or file must be provided.
+
+  if(missing(sql)) {
+    # Build SQL from code in the file.
+    sql <- paste(readLines(file), collapse="\n")
+  }
+
+  # StartDate - start of Custom Dimension for UserID
+  start.date <- as.Date(Sys.getenv("BIGQUERY_START_DATE"))
+  #EndDate
+  if (Sys.getenv("BIGQUERY_END_DATE") == ""){
+    end.date <- Sys.Date() - 1
+  } else {
+    end.date <- as.Date(Sys.getenv("BIGQUERY_END_DATE"))
+  }
+
+  if(missing(existing.dates)) {
+    existing.dates <- getExistingPartitionDates(table)
+  }
+
+  if(missing(missing.dates)) {
+    missing.dates <- getMissingDates(start.date, end.date, existing.dates)
+  }
+
+  res <-
+    lapply(missing.dates, function(d) { # Create partition for every missing date.
+      destination.partition <- paste0(table, "$", d)
+      print(paste0("Partition name: ", destination.partition))
+
+      delete_table(project = Sys.getenv("BIGQUERY_PROJECT"),
+                   dataset = Sys.getenv("BIGQUERY_DATASET"),
+                   table = destination.partition)
+
+      lapply(ga.properties, function(p) {
+        sql.exec <- sprintf(sql, p, d, gaGetShop(ga.properties, p)) # Replace placeholder in sql template.
+        query_exec(query = sql.exec,
+                   project = Sys.getenv("BIGQUERY_PROJECT"),
+                   default_dataset = Sys.getenv("BIGQUERY_DATASET"),
+                   destination_table =paste0(Sys.getenv("BIGQUERY_DATASET"), ".", destination.partition),
+                   max_pages = 1,
+                   page_size = 1,
+                   create_disposition = "CREATE_IF_NEEDED",
+                   write_disposition = "WRITE_APPEND")
+      })
+    })
+
+  return (res)
 }
