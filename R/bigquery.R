@@ -173,7 +173,8 @@ bqDeleteTable <- function(bq.table, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
 }
 
 bqCreateTable <- function(sql, bq.table, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
-                          bq.dataset = Sys.getenv("BIGQUERY_DATASET")) {
+                          bq.dataset = Sys.getenv("BIGQUERY_DATASET"),
+                          write_disposition = "WRITE_APPEND" ) {
   # Creates table from the given SQL.
   res <- query_exec(query = sql,
                     project = bq.project, default_dataset = bq.dataset,
@@ -181,7 +182,7 @@ bqCreateTable <- function(sql, bq.table, bq.project = Sys.getenv("BIGQUERY_PROJE
                     max_pages = 1,
                     page_size = 1,
                     create_disposition = "CREATE_IF_NEEDED",
-                    write_disposition = "WRITE_APPEND")
+                    write_disposition = write_disposition)
   return(res)
 }
 
