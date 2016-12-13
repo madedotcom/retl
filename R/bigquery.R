@@ -179,7 +179,9 @@ bqCreateTable <- function(sql, bq.table, bq.project = Sys.getenv("BIGQUERY_PROJE
                     project = bq.project, default_dataset = bq.dataset,
                     destination_table = paste0(bq.dataset, ".", bq.table),
                     max_pages = 1,
-                    page_size = 1)
+                    page_size = 1,
+                    create_disposition = "CREATE_IF_NEEDED",
+                    write_disposition = "WRITE_APPEND")
   return(res)
 }
 
