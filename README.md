@@ -23,7 +23,8 @@ __increment_value__ | STRING | maximum value in of the incrment key in the proce
 __records__ |INTEGER | Number of records processed by the etl job.
 __datetime__ | TIMESTAMP | Time when job was executed.
 
-### model_performance ### 
+### model_performance ###
+
 Field Name | Type | Description
 -----------|------|------------
 __date__ | date | Cross-validation execution date.
