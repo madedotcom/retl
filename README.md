@@ -32,4 +32,4 @@ __model__ | STRING | This is usually the name of a business metric, e.g. `Revenu
 __metric__ | STRING | This is a statistical metric of the model, e.g. `MAE`.
 __group__ | STRING | Name of the group within the population. If data is not split use `All`.
 __size__ | INTEGER | Size of the group on which cross-validation was performed.
-__value__ | STRING | Numeric value of the metric.
+__value__ | FLOAT | Numeric value of the metric.
