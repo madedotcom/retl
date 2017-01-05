@@ -34,3 +34,4 @@ __metric__ | STRING | This is a statistical metric of the model, e.g. `MAE`.
 __group__ | STRING | Name of the group within the population. If data is not split use `All`.
 __size__ | INTEGER | Size of the group on which cross-validation was performed.
 __value__ | FLOAT | Numeric value of the metric.
+__dataset__ | STRING | Name of the dataset source if available as table in BigQuery.
