@@ -218,3 +218,19 @@ bqExecuteSql <- function(sql, ...) {
                     max_pages = Inf)
   return(res)
 }
+
+bqInsertData <- function(table, data, append = TRUE) {
+  # Function inserts data.frame into BigQuery table.
+
+  write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
+
+  job <- insert_upload_job(project = Sys.getenv("BIGQUERY_PROJECT"),
+                           dataset = Sys.getenv("BIGQUERY_DATASET"),
+                           table,
+                           data,
+                           write_disposition = write.disposition,
+                           create_disposition = "CREATE_IF_NEEDED")
+
+  res <- wait_for(job)
+  return(res)
+}
