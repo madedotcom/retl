@@ -220,7 +220,6 @@ bqExecuteSql <- function(sql, ...) {
   return(res)
 }
 
-
 gaGetShop <- function(ga.properties, property) {
   # Gets the shop code from the GA properties vector.
   #
@@ -289,4 +288,20 @@ bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL
     })
 
   return (res)
+}
+
+bqInsertData <- function(table, data, append = TRUE) {
+  # Function inserts data.frame into BigQuery table.
+
+  write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
+
+  job <- insert_upload_job(project = Sys.getenv("BIGQUERY_PROJECT"),
+                           dataset = Sys.getenv("BIGQUERY_DATASET"),
+                           table,
+                           data,
+                           write_disposition = write.disposition,
+                           create_disposition = "CREATE_IF_NEEDED")
+
+  res <- wait_for(job)
+  return(res)
 }
