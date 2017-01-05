@@ -27,7 +27,7 @@ __datetime__ | TIMESTAMP | Time when job was executed.
 Field Name | Type | Description
 -----------|------|------------
 __date__ | date | Cross-validation execution date.
-__project__ | 
+__project__ | STRING | Name of the project.
 __model__ | STRING | This is usually the name of a business metric, e.g. `Revenue Forecast`
 __metric__ | STRING | This is a statistical metric of the model, e.g. `MAE`.
 __group__ | STRING | Name of the group within the population. If data is not split use `All`.
