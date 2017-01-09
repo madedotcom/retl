@@ -305,3 +305,22 @@ bqInsertData <- function(table, data, append = TRUE) {
   res <- wait_for(job)
   return(res)
 }
+
+bqGetColumnNames <- function(table) {
+  # Function which returns the columns of a table
+
+
+  info <- get_table(project = Sys.getenv("BIGQUERY_PROJECT"),
+                    dataset = Sys.getenv("BIGQUERY_DATASET"),
+                    table)
+
+  # Unlist all the schema data and keep only the name fields
+  # remove the naming and then return the vector with only
+  # the names
+  fields <- unlist(info$schema$fields)
+  fields <- fields[names(fields)=="name"]
+  names(fields) <- NULL
+
+  return(fields)
+}
+
