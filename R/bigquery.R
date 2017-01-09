@@ -318,7 +318,7 @@ bqGetColumnNames <- function(table) {
   # remove the naming and then return the vector with only
   # the names
   fields <- unlist(info$schema$fields)
-  fields <- fields[names(fields)=="name"]
+  fields <- fields[names(fields) == "name"]
   names(fields) <- NULL
 
   return(fields)
