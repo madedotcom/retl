@@ -324,3 +324,23 @@ bqGetColumnNames <- function(table) {
   return(fields)
 }
 
+bqCopyTable <- function(from, to) {
+  # Function to copy a table in BigQuery
+  # returns TRUE if the table has been succesfully copied
+  src <- list(project_id = Sys.getenv("BIGQUERY_PROJECT"),
+              dataset_id = Sys.getenv("BIGQUERY_DATASET"),
+              table_id = from)
+  dest <- list(project_id = Sys.getenv("BIGQUERY_PROJECT"),
+               dataset_id = Sys.getenv("BIGQUERY_DATASET"),
+               table_id = to)
+
+
+  job <- copy_table( src = src,
+                     dest = dest,
+                     write_disposition = "WRITE_TRUNCATE",
+                     project = Sys.getenv("BIGQUERY_PROJECT"))
+
+  wait_for(job)
+
+  return (bqTableExists(to))
+}
