@@ -194,7 +194,7 @@ bqGetData <- function(sql = NULL, file = NULL, ...) {
     return(bqExecuteFile(file, ...))
   }
   else {
-    return(dbExecuteQuery(sql, ...))
+    return(bqExecuteSql(sql, ...))
   }
 }
 
