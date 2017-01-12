@@ -2,8 +2,8 @@
 
 logModelPerformance <- function(data) {
 
-  data <- data[, c("date", "project", "model", "metric", "group", "size", "value", "dataset")]
-  data <- cbind(Sys.Date(), data)
+  data <- data[, c("project", "model", "metric", "group", "size", "value", "dataset")]
+  data <- cbind(date = Sys.Date(), data)
 
   job <- insert_upload_job(project = Sys.getenv("BIGQUERY_PROJECT"),
                              dataset = Sys.getenv("BIGQUERY_METADATA_DATASET"),
