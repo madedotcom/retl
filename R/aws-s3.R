@@ -1,7 +1,3 @@
-library(devtools)
-library(aws.s3)
-
-
 s3PutFile <- function (df, file.name=df, path="",
                        bucket = Sys.getenv("AWS_S3_BUCKET"),
                        root = Sys.getenv("AWS_S3_ROOT")) {

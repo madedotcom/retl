@@ -1,5 +1,3 @@
-library(bigrquery)
-
 # Required environment variables to use BigQuery helper functions:
 # BIGQUERY_PROJECT - name of the project in BigQuery.
 # BIGQUERY_DATASET - name of the default dataset in BigQuery.
