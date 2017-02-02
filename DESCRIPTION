@@ -7,12 +7,12 @@ Author: byapparov@gmail.com
 Maintainer: Bulat Yapparov <byapparov@gmail.com>
 Depends:
     bigrquery,
-    aws.s3,
     RPostgreSQL
 Description: Wrappers for connections with ERP, S3, BigQuery and other common
     MADE data sources.
 License: GPL-2
 LazyData: TRUE
 Suggests:
-    testthat
+    testthat,
+    aws.s3
 RoxygenNote: 5.0.1
