@@ -1,3 +1,4 @@
+library(bigrquery)
 # Required environment variables to use BigQuery helper functions:
 # BIGQUERY_PROJECT - name of the project in BigQuery.
 # BIGQUERY_DATASET - name of the default dataset in BigQuery.
@@ -33,8 +34,10 @@ getExistingPartitionDates <- function(table) {
 #' Creates partition in specified table in BigQuery.
 #
 #' @param table name of the new table
-#' @param sql source for the table as string.
-#' @param file source for the tabel as file.
+#' @param sql source for the table as string
+#' @param file source for the tabel as file
+#' @param existing.dates Vector of dates that already exist in the target table. If provided, masked tables for these dates will be exlcuded
+#' @param missing.dates Vector of dates that should be created. If provided data for those dates will be added or re-created.
 #' @note sql or file must be provided.
 createPartitionTable <- function(table, sql = NULL, file = NULL, existing.dates = NULL, missing.dates = NULL) {
 
@@ -132,6 +135,7 @@ library(stringr)
 #'
 #' @param bq.dataset name of a dataset
 #' @param table.prefix name of the table before the wildcard
+#' @param bq.project name of the project
 #' @return string vector of dates
 getExistingDates <- function(bq.dataset, table.prefix, bq.project = Sys.getenv("BIGQUERY_PROJECT")) {
   # Gets list of dates for which date range table exists.
@@ -158,6 +162,12 @@ getMissingDates <- function(start.date, end.date, existing.dates) {
 }
 
 #' Gets last id from a given field
+#'
+#' @param bq.table name of the table
+#' @param field name of the field
+#' @param bq.project name of the project
+#' @param bq.dataset name of the dataset
+#' @return max value in a requested field
 getLastID <- function(bq.table, field, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
                                        bq.dataset =  Sys.getenv("BIGQUERY_DATASET")) {
   sql.tempalte <- "SELECT MAX(%1$s) as ID FROM [%2$s.%3$s]"
@@ -247,7 +257,7 @@ bqExecuteFile <- function(file, ...) {
 
 #' Gets data for a given SQL statement
 #'
-#' @param file string with sql statment
+#' @param sql string with sql statment
 #' @param ... any parameters that will be used to fill in placeholders with sprintf
 #' @return results of execution as data.frame
 bqExecuteSql <- function(sql, ...) {
@@ -356,6 +366,8 @@ bqInsertData <- function(table, data, append = TRUE) {
 }
 
 #' Gets list of the column names for a given table
+#'
+#' @param table name of the table
 bqGetColumnNames <- function(table) {
   # Function which returns the columns of a table
 

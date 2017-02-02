@@ -1,5 +1,6 @@
 library(RPostgreSQL)
 
+#' Creates db connection based on the environment variables
 dbGetConnection <- function() {
   # Creates connection to ERP db using environment variables.
   drv <- dbDriver(Sys.getenv("ERP_DB"))
@@ -11,6 +12,9 @@ dbGetConnection <- function() {
   return(con)
 }
 
+#' Executes statement in the SQL file
+#'
+#' @param sql.file path to the sql file
 dbExecuteQueryFile <- function(sql.file) {
   # Executes SQL query from the given file and returns the result as a data.frame.
   #
@@ -20,11 +24,11 @@ dbExecuteQueryFile <- function(sql.file) {
   return(dbExecuteQuery(query))
 }
 
+#' Executes SQL query agains the database
+#'
+#' @param query string with sql query
 dbExecuteQuery <- function(query) {
-  # Executes SQL query agains the database.
-  #
-  # Args:
-  #   sql.file: file name of the query.
+
   con <- dbGetConnection()
   on.exit(dbDisconnect(con))
   results <- dbGetQuery(con, query)

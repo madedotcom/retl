@@ -7,6 +7,18 @@
 getLastID(bq.table, field, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
   bq.dataset = Sys.getenv("BIGQUERY_DATASET"))
 }
+\arguments{
+\item{bq.table}{name of the table}
+
+\item{field}{name of the field}
+
+\item{bq.project}{name of the project}
+
+\item{bq.dataset}{name of the dataset}
+}
+\value{
+max value in a requested field
+}
 \description{
 Gets last id from a given field
 }

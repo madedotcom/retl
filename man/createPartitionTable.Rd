@@ -10,9 +10,13 @@ createPartitionTable(table, sql = NULL, file = NULL,
 \arguments{
 \item{table}{name of the new table}
 
-\item{sql}{source for the table as string.}
+\item{sql}{source for the table as string}
 
-\item{file}{source for the tabel as file.}
+\item{file}{source for the tabel as file}
+
+\item{existing.dates}{Vector of dates that already exist in the target table. If provided, masked tables for these dates will be exlcuded}
+
+\item{missing.dates}{Vector of dates that should be created. If provided data for those dates will be added or re-created.}
 }
 \description{
 Creates partition in specified table in BigQuery.

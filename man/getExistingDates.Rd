@@ -11,6 +11,8 @@ getExistingDates(bq.dataset, table.prefix,
 \item{bq.dataset}{name of a dataset}
 
 \item{table.prefix}{name of the table before the wildcard}
+
+\item{bq.project}{name of the project}
 }
 \value{
 string vector of dates

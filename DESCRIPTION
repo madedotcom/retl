@@ -1,6 +1,6 @@
 Package: retl
 Type: Package
-Title: Support for common ETL operations and connections.
+Title: Support for common ETL operations and connections
 Version: 0.1
 Date: 2016-11-07
 Author: byapparov@gmail.com

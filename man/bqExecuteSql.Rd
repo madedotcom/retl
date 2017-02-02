@@ -7,9 +7,9 @@
 bqExecuteSql(sql, ...)
 }
 \arguments{
-\item{...}{any parameters that will be used to fill in placeholders with sprintf}
+\item{sql}{string with sql statment}
 
-\item{file}{string with sql statment}
+\item{...}{any parameters that will be used to fill in placeholders with sprintf}
 }
 \value{
 results of execution as data.frame
