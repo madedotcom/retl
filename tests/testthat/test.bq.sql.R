@@ -1,3 +1,4 @@
+library(bigrquery)
 context("BigQuery Helper functions.")
 
 test_that("Correct sql is executed", {
