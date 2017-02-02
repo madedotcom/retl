@@ -1,8 +1,9 @@
-library(bigrquery)
 # Required environment variables to use BigQuery helper functions:
 # BIGQUERY_PROJECT - name of the project in BigQuery.
 # BIGQUERY_DATASET - name of the default dataset in BigQuery.
 
+library(bigrquery)
+library(stringr)
 
 #' Gets existing dates for date partitioned table in BigQuery
 #'
@@ -128,8 +129,6 @@ createRangeTable <- function(table, sql = NULL, file = NULL) {
 
   })
 }
-
-library(stringr)
 
 #' Gets existing dates from wildcard tables in BigQuery
 #'

@@ -17,4 +17,5 @@ RoxygenNote: 6.0.0
 Imports:
     aws.s3,
     bigrquery,
-    data.table
+    data.table,
+    stringr
