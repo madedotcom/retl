@@ -25,4 +25,3 @@ results of the exectuion as returned by bigrquery::query_exec
 \description{
 Creates table using given sql
 }
-

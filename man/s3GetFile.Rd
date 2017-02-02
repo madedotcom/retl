@@ -19,4 +19,3 @@ s3GetFile(path, header = T, bucket = Sys.getenv("AWS_S3_BUCKET"),
 \description{
 Loads data from csv file in AWS S3
 }
-

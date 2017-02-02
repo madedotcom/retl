@@ -9,4 +9,3 @@ dbGetConnection()
 \description{
 Creates db connection based on the environment variables
 }
-

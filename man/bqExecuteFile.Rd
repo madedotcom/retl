@@ -17,4 +17,3 @@ results of execution as data.frame
 \description{
 Gets data for a given file that contains SQL statement
 }
-

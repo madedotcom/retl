@@ -21,4 +21,3 @@ s3PutFile(df, file.name, path = "", bucket = Sys.getenv("AWS_S3_BUCKET"),
 \description{
 Saves the data frame to S3.
 }
-

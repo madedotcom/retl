@@ -17,4 +17,3 @@ result of the exectuion
 \description{
 Copies table
 }
-
