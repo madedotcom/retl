@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/madedotcom/retl.svg?branch=master)](https://travis-ci.org/madedotcom/retl)
+[![codecov.io](https://codecov.io/github/madedotcom/retl/coverage.svg?branch=master)](https://codecov.io/github/madedotcom/retl?branch=master)
+
 ## Purpose ##
 
 ETL project provides means to log data related job executions and facilitates incremental data processing.
