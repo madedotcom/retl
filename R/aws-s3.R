@@ -1,4 +1,5 @@
 library(aws.s3)
+
 # To access AWS S3 following environment variables are required:
 #
 # AWS_S3_BUCKET - defines the name of the bucket in aws s3.
