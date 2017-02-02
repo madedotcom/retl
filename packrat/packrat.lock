@@ -1,6 +1,6 @@
 PackratFormat: 1.4
 PackratVersion: 0.4.8.1
-RVersion: 3.3.0
+RVersion: 3.3.2
 Repos: CRAN=https://cran.rstudio.com/
 
 Package: BH
@@ -36,18 +36,18 @@ Hash: 0afb92b59b02593c70ff8046700ba9d3
 
 Package: aws.s3
 Source: github
-Version: 0.1.26
-Hash: bdac261808a48689d03b7286de23e8ba
+Version: 0.1.30
+Hash: 43e99820320c3469beaf7f75ad62b666
 Requires: aws.signature, base64enc, curl, digest, httr, xml2
 GithubRepo: aws.s3
 GithubUsername: cloudyr
 GithubRef: master
-GithubSha1: aedc7c26b3d0578d792524ed6c39f6db09c6063a
+GithubSha1: 0a99733f4916c156969fe4bc654267e774f7d515
 
 Package: aws.signature
 Source: CRAN
-Version: 0.2.2
-Hash: eff80b71a1c0396457a46201f5b2210e
+Version: 0.2.5
+Hash: 96923c0709ae1cd83b2087581960224e
 Requires: base64enc, digest
 
 Package: backports
@@ -83,8 +83,8 @@ Hash: 576a9d297a567d6a5ebd164ca5221590
 
 Package: curl
 Source: CRAN
-Version: 0.9.7
-Hash: 8a3eaed84ed6a9a188efdeddb231c5de
+Version: 2.2
+Hash: 4533829fb0026bd0dea77ba8f1612d37
 
 Package: data.table
 Source: CRAN
@@ -106,8 +106,8 @@ Requires: digest, git2r, httr, jsonlite, memoise, rstudioapi, whisker,
 
 Package: digest
 Source: CRAN
-Version: 0.6.11
-Hash: e959a80e637182a39f4f865ef4fc51cc
+Version: 0.6.12
+Hash: e53fb8c58673df868183697e39a6a4d6
 
 Package: dplyr
 Source: CRAN
@@ -197,19 +197,15 @@ Hash: 4d21d0063b37a17ea18eaec6acd29bf3
 Requires: magrittr, stringi
 
 Package: testthat
-Source: github
-Version: 1.0.2.9000
-Hash: fbd456873284221fe83fad44526cdf03
-Requires: R6, crayon, digest, magrittr, praise, xml2
-GithubRepo: testthat
-GithubUsername: hadley
-GithubRef: master
-GithubSha1: 3b2f22569b7888a15aeb8859ca0cb6a894ca6a06
+Source: CRAN
+Version: 1.0.2
+Hash: 88d5291104227f9dc2e7c7c1d0eb6c74
+Requires: R6, crayon, digest, magrittr, praise
 
 Package: tibble
 Source: CRAN
-Version: 1.1
-Hash: 9f15b8fedd9f2ce4f596d60dd120d94a
+Version: 1.2
+Hash: 3857905737a164648031462bed6aa2ef
 Requires: Rcpp, assertthat, lazyeval
 
 Package: whisker
