@@ -121,7 +121,7 @@ etlGetIncrement <- function(job) {
                      default_dataset = Sys.getenv("BIGQUERY_METADATA_DATASET"),
                      page_size = 1000)
   if(nrow(data) == 0) {
-    return (0)
+    return (as.integer(0))
   }
   return(data$increment_value)
 }
