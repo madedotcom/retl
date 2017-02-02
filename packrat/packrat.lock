@@ -1,0 +1,146 @@
+PackratFormat: 1.4
+PackratVersion: 0.4.8.1
+RVersion: 3.3.0
+Repos: CRAN=https://cran.rstudio.com/
+
+Package: BH
+Source: CRAN
+Version: 1.62.0-1
+Hash: 14dfb3e8ffe20996118306ff4de1fab2
+
+Package: DBI
+Source: CRAN
+Version: 0.5-1
+Hash: 375869004db963f9915f2b8a49b4a718
+
+Package: R6
+Source: CRAN
+Version: 2.2.0
+Hash: 712773a3439bd32db5c40938e1a9aac2
+
+Package: RPostgreSQL
+Source: CRAN
+Version: 0.4-1
+Hash: 42460e37a21dc9e3f1f47c7d8d210592
+Requires: DBI
+
+Package: Rcpp
+Source: CRAN
+Version: 0.12.9
+Hash: 7ab41cbe74918de8de87e435ef17e92d
+
+Package: assertthat
+Source: CRAN
+Version: 0.1
+Hash: 0afb92b59b02593c70ff8046700ba9d3
+
+Package: aws.s3
+Source: github
+Version: 0.1.26
+Hash: bdac261808a48689d03b7286de23e8ba
+Requires: aws.signature, base64enc, curl, digest, httr, xml2
+GithubRepo: aws.s3
+GithubUsername: cloudyr
+GithubRef: master
+GithubSha1: aedc7c26b3d0578d792524ed6c39f6db09c6063a
+
+Package: aws.signature
+Source: CRAN
+Version: 0.2.2
+Hash: eff80b71a1c0396457a46201f5b2210e
+Requires: base64enc, digest
+
+Package: base64enc
+Source: CRAN
+Version: 0.1-3
+Hash: c590d29e555926af053055e23ee79efb
+
+Package: bigrquery
+Source: CRAN
+Version: 0.3.0
+Hash: 732397d131d8b53df35dbcd356004bd0
+Requires: DBI, R6, assertthat, dplyr, httr, jsonlite
+
+Package: crayon
+Source: CRAN
+Version: 1.3.2
+Hash: 576a9d297a567d6a5ebd164ca5221590
+
+Package: curl
+Source: CRAN
+Version: 0.9.7
+Hash: 8a3eaed84ed6a9a188efdeddb231c5de
+
+Package: digest
+Source: CRAN
+Version: 0.6.11
+Hash: e959a80e637182a39f4f865ef4fc51cc
+
+Package: dplyr
+Source: CRAN
+Version: 0.5.0
+Hash: 884482baf4ab273f2af5e641469f9ea4
+Requires: BH, DBI, R6, Rcpp, assertthat, lazyeval, magrittr, tibble
+
+Package: httr
+Source: CRAN
+Version: 1.2.1
+Hash: 7de1f8f760441881804af7c1ff324340
+Requires: R6, curl, jsonlite, mime, openssl
+
+Package: jsonlite
+Source: CRAN
+Version: 1.2
+Hash: 3a193a612cae6814719ed523f7e7cf44
+
+Package: lazyeval
+Source: CRAN
+Version: 0.2.0
+Hash: 3d6e7608e65bbf5cb170dab1e3c9ed8b
+
+Package: magrittr
+Source: CRAN
+Version: 1.5
+Hash: bdc4d48c3135e8f3b399536ddf160df4
+
+Package: mime
+Source: CRAN
+Version: 0.5
+Hash: 463550cf44fb6f0a2359368f42eebe62
+
+Package: openssl
+Source: CRAN
+Version: 0.9.6
+Hash: 5f4711e142a44655dfea4d64fcf2f641
+
+Package: packrat
+Source: CRAN
+Version: 0.4.8-1
+Hash: 6ad605ba7b4b476d84be6632393f5765
+
+Package: praise
+Source: CRAN
+Version: 1.0.0
+Hash: 77da8f1df873a4b91e5c4a68fe2fb1b6
+
+Package: testthat
+Source: github
+Version: 1.0.2.9000
+Hash: fbd456873284221fe83fad44526cdf03
+Requires: R6, crayon, digest, magrittr, praise, xml2
+GithubRepo: testthat
+GithubUsername: hadley
+GithubRef: master
+GithubSha1: 3b2f22569b7888a15aeb8859ca0cb6a894ca6a06
+
+Package: tibble
+Source: CRAN
+Version: 1.1
+Hash: 9f15b8fedd9f2ce4f596d60dd120d94a
+Requires: Rcpp, assertthat, lazyeval
+
+Package: xml2
+Source: CRAN
+Version: 1.1.1
+Hash: b913af17a4e43c2fb83f3b60b5353a27
+Requires: BH, Rcpp
