@@ -39,7 +39,7 @@ getExistingPartitionDates <- function(table) {
 #' @param file source for the tabel as file
 #' @param existing.dates Vector of dates that already exist in the target table. If provided, masked tables for these dates will be exlcuded
 #' @param missing.dates Vector of dates that should be created. If provided data for those dates will be added or re-created.
-#' @note sql or file must be provided.
+#' @note sql or file must be provided
 createPartitionTable <- function(table, sql = NULL, file = NULL, existing.dates = NULL, missing.dates = NULL) {
 
   if(missing(sql)) {
@@ -94,9 +94,9 @@ createPartitionTable <- function(table, sql = NULL, file = NULL, existing.dates 
 #' Creates range teable in BigQuery.
 #'
 #' @param table name of the new table
-#' @param sql source for the table as string.
-#' @param file source for the tabel as file.
-#' @note sql or file must be provided.
+#' @param sql source for the table as string
+#' @param file source for the tabel as file
+#' @note sql or file must be provided
 createRangeTable <- function(table, sql = NULL, file = NULL) {
 
   if(missing(sql)) {
@@ -273,20 +273,26 @@ bqExecuteSql <- function(sql, ...) {
   return(res)
 }
 
+#' Gets the shop code from the GA properties vector.
+#
+#' @param ga.properties named vector of Google Analytics properties.
+#' Names are ISO2 codes of the country.
+#' @param  property number of a property in Google Analytics.
+#' @return gets site code for a given propertiy code
 gaGetShop <- function(ga.properties, property) {
-  # Gets the shop code from the GA properties vector.
-  #
-  # Parameters:
-  #   ga.properties - named vector of Google Analytics properties.
-  #                   Names are ISO2 codes of the country.
-  #   property - is a property in Google Analytics.
-
   shops <- names(ga.properties)
   names(shops) <- ga.properties
   return(shops[as.character(property)])
 }
 
-
+#' Creates partition table for a given sql
+#'
+#' @param table name of the destination table
+#' @param ga.properties list of Google Analytics properties to populate table for
+#' @param sql sql to use a source of the data
+#' @param file if sql is not provided it will be read from the file
+#' @param existing.dates dates that should be skipped
+#' @param missing.dates dates calculation for which will be enforced
 bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL, existing.dates = NULL, missing.dates = NULL) {
   # Creates partition in specified table in BigQuery.
   #

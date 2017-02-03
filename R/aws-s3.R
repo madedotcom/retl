@@ -13,9 +13,9 @@ library(aws.s3)
 # See: https://github.com/cloudyr/aws.s3
 
 
-#' Saves the data frame to S3.
+#' Saves a data.frame structure to AWS S3 as a csv file
 #'
-#' @param df data to save
+#' @param df data.frame to save
 #' @param file.name name of the file to be uploaded to S3.
 #' @param path S3 path starting after root folder, excludes filename. example: "folder/"
 #' @param bucket S3 bucket
@@ -31,13 +31,13 @@ s3PutFile <- function (df, file.name, path="",
 }
 
 
-#' Loads data from csv file in AWS S3
+#' Loads data from a csv file in AWS S3 to data.table
 #'
 #' @param path is the path to the S3 object
 #' @param header flag defines whether file has header
 #' @param bucket name of the bucket
 #' @param root project root path that is appended before the path
-#'
+#' @return data.table from the source csv file
 s3GetFile <- function(path, header=T,
                       bucket = Sys.getenv("AWS_S3_BUCKET"),
                       root = Sys.getenv("AWS_S3_ROOT")) {
@@ -51,7 +51,7 @@ s3GetFile <- function(path, header=T,
     stop(print(raw_data[1:3]))
 
   data <- iconv(readBin(raw_data, character()), from="UTF-8", to="UTF-8")
-  df <- as.data.frame(fread(data, header=header, strip.white = F))
+  df <- fread(data, header=header, strip.white = F)
   # Replace " ", "-" and "_" with "." in the header.
   names(df) <- gsub(" |_|-", ".", names(df))
   return(df)
