@@ -28,7 +28,6 @@ etlJobExists <- function(job) {
   else {
     return (FALSE)
   }
-
 }
 
 #' Adds ETL job

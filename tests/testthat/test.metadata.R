@@ -29,3 +29,16 @@ test_that("Correct increment is fetched from the database", {
     }
   )
 })
+
+test_that("Increment is saved to the database correctly", {
+  with_mock(
+    `bigrquery::insert_upload_job` = function(project, dataset, table, values,
+                                              write_disposition, create_disposition) {
+      return(values)
+    },
+    `bigrquery::wait_for` = function(job) job,
+     logged.data <- etlLogExecution("test", as.integer(10), 100),
+     expect_equal(logged.data$increment_value, as.integer(10)),
+     expect_equal(logged.data$job, "test")
+  )
+})
