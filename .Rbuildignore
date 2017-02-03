@@ -2,3 +2,6 @@
 ^\.Rprofile$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.httr-oauth$
+^\.travis\.yml$
+^\schema\.*json$

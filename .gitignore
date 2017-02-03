@@ -1,4 +1,4 @@
 packrat/lib*/
-packrat/src/
+packrat/src/*
 .Rproj.user
 .Renviron

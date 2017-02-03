@@ -1,13 +1,28 @@
-library(devtools)
 library(aws.s3)
 
+# To access AWS S3 following environment variables are required:
+#
+# AWS_S3_BUCKET - defines the name of the bucket in aws s3.
+# AWS_S3_ROOT - defines the root path for the project.
+#
+# Also aws.s3 package required following env variables:
+# Sys.setenv("AWS_ACCESS_KEY_ID" = "mykey",
+#            "AWS_SECRET_ACCESS_KEY" = "mysecretkey",
+#            "AWS_DEFAULT_REGION" = "us-east-1",
+#            "AWS_SESSION_TOKEN" = "mytoken")
+# See: https://github.com/cloudyr/aws.s3
 
-s3PutFile <- function (df, file.name=df, path="",
+
+#' Saves a data.frame structure to AWS S3 as a csv file
+#'
+#' @param df data.frame to save
+#' @param file.name name of the file to be uploaded to S3.
+#' @param path S3 path starting after root folder, excludes filename. example: "folder/"
+#' @param bucket S3 bucket
+#' @param root Root folder that will be appended before the path
+s3PutFile <- function (df, file.name, path="",
                        bucket = Sys.getenv("AWS_S3_BUCKET"),
                        root = Sys.getenv("AWS_S3_ROOT")) {
-  # Saves the data frame in S3.
-  #   file.name: name of the file to be uploaded in S3.
-  #   path: S3 path starting after root folder, excludes filename. example: "folder/".
 
   write.csv(df, file = file.name, row.names = F)
   full.path <- paste0(root, path, file.name)
@@ -15,18 +30,14 @@ s3PutFile <- function (df, file.name=df, path="",
   if (file.exists(file.name)) file.remove(file.name)
 }
 
-s3CopyFile <- function(source.path, target.name) {
-  if(missing(target.name)) {
-    target.name <- basename(source.path)
-  }
-  bucket <- Sys.getenv("AWS_S3_BUCKET")
-  root = Sys.getenv("AWS_S3_ROOT")
 
-  object.path <- paste0(root, basename(source.path))
-  put_object(file = source.path, object = object.path, bucket = bucket)
-}
-
-
+#' Loads data from a csv file in AWS S3 to data.table
+#'
+#' @param path is the path to the S3 object
+#' @param header flag defines whether file has header
+#' @param bucket name of the bucket
+#' @param root project root path that is appended before the path
+#' @return data.table from the source csv file
 s3GetFile <- function(path, header=T,
                       bucket = Sys.getenv("AWS_S3_BUCKET"),
                       root = Sys.getenv("AWS_S3_ROOT")) {
@@ -40,7 +51,7 @@ s3GetFile <- function(path, header=T,
     stop(print(raw_data[1:3]))
 
   data <- iconv(readBin(raw_data, character()), from="UTF-8", to="UTF-8")
-  df <- as.data.frame(fread(data, header=header, strip.white = F))
+  df <- fread(data, header=header, strip.white = F)
   # Replace " ", "-" and "_" with "." in the header.
   names(df) <- gsub(" |_|-", ".", names(df))
   return(df)

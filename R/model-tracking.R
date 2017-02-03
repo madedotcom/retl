@@ -1,5 +1,7 @@
 
-
+#' Logs model performans data.frame to BigQuery table
+#'
+#' @param data data with metrics of the model
 logModelPerformance <- function(data) {
 
   data <- data[, c("project", "model", "metric", "group", "size", "value", "dataset")]
