@@ -22,5 +22,5 @@ createPartitionTable(table, sql = NULL, file = NULL,
 Creates partition in specified table in BigQuery.
 }
 \note{
-sql or file must be provided.
+sql or file must be provided
 }

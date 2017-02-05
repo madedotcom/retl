@@ -9,13 +9,13 @@ createRangeTable(table, sql = NULL, file = NULL)
 \arguments{
 \item{table}{name of the new table}
 
-\item{sql}{source for the table as string.}
+\item{sql}{source for the table as string}
 
-\item{file}{source for the tabel as file.}
+\item{file}{source for the tabel as file}
 }
 \description{
 Creates range teable in BigQuery.
 }
 \note{
-sql or file must be provided.
+sql or file must be provided
 }

@@ -120,6 +120,12 @@ Source: CRAN
 Version: 0.18.0
 Hash: 9dfaafbcca68be29b89ef7783dc1dac0
 
+Package: httptest
+Source: CRAN
+Version: 1.1.0
+Hash: 4ab0f7cf318ee30a2630df769368b420
+Requires: digest, httr, jsonlite, testthat
+
 Package: httr
 Source: CRAN
 Version: 1.2.1
