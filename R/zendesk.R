@@ -56,8 +56,12 @@ zdGetObjects <- function(type, subdomain, start.time) {
 #' @param start.time starting point for new tickets based on the update_date
 #' @return data.table with zendesk tickets
 zdGetTickets <- function(subdomain, start.time) {
+  ticket.fields <- c("id", "created_at", "updated_at", "type", "status", "subject")
   tickets <- zdGetObjects("tickets", subdomain, start.time)
-  dt <- zdExtractData(tickets, c("id", "created_at", "updated_at", "type", "status", "subject"))
+  if(length(tickets) == 0) {
+    return(NULL)
+  }
+  dt <- zdExtractData(tickets, ticket.fields)
   return(dt)
 }
 
@@ -68,6 +72,9 @@ zdGetTickets <- function(subdomain, start.time) {
 #' @return data.table with zendesk users
 zdGetUsers <- function(subdomain, start.time) {
   users <- zdGetObjects("users", subdomain, start.time)
+  if(length(users) == 0) {
+    return(NULL)
+  }
   dt <- zdExtractData(users, c("id", "email", "created_at", "updated_at", "role"))
   return(dt)
 }
@@ -100,8 +107,8 @@ zdProcessResponse <- function(response) {
     return(content(response, "parsed", "application/json"))
   }
   else { # error
-    type <- parse_media(response$headers$`Content-type`)
-    if (type$complete == "application/json") {
+    type <- http_type(response)
+    if (type == "application/json") {
       out <- content(response, "parsed", "application/json")
       stop("HTTP error [", out$error, "] ", out$description, call. = FALSE)
     } else {
