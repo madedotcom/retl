@@ -1,5 +1,3 @@
-library(httr)
-library(data.table)
 
 # Environment variables required
 # Sys.setenv(ZENDESK_USER = ...)

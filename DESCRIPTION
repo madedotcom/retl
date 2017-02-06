@@ -20,4 +20,5 @@ Imports:
     bigrquery,
     data.table,
     stringr,
-    httr
+    httr,
+    data.table

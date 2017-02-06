@@ -1,3 +1,4 @@
+library(httr)
 library(data.table)
 library(httptest)
 
