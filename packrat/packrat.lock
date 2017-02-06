@@ -45,10 +45,14 @@ GithubRef: master
 GithubSha1: 72edc122c763bf9e8db546a8c8c22794659b110d
 
 Package: aws.signature
-Source: CRAN
-Version: 0.2.6
-Hash: 86405fa9a77148f19a6d24642dced84e
+Source: github
+Version: 0.2.7
+Hash: 443e40cb48fd1cf0cc3803b5114bc2eb
 Requires: base64enc, digest
+GithubRepo: aws.signature
+GithubUsername: cloudyr
+GithubRef: master
+GithubSha1: fbf515d475f3f8495ffaee17906f6b9d2406da4e
 
 Package: backports
 Source: CRAN
@@ -123,12 +127,12 @@ Hash: 9dfaafbcca68be29b89ef7783dc1dac0
 Package: httptest
 Source: github
 Version: 1.1.1
-Hash: c7026aef0ce75c56165bf9bfd85991cb
+Hash: 60e2f74ef747e7a9e0ebca8059df9e4d
 Requires: digest, httr, jsonlite, testthat
 GithubRepo: httptest
-GithubUsername: nealrichardson
-GithubRef: 1a4e3dfc45fc09e1a53916e5310c589fca289294
-GithubSha1: 1a4e3dfc45fc09e1a53916e5310c589fca289294
+GithubUsername: byapparov
+GithubRef: master
+GithubSha1: 260c0aad98332321e13b9dc03c20859b56cc2f6b
 
 Package: httr
 Source: CRAN
