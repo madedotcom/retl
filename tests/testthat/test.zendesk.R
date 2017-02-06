@@ -1,6 +1,4 @@
-library(httptest)
 context("Zendesk api helper functions")
-
 
 test_that("Ticket increment path is correct", {
   type <- "tickets"
