@@ -17,3 +17,4 @@ data.table with relevant object attributes
 \description{
 Extracts data from list of tickets as parsed from json by httr::content
 }
+

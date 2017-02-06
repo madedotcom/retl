@@ -10,9 +10,8 @@ zdGetPath(type, start.time)
 \item{type}{type of the object to be returned (users, tickets)}
 
 \item{start.time}{starting point for new objects based on the update_date}
-
-\item{subdomain}{organisation subdomain on zendesk}
 }
 \description{
 Makes url for incremental object extraction from Zendesk
 }
+

@@ -18,3 +18,4 @@ gets site code for a given propertiy code
 \description{
 Gets the shop code from the GA properties vector.
 }
+

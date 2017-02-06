@@ -15,3 +15,4 @@ TRUE if table exists
 \description{
 Checks if table exists
 }
+

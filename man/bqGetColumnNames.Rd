@@ -12,3 +12,4 @@ bqGetColumnNames(table)
 \description{
 Gets list of the column names for a given table
 }
+

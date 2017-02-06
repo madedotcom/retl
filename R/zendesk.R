@@ -8,7 +8,6 @@ library(data.table)
 #' Makes url for incremental object extraction from Zendesk
 #'
 #' @param type type of the object to be returned (users, tickets)
-#' @param subdomain organisation subdomain on zendesk
 #' @param start.time starting point for new objects based on the update_date
 zdGetPath <- function (type, start.time) {
   zendesk.api.url <- paste0("/api/v2/incremental/", type, ".json")
@@ -108,7 +107,7 @@ zdProcessResponse <- function(response) {
       out <- content(response, "parsed", "application/json")
       stop("HTTP error [", out$error, "] ", out$description, call. = FALSE)
     } else {
-      out <- content(req, "text")
+      out <- content(response, "text")
       stop("HTTP error [", response$status, "] ", out, call. = FALSE)
     }
   }

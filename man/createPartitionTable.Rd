@@ -24,3 +24,4 @@ Creates partition in specified table in BigQuery.
 \note{
 sql or file must be provided
 }
+

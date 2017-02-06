@@ -12,3 +12,4 @@ dbExecuteQuery(query)
 \description{
 Executes SQL query agains the database
 }
+
