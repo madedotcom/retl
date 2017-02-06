@@ -14,9 +14,9 @@ s3PutFile(df, file.name, path = "", bucket = Sys.getenv("AWS_S3_BUCKET"),
 
 \item{path}{S3 path starting after root folder, excludes filename. example: "folder/"}
 
-\item{bucket}{S3 bucket}
+\item{bucket}{name of the S3 bucket}
 
-\item{root}{Root folder that will be appended before the path}
+\item{root}{project root path that is appended before the path}
 }
 \description{
 Saves a data.frame structure to AWS S3 as a csv file

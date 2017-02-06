@@ -12,7 +12,7 @@ s3GetFile(path, header = T, bucket = Sys.getenv("AWS_S3_BUCKET"),
 
 \item{header}{flag defines whether file has header}
 
-\item{bucket}{name of the bucket}
+\item{bucket}{name of the S3 bucket}
 
 \item{root}{project root path that is appended before the path}
 }

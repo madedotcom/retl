@@ -1,6 +1,10 @@
 library(httr)
 library(data.table)
 
+# Environment variables required
+# Sys.setenv(ZENDESK_USER = ...)
+# Sys.setenv(ZENDESK_PASSWORD = ...)
+
 #' Makes url for incremental object extraction from Zendesk
 #'
 #' @param type type of the object to be returned (users, tickets)

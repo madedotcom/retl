@@ -18,8 +18,8 @@ library(aws.s3)
 #' @param df data.frame to save
 #' @param file.name name of the file to be uploaded to S3.
 #' @param path S3 path starting after root folder, excludes filename. example: "folder/"
-#' @param bucket S3 bucket
-#' @param root Root folder that will be appended before the path
+#' @param bucket name of the S3 bucket
+#' @param root project root path that is appended before the path
 s3PutFile <- function (df, file.name, path="",
                        bucket = Sys.getenv("AWS_S3_BUCKET"),
                        root = Sys.getenv("AWS_S3_ROOT")) {
@@ -35,7 +35,7 @@ s3PutFile <- function (df, file.name, path="",
 #'
 #' @param path is the path to the S3 object
 #' @param header flag defines whether file has header
-#' @param bucket name of the bucket
+#' @param bucket name of the S3 bucket
 #' @param root project root path that is appended before the path
 #' @return data.table from the source csv file
 s3GetFile <- function(path, header=T,
