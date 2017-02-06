@@ -28,7 +28,6 @@ zdGetObjects <- function(type, subdomain, start.time) {
   obj.list <- list() # default results as a blank list
 
   repeat { # Recursively call the api while end_time is set
-   # get.url <- modify_url(zdGetUrl(subdomain), path = )
     response <- GET(url  = zdGetUrl(subdomain),
                     path = zdGetPath(type, start.time),
                     add_headers("Content-Type" = "application/json"),
