@@ -44,10 +44,18 @@ test_that("Users are returned as data.table", {
 context("Zendesk bad responses")
 
 test_that("Bad responses are processed correctly", {
+
+  # If response is not json, code will be returned
   resp <- fakeResponse(status_code = 500,
                        headers = list("Content-Type" = "application/xml"),
                        content = '{"error": "ServerFault", "description": "Server Fault"}')
-  expect_error(zdProcessResponse(resp), regexp = "ServerFault")
+  expect_error(zdProcessResponse(resp), regexp = "\\[500\\]")
+
+  # If response is json, error will be returned
+  resp <- fakeResponse(status_code = 500,
+                       headers = list("Content-Type" = "application/json"),
+                       content = '{"error": "ServerFault", "description": "Server Fault"}')
+  expect_error(zdProcessResponse(resp), regexp = "\\[ServerFault\\]")
 
   resp <- fakeResponse(status_code = 200, headers = list("Content-Type" = "application/xml"))
   expect_error(zdProcessResponse(resp))
