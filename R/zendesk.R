@@ -51,6 +51,7 @@ zdGetObjects <- function(type, subdomain, start.time) {
 
 #' Gets Zendesk tickets via increment API
 #'
+#' @export
 #' @param subdomain organisation subdomain on zendesk
 #' @param start.time starting point for new tickets based on the update_date
 #' @return data.table with zendesk tickets
@@ -66,6 +67,7 @@ zdGetTickets <- function(subdomain, start.time) {
 
 #' Gets Zendesk users via increment API
 #'
+#' @export
 #' @param subdomain organisation subdomain on zendesk
 #' @param start.time starting point for new users based on the update_date
 #' @return data.table with zendesk users

@@ -19,4 +19,3 @@ results of execution as data.frame
 \description{
 Gets data for a given SQL statement or file that contains SQL
 }
-

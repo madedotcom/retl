@@ -19,4 +19,3 @@ list of zendesk objects according to the type
 \description{
 Gets Zendesk objects for a given subdomain as a data.table
 }
-

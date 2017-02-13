@@ -15,6 +15,7 @@ library(aws.s3)
 
 #' Saves a data.frame structure to AWS S3 as a csv file
 #'
+#' @export
 #' @param df data.frame to save
 #' @param file.name name of the file to be uploaded to S3.
 #' @param path S3 path starting after root folder, excludes filename. example: "folder/"
@@ -33,6 +34,7 @@ s3PutFile <- function (df, file.name, path="",
 
 #' Loads data from a csv file in AWS S3 to data.table
 #'
+#' @export
 #' @param path is the path to the S3 object
 #' @param header flag defines whether file has header
 #' @param bucket name of the S3 bucket

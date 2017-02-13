@@ -14,4 +14,3 @@ zdGetPath(type, start.time)
 \description{
 Makes url for incremental object extraction from Zendesk
 }
-

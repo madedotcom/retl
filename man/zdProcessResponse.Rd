@@ -15,4 +15,3 @@ list of resutls parsed from the response
 \description{
 Processes http response and returns a list of results
 }
-

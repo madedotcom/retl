@@ -1,5 +1,6 @@
 #' Checks if ETL job exists in the etl_jobs table
 #'
+#' @export
 #' @param job name of the ETL job
 etlJobExists <- function(job) {
 

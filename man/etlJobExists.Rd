@@ -12,4 +12,3 @@ etlJobExists(job)
 \description{
 Checks if ETL job exists in the etl_jobs table
 }
-

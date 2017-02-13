@@ -17,4 +17,3 @@ data.table with zendesk users
 \description{
 Gets Zendesk users via increment API
 }
-

@@ -7,6 +7,7 @@ library(stringr)
 
 #' Gets existing dates for date partitioned table in BigQuery
 #'
+#' @export
 #' @param table name of a table
 #' @return string vector of dates
 getExistingPartitionDates <- function(table) {
@@ -132,6 +133,7 @@ createRangeTable <- function(table, sql = NULL, file = NULL) {
 
 #' Gets existing dates from wildcard tables in BigQuery
 #'
+#' @export
 #' @param bq.dataset name of a dataset
 #' @param table.prefix name of the table before the wildcard
 #' @param bq.project name of the project
@@ -146,6 +148,7 @@ getExistingDates <- function(bq.dataset, table.prefix, bq.project = Sys.getenv("
 
 #' Gets dates that are missing from the date range for a give list of existing dates
 #'
+#' @export
 #' @param start.date begining of the period
 #' @param end.date end of the period
 #' @param existing.dates vector of existing dates that should be exlcuded
@@ -162,6 +165,7 @@ getMissingDates <- function(start.date, end.date, existing.dates) {
 
 #' Gets last id from a given field
 #'
+#' @export
 #' @param bq.table name of the table
 #' @param field name of the field
 #' @param bq.project name of the project
@@ -181,6 +185,7 @@ getLastID <- function(bq.table, field, bq.project = Sys.getenv("BIGQUERY_PROJECT
 
 #' Checks if table exists
 #'
+#' @export
 #' @param table.name name of the table
 #' @return TRUE if table exists
 bqTableExists <- function(table.name) {
@@ -192,6 +197,7 @@ bqTableExists <- function(table.name) {
 
 #' Deletes table
 #'
+#' @export
 #' @param bq.table name of the table
 #' @param bq.project name of the project
 #' @param bq.dataset name of the dataset
@@ -204,6 +210,7 @@ bqDeleteTable <- function(bq.table, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
 
 #' Creates table using given sql
 #'
+#' @export
 #' @param sql SQL statement to use a source for a new table
 #' @param bq.table name of a table to be created
 #' @param bq.project name of the destination project
@@ -226,6 +233,7 @@ bqCreateTable <- function(sql, bq.table, bq.project = Sys.getenv("BIGQUERY_PROJE
 
 #' Gets data for a given SQL statement or file that contains SQL
 #'
+#' @export
 #' @param sql sql statement
 #' @param file file with sql statment
 #' @param ... any parameters that will be used to fill in placeholders with sprintf
@@ -243,6 +251,7 @@ bqGetData <- function(sql = NULL, file = NULL, ...) {
 
 #' Gets data for a given file that contains SQL statement
 #'
+#' @export
 #' @param file file with sql statment
 #' @param ... any parameters that will be used to fill in placeholders with sprintf
 #' @return results of execution as data.frame
@@ -256,6 +265,7 @@ bqExecuteFile <- function(file, ...) {
 
 #' Gets data for a given SQL statement
 #'
+#' @export
 #' @param sql string with sql statment
 #' @param ... any parameters that will be used to fill in placeholders with sprintf
 #' @return results of execution as data.frame
@@ -287,6 +297,7 @@ gaGetShop <- function(ga.properties, property) {
 
 #' Creates partition table for a given sql
 #'
+#' @export
 #' @param table name of the destination table
 #' @param ga.properties list of Google Analytics properties to populate table for
 #' @param sql sql to use a source of the data
@@ -351,6 +362,7 @@ bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL
 
 #' Inserts data into BigQuery table
 #'
+#' @export
 #' @param table name of the target table
 #' @param data data to be inserted
 #' @param append specifies if data should be appended or truncated
@@ -372,6 +384,7 @@ bqInsertData <- function(table, data, append = TRUE) {
 
 #' Gets list of the column names for a given table
 #'
+#' @export
 #' @param table name of the table
 bqGetColumnNames <- function(table) {
   # Function which returns the columns of a table
@@ -393,6 +406,7 @@ bqGetColumnNames <- function(table) {
 
 #' Copies table
 #'
+#' @export
 #' @param from name of the source table
 #' @param to name of the desitnation table
 #' @return result of the exectuion
