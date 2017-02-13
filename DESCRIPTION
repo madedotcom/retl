@@ -12,13 +12,11 @@ Description: Wrappers for connections with ERP, S3, BigQuery and other common
 License: GPL-2
 LazyData: TRUE
 Suggests:
-    testthat,
-    httptest
+    testthat
 RoxygenNote: 6.0.0
 Imports:
     aws.s3,
     bigrquery,
     data.table,
     stringr,
-    httr,
-    data.table
+    httr
