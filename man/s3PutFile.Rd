@@ -2,22 +2,22 @@
 % Please edit documentation in R/aws-s3.R
 \name{s3PutFile}
 \alias{s3PutFile}
-\title{Saves the data frame to S3.}
+\title{Saves a data.frame structure to AWS S3 as a csv file}
 \usage{
 s3PutFile(df, file.name, path = "", bucket = Sys.getenv("AWS_S3_BUCKET"),
   root = Sys.getenv("AWS_S3_ROOT"))
 }
 \arguments{
-\item{df}{data to save}
+\item{df}{data.frame to save}
 
 \item{file.name}{name of the file to be uploaded to S3.}
 
 \item{path}{S3 path starting after root folder, excludes filename. example: "folder/"}
 
-\item{bucket}{S3 bucket}
+\item{bucket}{name of the S3 bucket}
 
-\item{root}{Root folder that will be appended before the path}
+\item{root}{project root path that is appended before the path}
 }
 \description{
-Saves the data frame to S3.
+Saves a data.frame structure to AWS S3 as a csv file
 }

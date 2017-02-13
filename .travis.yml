@@ -6,6 +6,7 @@ sudo: false
 
 r_github_packages:
   - cloudyr/aws.s3
+  - byapparov/httptest
   - jimhester/covr
 
 after_success:

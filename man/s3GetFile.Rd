@@ -2,7 +2,7 @@
 % Please edit documentation in R/aws-s3.R
 \name{s3GetFile}
 \alias{s3GetFile}
-\title{Loads data from csv file in AWS S3}
+\title{Loads data from a csv file in AWS S3 to data.table}
 \usage{
 s3GetFile(path, header = T, bucket = Sys.getenv("AWS_S3_BUCKET"),
   root = Sys.getenv("AWS_S3_ROOT"))
@@ -12,10 +12,13 @@ s3GetFile(path, header = T, bucket = Sys.getenv("AWS_S3_BUCKET"),
 
 \item{header}{flag defines whether file has header}
 
-\item{bucket}{name of the bucket}
+\item{bucket}{name of the S3 bucket}
 
 \item{root}{project root path that is appended before the path}
 }
+\value{
+data.table from the source csv file
+}
 \description{
-Loads data from csv file in AWS S3
+Loads data from a csv file in AWS S3 to data.table
 }
