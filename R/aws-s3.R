@@ -62,6 +62,7 @@ s3GetFile <- function(path, header=T,
 #' Gets the path to the object based on the root path setup via
 #' environment variable
 #'
+#' @export
 #' @param relative.path defines the path to the object post project root path.
 s3GetObjectPath <- function(relative.path) {
   path <- paste0(Sys.getenv("AWS_S3_ROOT"), relative.path)
