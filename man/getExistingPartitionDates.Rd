@@ -15,3 +15,4 @@ string vector of dates
 \description{
 Gets existing dates for date partitioned table in BigQuery
 }
+

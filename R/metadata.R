@@ -33,6 +33,7 @@ etlJobExists <- function(job) {
 
 #' Adds ETL job
 #'
+#' @export
 #' @param job name of the job
 #' @param increment.name name of the increment
 #' @param increment.type type of the increment
@@ -58,6 +59,7 @@ etlAddJob <- function(job, increment.name, increment.type) {
 
 #' Logs execution of the ETL job
 #'
+#' @export
 #' @param job name of the etl job
 #' @param increment.value maximum value in the field that used for increment
 #' @param records number of records processed by execution
@@ -82,6 +84,7 @@ etlLogExecution <- function(job, increment.value, records = 0) {
 
 #' Gets increment value from
 #'
+#' @export
 #' @param job name of the etl job
 etlGetIncrementType <- function(job) {
   # Gets the TYPE of increment for the given job.
@@ -105,6 +108,7 @@ etlGetIncrementType <- function(job) {
 
 #' Gets latest increment for the
 #'
+#' @export
 #' @param job name of the job
 #' @return increment value for the last execution of the job
 etlGetIncrement <- function(job) {

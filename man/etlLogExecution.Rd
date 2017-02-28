@@ -16,3 +16,4 @@ etlLogExecution(job, increment.value, records = 0)
 \description{
 Logs execution of the ETL job
 }
+

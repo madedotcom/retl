@@ -22,3 +22,4 @@ data.table from the source csv file
 \description{
 Loads data from a csv file in AWS S3 to data.table
 }
+
