@@ -19,3 +19,4 @@ Creates range teable in BigQuery.
 \note{
 sql or file must be provided
 }
+

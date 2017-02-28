@@ -19,3 +19,4 @@ vector of dates from the period that don't exist in the give vector
 \description{
 Gets dates that are missing from the date range for a give list of existing dates
 }
+

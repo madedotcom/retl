@@ -20,3 +20,4 @@ results of the execution from bigrquery::delete_table
 \description{
 Deletes table
 }
+
