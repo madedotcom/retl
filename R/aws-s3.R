@@ -1,3 +1,8 @@
+#' @import utils
+#' @import data.table
+#' @import aws.s3
+
+library(data.table)
 library(aws.s3)
 
 # To access AWS S3 following environment variables are required:

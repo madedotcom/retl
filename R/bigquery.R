@@ -1,3 +1,7 @@
+#' @import utils
+#' @import bigrquery
+#' @import stringr
+
 # Required environment variables to use BigQuery helper functions:
 # BIGQUERY_PROJECT - name of the project in BigQuery.
 # BIGQUERY_DATASET - name of the default dataset in BigQuery.
@@ -20,7 +24,6 @@ getExistingPartitionDates <- function(table) {
     return(NULL)
   }
 
-
   sql <- paste0("SELECT partition_id from [", dataset , ".", table, "$__PARTITIONS_SUMMARY__];")
   res <- query_exec(query = sql,
                     project = project)
@@ -30,7 +33,6 @@ getExistingPartitionDates <- function(table) {
   else {
     return(NULL)
   }
-
 }
 
 #' Creates partition in specified table in BigQuery.
@@ -42,54 +44,7 @@ getExistingPartitionDates <- function(table) {
 #' @param missing.dates Vector of dates that should be created. If provided data for those dates will be added or re-created.
 #' @note sql or file must be provided
 createPartitionTable <- function(table, sql = NULL, file = NULL, existing.dates = NULL, missing.dates = NULL) {
-
-  if(missing(sql)) {
-    # Build SQL from code in the file.
-    sql <- paste(readLines(file), collapse="\n")
-  }
-
-  # StartDate - start of Custom Dimension for UserID
-  start.date <- as.Date(Sys.getenv("BIGQUERY_START_DATE"))
-  #EndDate
-  if (Sys.getenv("BIGQUERY_END_DATE") == ""){
-    end.date <- Sys.Date() - 1
-  } else {
-    end.date <- as.Date(Sys.getenv("BIGQUERY_END_DATE"))
-  }
-
-  if(missing(existing.dates)) {
-    existing.dates <- getExistingPartitionDates(table)
-  }
-
-  if(missing(missing.dates)) {
-    missing.dates <- getMissingDates(start.date, end.date, existing.dates)
-  }
-
-  ga.properties <- getGoogleAnalyticsProperties()
-
-  res <-
-    lapply(missing.dates, function(d) { # Create partition for every missing date.
-      destination.partition <- paste0(table, "$", d)
-      print(paste0("Partition name: ", destination.partition))
-
-      delete_table(project = Sys.getenv("BIGQUERY_PROJECT"),
-                   dataset = Sys.getenv("BIGQUERY_DATASET"),
-                   table = destination.partition)
-
-      lapply(ga.properties, function(p) {
-        sql.exec <- sprintf(sql, p, d) # Replace placeholder in sql template.
-        query_exec(query = sql.exec,
-                   project = Sys.getenv("BIGQUERY_PROJECT"),
-                   default_dataset = Sys.getenv("BIGQUERY_DATASET"),
-                   destination_table =paste0(Sys.getenv("BIGQUERY_DATASET"), ".", destination.partition),
-                   max_pages = 1,
-                   page_size = 1,
-                   create_disposition = "CREATE_IF_NEEDED",
-                   write_disposition = "WRITE_APPEND")
-      })
-    })
-
-  return (res)
+  .Deprecated("bqCreatePartitionTable")
 }
 
 #' Creates range teable in BigQuery.
@@ -114,7 +69,7 @@ createRangeTable <- function(table, sql = NULL, file = NULL) {
   project <- Sys.getenv("BIGQUERY_PROJECT")
   dataset <- Sys.getenv("BIGQUERY_DATASET")
 
-  existing.dates <- getExistingPartitionDates(dataset, table)
+  existing.dates <- getExistingPartitionDates(table)
   missing.dates <- getMissingDates(start.date, end.date, existing.dates)
 
   lapply(missing.dates, function(d) {
