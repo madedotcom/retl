@@ -1,3 +1,6 @@
+#' @import DBI
+#' @import RPostgreSQL
+
 library(RPostgreSQL)
 
 #' Creates db connection based on the environment variables
