@@ -20,4 +20,5 @@ Imports:
     data.table,
     stringr,
     httr,
-    DBI
+    DBI,
+    rGoodData

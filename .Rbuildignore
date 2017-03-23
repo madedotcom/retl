@@ -5,3 +5,4 @@
 ^\.httr-oauth$
 ^\.travis\.yml$
 ^\schema\.*json$
+.travis.yml
