@@ -1,3 +1,6 @@
+#' @import googleAuthR
+#' @import googlesheets
+
 library(googleAuthR)
 library(googlesheets)
 library(data.table)
