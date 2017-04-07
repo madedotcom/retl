@@ -1,6 +1,6 @@
 PackratFormat: 1.4
 PackratVersion: 0.4.8.1
-RVersion: 3.3.2
+RVersion: 3.3.3
 Repos: CRAN=https://cran.rstudio.com/
 
 Package: BH
@@ -180,6 +180,11 @@ Package: praise
 Source: CRAN
 Version: 1.0.0
 Hash: 77da8f1df873a4b91e5c4a68fe2fb1b6
+
+Package: rGoodData
+Source: CRAN
+Version: 0.1.0
+Requires: data.table, jsonlite, httr
 
 Package: roxygen2
 Source: CRAN
