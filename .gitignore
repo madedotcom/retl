@@ -2,3 +2,5 @@ packrat/lib*/
 packrat/src/*
 .Rproj.user
 .Renviron
+access_token.json
+.httr-oauth
