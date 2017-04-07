@@ -5,6 +5,7 @@ library(data.table)
 #' Requires access_token.json file the working directory
 
 #' Loads google spreadsheet via key
+#' @export
 #'
 #' @param key key of the google spreadsheet
 #' @param token.file json access token file for Google API.
