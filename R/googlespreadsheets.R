@@ -11,6 +11,7 @@ library(data.table)
 #' @export
 #'
 #' @param key key of the google spreadsheet
+#' @param tab name of the tab from which data will be loaded
 #' @param token.file json access token file for Google API.
 gsLoadSheet <- function(key, tab, token.file = "access_token.json") {
   service_token <- gar_auth_service(json_file = token.file, scope = c("https://www.googleapis.com/auth/drive",

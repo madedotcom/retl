@@ -10,6 +10,8 @@ gsLoadSheet(key, tab, token.file = "access_token.json")
 \arguments{
 \item{key}{key of the google spreadsheet}
 
+\item{tab}{name of the tab from which data will be loaded}
+
 \item{token.file}{json access token file for Google API.}
 }
 \description{

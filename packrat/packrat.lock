@@ -157,6 +157,7 @@ Hash: 3fca8a1c97e6cfb297fe3f4690f82c58
 Package: htmltools
 Source: CRAN
 Version: 0.3.5
+Hash: 6c7e3a96d9034d3ba8e6a07f7e2a333d
 Requires: Rcpp, digest
 
 Package: httptest
@@ -242,7 +243,7 @@ Requires: data.table, httr, jsonlite
 Package: readr
 Source: CRAN
 Version: 1.1.0
-Requires: R6, Rcpp, hms, tibble
+Requires: BH, R6, Rcpp, hms, tibble
 
 Package: rematch
 Source: CRAN
