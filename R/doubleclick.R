@@ -1,5 +1,11 @@
-library(jsonlite)
+#' @import googleAuthR
+#' @import jsonlite
 
+library(jsonlite)
+library(googleAuthR)
+
+
+#' Creates list for the DoubleClick API call from prediction variables
 dcPredictionBody <- function(clickId, conversionId, datetime, predicted.conversion, predicted.aov) {
   body = list(
     kind = "doubleclicksearch#conversionList",
