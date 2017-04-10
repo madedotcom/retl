@@ -94,7 +94,7 @@ etlGetIncrementType <- function(job) {
      FROM etl_jobs
      WHERE job = '%1$s'
      LIMIT 1"
-  sql <- sprintf(sql.tempalte, job)
+  sql <- sprintf(sql.template, job)
   data <- query_exec(sql,
                      project = Sys.getenv("BIGQUERY_PROJECT"),
                      default_dataset = Sys.getenv("BIGQUERY_METADATA_DATASET"),
