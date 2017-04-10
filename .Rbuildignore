@@ -6,3 +6,4 @@
 ^\.travis\.yml$
 ^\schema\.*json$
 .travis.yml
+access_token.json
