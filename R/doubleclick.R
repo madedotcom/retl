@@ -21,8 +21,6 @@ dcPredictionBody <- function(clickId, conversionId, datetime, custom.metrics) {
         conversionTimestamp = as.character(datetime),
         segmentationType = "FLOODLIGHT",
         segmentationName = "ML",
-       # type = "ACTION",
-       #  state = "ACTIVE",
         customMetric = metricsToList(custom.metrics)
       )
     )
