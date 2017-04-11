@@ -3,33 +3,32 @@ library(jsonlite)
 
 test_that("DoubleClick call List to body works", {
 
+  metrics <- c("Predicted Revenue" = 20L, "Predicted CVR" = 0.1, "Predicted AOV" = 200L)
+  expect <-read_json("dc-conversion-insert.json")
 
-  j <- '{
-      "kind": "doubleclicksearch#conversionList",
-      "conversion" : [{
-      "clickId" : "COiYmPDTv7kCFcP0KgodOzQAAA", // Replace with a click ID from your site
-      "conversionId" : "test_20130906_04",
-      "conversionTimestamp" : "1378710000000",
-      "segmentationType" : "FLOODLIGHT",
-      "segmentationName" : "Test",
-      "type": "TRANSACTION",
-      "revenueMicros": "10000000", // 10 million revenueMicros is equivalent to $10 of revenue
-      "currencyCode": "USD",
-      "customMetric": [
-        {
-          "name": "sales",
-          "value": 2.0
-        },
-        {
-          "name": "shipping",
-          "value": 3.0
-        }
-      ]
-      }]
-  }'
-
-  res <- dcPredictionBody("xxx", "yyy", 1378710000000, 0.1, 100)
-  print(toJSON(res, complex = "list", auto_unbox = T))
+  res <- dcPredictionBody(clickId = "CJPmyaSYmdMCFVcW0wodHMAE2w",
+                          conversionId = "23436345D",
+                          datetime = 1491819654000,
+                          custom.metrics = metrics)
+  expect_equal(res, expect)
 })
 
-
+test_that("Metrics vector to list conversion works", {
+  custom.metrics <- c("Predicted Revenue" = 20, "Predicted CVR" = 0.1, "Predicted AOV" = 200)
+  res <- metricsToList(custom.metrics)
+  expected.list <- list(
+    list(
+      name = "Predicted Revenue",
+      value = 20
+    ),
+    list(
+      name = "Predicted CVR",
+      value = 0.1
+    ),
+    list(
+      name = "Predicted AOV",
+      value = 200
+    )
+  )
+  expect_identical(res, expected.list)
+})
