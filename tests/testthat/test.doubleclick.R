@@ -1,6 +1,8 @@
 library(googleAuthR)
 library(jsonlite)
 
+context("DoubleClick Search API")
+
 test_that("DoubleClick call List to body works", {
 
   metrics <- c("Predicted Revenue" = 20L, "Predicted CVR" = 0.1, "Predicted AOV" = 200L)
