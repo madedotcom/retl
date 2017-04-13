@@ -5,14 +5,19 @@
 \title{Writes custom metrics to DoubleClick Floodlight
 requires gar_auth()}
 \usage{
-dcWriteCustomMetics(clickId, conversionId, metrics)
+dcWriteCustomMetics(clickId, conversionId, timestamp, metrics)
 }
 \arguments{
 \item{clickId}{gclid unique identifier of the google click}
 
 \item{conversionId}{unique identifier of the conversion}
 
+\item{timestamp}{POSIX timestamp in seconds as integer}
+
 \item{metrics}{named vector of custom metrics}
+}
+\value{
+response from the call to DoubleClick search API.
 }
 \description{
 Writes custom metrics to DoubleClick Floodlight
