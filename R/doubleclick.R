@@ -1,5 +1,4 @@
 #' @import googleAuthR
-#' @import jsonlite
 
 library(jsonlite)
 library(googleAuthR)
@@ -57,21 +56,18 @@ metricsToList <- function(metrics) {
   res <- unname(res)
 }
 
-
-dcGetApiUri <- function() {
-  uri <- paste0("https://www.googleapis.com/doubleclicksearch/v2/conversion?key=", Sys.getenv("GOOGLE_REFRESH_TOKEN"))
-}
-
-dcWriteConversion <-gar_api_generator(dcGetApiUri(), http_header = "POST")
-
 #' Writes custom metrics to DoubleClick Floodlight
 #' requires gar_auth()
+#' @export
 #'
 #' @param clickId gclid unique identifier of the google click
 #' @param conversionId unique identifier of the conversion
+#' @param timestamp POSIX timestamp in seconds as integer
 #' @param metrics named vector of custom metrics
-dcWriteCustomMetics <- function(clickId, conversionId, metrics) {
-  ts <- paste0(as.integer(as.POSIXct( Sys.time() )) * 1000)
+#' @return response from the call to DoubleClick search API.
+dcWriteCustomMetics <- function(clickId, conversionId, timestamp, metrics) {
+  ts <- paste0(as.integer(timestamp) * 1000)
   body <- dcPredictionBody(clickId, conversionId, datetime = ts, metrics)
+  dcWriteConversion <-gar_api_generator("https://www.googleapis.com/doubleclicksearch/v2/conversion", http_header = "POST")
   res <- dcWriteConversion(the_body = body)
 }
