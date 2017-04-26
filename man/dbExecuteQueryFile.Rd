@@ -12,4 +12,3 @@ dbExecuteQueryFile(sql.file)
 \description{
 Executes statement in the SQL file
 }
-

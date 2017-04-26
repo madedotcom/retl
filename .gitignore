@@ -4,3 +4,7 @@ packrat/src/*
 .Renviron
 access_token.json
 .httr-oauth
+.DS_Store
+.Rhistory
+R/.Rapp.history
+refresh_token.txt

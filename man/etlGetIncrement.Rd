@@ -15,4 +15,3 @@ increment value for the last execution of the job
 \description{
 Gets latest increment for the
 }
-

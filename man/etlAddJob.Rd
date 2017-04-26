@@ -16,4 +16,3 @@ etlAddJob(job, increment.name, increment.type)
 \description{
 Adds ETL job
 }
-

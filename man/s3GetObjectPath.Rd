@@ -14,4 +14,3 @@ s3GetObjectPath(relative.path)
 Gets the path to the object based on the root path setup via
 environment variable
 }
-

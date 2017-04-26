@@ -19,4 +19,3 @@ results of execution
 \description{
 Inserts data into BigQuery table
 }
-
