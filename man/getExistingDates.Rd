@@ -20,4 +20,3 @@ string vector of dates
 \description{
 Gets existing dates from wildcard tables in BigQuery
 }
-

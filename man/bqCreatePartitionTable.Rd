@@ -23,4 +23,3 @@ bqCreatePartitionTable(table, ga.properties, sql = NULL, file = NULL,
 \description{
 Creates partition table for a given sql
 }
-

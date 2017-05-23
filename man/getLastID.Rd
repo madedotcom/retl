@@ -22,4 +22,3 @@ max value in a requested field
 \description{
 Gets last id from a given field
 }
-
