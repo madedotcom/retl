@@ -321,20 +321,36 @@ bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL
 #' @param table name of the target table
 #' @param data data to be inserted
 #' @param append specifies if data should be appended or truncated
+#' @param job.name name of the ETL job that will be written to the metadata execution log
+#' @param increment.field specifies field that is used for incremental data loads
 #' @return results of execution
-bqInsertData <- function(table, data, append = TRUE) {
+bqInsertData <- function(table, data, append = TRUE, job.name = NULL, increment.field = NULL) {
+
+  if(xor(is.null(job.name), is.null(increment.field))) {
+    stop("increment.field and job.name arguments are both required if one is provided.")
+  }
 
   write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
+  rows <- nrow(data)
+  if(rows > 0) {
+    job <- insert_upload_job(project = Sys.getenv("BIGQUERY_PROJECT"),
+                             dataset = Sys.getenv("BIGQUERY_DATASET"),
+                             table,
+                             data,
+                             write_disposition = write.disposition,
+                             create_disposition = "CREATE_IF_NEEDED")
 
-  job <- insert_upload_job(project = Sys.getenv("BIGQUERY_PROJECT"),
-                           dataset = Sys.getenv("BIGQUERY_DATASET"),
-                           table,
-                           data,
-                           write_disposition = write.disposition,
-                           create_disposition = "CREATE_IF_NEEDED")
+    res <- wait_for(job)
 
-  res <- wait_for(job)
-  return(res)
+    if(!is.null(job.name)) {
+      # Log metadata of the execution with number of rows and increment value
+      increment.value <- max(data[, get(increment.field)])
+      etlLogExecution(job.name, increment.value, rows)
+    }
+    return(res)
+  } else {
+    return(NULL)
+  }
 }
 
 #' Gets list of the column names for a given table

@@ -1,5 +1,5 @@
 library(bigrquery)
-context("BigQuery Helper functions.")
+context("BigQuery query functions.")
 
 test_that("Correct sql is executed", {
   with_mock(
