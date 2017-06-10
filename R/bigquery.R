@@ -215,7 +215,7 @@ bqExecuteFile <- function(file, ...) {
 
   sql <-  paste(readLines(file), collapse="\n")
   res <- bqExecuteSql(sql, ...)
-  return(res)
+  return(data.table(res))
 }
 
 #' Gets data for a given SQL statement
