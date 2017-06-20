@@ -4,7 +4,8 @@
 \alias{bqInsertData}
 \title{Inserts data into BigQuery table}
 \usage{
-bqInsertData(table, data, append = TRUE)
+bqInsertData(table, data, append = TRUE, job.name = NULL,
+  increment.field = NULL)
 }
 \arguments{
 \item{table}{name of the target table}
@@ -12,6 +13,10 @@ bqInsertData(table, data, append = TRUE)
 \item{data}{data to be inserted}
 
 \item{append}{specifies if data should be appended or truncated}
+
+\item{job.name}{name of the ETL job that will be written to the metadata execution log}
+
+\item{increment.field}{specifies field that is used for incremental data loads}
 }
 \value{
 results of execution

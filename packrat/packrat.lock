@@ -86,6 +86,17 @@ Source: CRAN
 Version: 1.1
 Hash: ef9740410f8fcf978782a7aa76eaba2b
 
+Package: countrycode
+Source: CRAN
+Version: 0.19
+Hash: edf948180dbf4105b2ca27f3f8d269f1
+
+Package: covr
+Source: CRAN
+Version: 2.2.2
+Hash: 4b7aa8c6847719b64201de2562353c3f
+Requires: crayon, httr, jsonlite, rex, withr
+
 Package: crayon
 Source: CRAN
 Version: 1.3.2
@@ -173,6 +184,7 @@ GithubSha1: 260c0aad98332321e13b9dc03c20859b56cc2f6b
 Package: httpuv
 Source: CRAN
 Version: 1.3.3
+Hash: d73b1fc4f52d1179ff24f12f49eb6121
 Requires: Rcpp
 
 Package: httr
@@ -213,6 +225,12 @@ Version: 0.1.1
 Hash: e85626581f80b1fe6c92a96ec348efc5
 Requires: htmltools, shiny
 
+Package: mockery
+Source: CRAN
+Version: 0.3.0
+Hash: b101ff792e627871b8b75c38a1ff7442
+Requires: testthat
+
 Package: openssl
 Source: CRAN
 Version: 0.9.6
@@ -243,6 +261,7 @@ Requires: data.table, httr, jsonlite
 Package: readr
 Source: CRAN
 Version: 1.1.0
+Hash: db358f1e1e05edafc8ef746054e063ae
 Requires: BH, R6, Rcpp, hms, tibble
 
 Package: rematch
@@ -250,10 +269,16 @@ Source: CRAN
 Version: 1.0.1
 Hash: ad4faf59e7611117ff165817074c50c7
 
+Package: rex
+Source: CRAN
+Version: 1.1.1
+Hash: 69e208c6283398d235e507a658ba8079
+Requires: lazyeval, magrittr
+
 Package: roxygen2
 Source: CRAN
-Version: 6.0.0
-Hash: 9b304dff303d510e9263839227468681
+Version: 6.0.1
+Hash: 3e17305cfd5f3a51f7ca450c08afec94
 Requires: R6, Rcpp, brew, commonmark, desc, digest, stringi, stringr,
     xml2
 

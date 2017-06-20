@@ -66,11 +66,10 @@ etlAddJob <- function(job, increment.name, increment.type) {
 etlLogExecution <- function(job, increment.value, records = 0) {
   # Logs job execution with increment and number of recors.
 
-  etl.increments <- data.frame(list(job = job,
+  etl.increments <- data.table(job = job,
                                     increment_value = increment.value,
                                     records = as.integer(records),
-                                    datetime = Sys.time()),
-                               stringsAsFactors = F)
+                                    datetime = Sys.time())
 
   job <- insert_upload_job(project = Sys.getenv("BIGQUERY_PROJECT"),
                            dataset = Sys.getenv("BIGQUERY_METADATA_DATASET"),
