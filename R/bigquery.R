@@ -344,7 +344,7 @@ bqInsertData <- function(table, data, append = TRUE, job.name = NULL, increment.
 
     if(!is.null(job.name)) {
       # Log metadata of the execution with number of rows and increment value
-      increment.value <- max(data[, get(increment.field)])
+      increment.value <- as.integer(max(data[, get(increment.field)]))
       etlLogExecution(job.name, increment.value, rows)
     }
     return(res)
