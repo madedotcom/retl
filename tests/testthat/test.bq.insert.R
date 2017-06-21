@@ -35,7 +35,7 @@ test_that("Data is inserted correctly with metadata", {
                   dataset = "",
                   table = "etl_increments",
                   values = data.table(job = "test",
-                                      increment_value = max(iris$Sepal.Width),
+                                      increment_value = as.integer(max(iris$Sepal.Width)),
                                       records = nrow(iris),
                                       datetime = Sys.time()),
                   write_disposition = "WRITE_APPEND",
