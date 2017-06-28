@@ -41,5 +41,5 @@ dbExecuteQuery <- function(query) {
 
   # replace underscore in colnames with dot.
   colnames(results) <- lapply(colnames(results), function(name) {return (gsub("_", ".", name))})
-  return(results)
+  return(data.table(results))
 }
