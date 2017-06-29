@@ -25,5 +25,3 @@ Imports:
     rGoodData,
     googleAuthR,
     googlesheets
-Remotes:
-    cloudyr/aws.s3
