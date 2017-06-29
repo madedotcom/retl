@@ -16,7 +16,7 @@ Suggests:
     mockery
 RoxygenNote: 6.0.1
 Imports:
-    aws.s3 (== 0.1.38),
+    aws.s3,
     bigrquery,
     data.table,
     stringr,
