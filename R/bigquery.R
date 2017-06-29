@@ -235,7 +235,7 @@ bqExecuteSql <- function(sql, ...) {
                     project = Sys.getenv("BIGQUERY_PROJECT"),
                     default_dataset = Sys.getenv("BIGQUERY_DATASET"),
                     max_pages = Inf)
-  return(res)
+  return(data.table(res))
 }
 
 #' Gets the shop code from the GA properties vector.
