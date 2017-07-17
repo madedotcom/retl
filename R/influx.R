@@ -35,11 +35,13 @@ influxGetConnection <- function(scheme = "http",
 #'@param job the name of the job to log
 #'@param val the number of records updated
 #'@param metric the metric to be written to
+#'@param env the environment to write test/prod
 #'
 #'@export
-etlLogInflux <- function(con, db, job, val, metric){
+etlLogInflux <- function(con, db, job, val, metric, env){
   data <- data.table(time = Sys.time(),
                      job = metric,
+                     env = env,
                      value = val)
 
   xts.data <- as.xts.data.table(data)

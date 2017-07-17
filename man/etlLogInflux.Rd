@@ -4,7 +4,7 @@
 \alias{etlLogInflux}
 \title{Logs the result of a job in the influx metric table}
 \usage{
-etlLogInflux(con, db, job, val, metric)
+etlLogInflux(con, db, job, val, metric, env)
 }
 \arguments{
 \item{con}{a connection object}
@@ -16,6 +16,8 @@ etlLogInflux(con, db, job, val, metric)
 \item{val}{the number of records updated}
 
 \item{metric}{the metric to be written to}
+
+\item{env}{the environment to write test/prod}
 }
 \description{
 Logs the result of a job in the influx metric table
