@@ -189,6 +189,13 @@ Version: 1.2.1
 Hash: 7de1f8f760441881804af7c1ff324340
 Requires: R6, curl, jsonlite, mime, openssl
 
+Package: influxdbr
+Source: CRAN
+Version: 0.12.0
+Hash: 668ac83a49012cac625f93bf35f0eceb
+Requires: dplyr, httr, jsonlite, magrittr, purrr, tibble, tidyr, xts,
+    zoo
+
 Package: jsonlite
 Source: CRAN
 Version: 1.2
@@ -350,3 +357,14 @@ Package: xtable
 Source: CRAN
 Version: 1.8-2
 Hash: 7293235cfcc14cdff1ce7fd1a0212031
+
+Package: xts
+Source: CRAN
+Version: 0.10-0
+Hash: 03131e6ac5458d08143205a198284f18
+Requires: zoo
+
+Package: zoo
+Source: CRAN
+Version: 1.8-0
+Hash: df9711767f56f086e8a8d1f0fb926ff6

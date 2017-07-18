@@ -24,4 +24,7 @@ Imports:
     DBI,
     rGoodData,
     googleAuthR,
-    googlesheets
+    googlesheets,
+    influxdbr,
+    xts
+
