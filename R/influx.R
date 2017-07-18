@@ -40,11 +40,12 @@ influxGetConnection <- function(scheme = "http",
 #'@export
 etlLogInflux <- function(con, db, job, val, metric, env){
   data <- data.table(time = Sys.time(),
-                     job = metric,
-                     env = env,
                      value = val)
 
   xts.data <- as.xts.data.table(data)
+
+  xtsAttributes(xts.data) <- list(job = metric,
+                                  env = env)
 
   influxdbr::influx_write(con = con,
                           db = db,
