@@ -13,7 +13,7 @@ etlLogInflux(con, db, job, val, metric, env)
 
 \item{job}{the name of the job to log}
 
-\item{val}{the number of records updated}
+\item{val}{the variable to log}
 
 \item{metric}{the metric to be written to}
 
