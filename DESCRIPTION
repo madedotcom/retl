@@ -27,4 +27,3 @@ Imports:
     googlesheets,
     influxdbr,
     xts
-
