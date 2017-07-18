@@ -44,7 +44,7 @@ etlLogInflux <- function(con, db, job, val, metric, env){
 
   xts.data <- as.xts.data.table(data)
 
-  xtsAttributes(xts.data) <- list(job = metric,
+  xtsAttributes(xts.data) <- list(job = job,
                                   env = env)
 
   influxdbr::influx_write(con = con,
