@@ -33,7 +33,7 @@ influxGetConnection <- function(scheme = "http",
 #'@param con a connection object
 #'@param db the database to write
 #'@param job the name of the job to log
-#'@param val the number of records updated
+#'@param val the variable to log
 #'@param metric the metric to be written to
 #'@param env the environment to write test/prod
 #'
