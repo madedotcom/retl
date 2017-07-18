@@ -15,9 +15,9 @@ influxGetConnection(scheme = "http", host = Sys.getenv("INFLUX_HOST"),
 
 \item{user}{look at influx_connection}
 
-\item{pwd}{look at influx_connection}
+\item{port}{look at influx_connection}
 
-\item{host}{look at influx_connection}
+\item{pwd}{look at influx_connection}
 }
 \description{
 Creates db connection based on the environmental variables

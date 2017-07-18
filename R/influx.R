@@ -1,8 +1,8 @@
-#' @import xts
 #' @import influxdbr
+#' @importFrom xts xtsAttributes
 
-library(xts)
 library(influxdbr)
+library(xts)
 
 #' Creates db connection based on the environmental variables
 #' @param scheme look at influx_connection
@@ -44,7 +44,7 @@ etlLogInflux <- function(con, db, job, val, metric, env){
 
   xts.data <- as.xts.data.table(data)
 
-  xtsAttributes(xts.data) <- list(job = job,
+  xts::xtsAttributes(xts.data) <- list(job = job,
                                   env = env)
 
   influxdbr::influx_write(con = con,
