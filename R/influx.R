@@ -8,7 +8,7 @@ library(influxdbr)
 #' @param scheme look at influx_connection
 #' @param host look at influx_connection
 #' @param user look at influx_connection
-#' @param host look at influx_connection
+#' @param port look at influx_connection
 #' @param pwd look at influx_connection
 #'
 #' @export
