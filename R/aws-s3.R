@@ -60,7 +60,7 @@ s3GetFile <- function(path, header=T,
   data <- iconv(readBin(raw_data, character()), from="UTF-8", to="UTF-8")
   df <- fread(data, header=header, strip.white = F)
   # Replace " ", "-" and "_" with "." in the header.
-  names(df) <- gsub(" |_|-", ".", names(df))
+  names(df) <- gsub(" |_|-", ".", tolower(names(df)))
   return(df)
 }
 
