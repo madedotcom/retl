@@ -414,17 +414,17 @@ bqCopyTable <- function(from, to) {
 #'
 bqVectorToCase <- function(field, limits, alias = field) {
   res <- "CASE "
-  mainBody <- paste0("WHEN (", field, " <= ", limits[1], ") THEN '(-Inf, ", limits[1], "]' ")
+  mainBody <- paste0("WHEN (", field, " <= ", limits[1], ") THEN '", LETTERS[1] ,") (-Inf, ", limits[1], "]' ")
 
   if (length(limits) > 1) {
     for (i in 2:(length(limits)) - 1) {
       tmp <- paste0("WHEN (", field, " > ", limits[i], " AND ",
-                    field, " <= ", limits[i+1], ") THEN '(", limits[i], ", ", limits[i+1], "]' ")
+                    field, " <= ", limits[i + 1], ") THEN '", LETTERS[i + 1] ,") (", limits[i], ", ", limits[i + 1], "]' ")
       mainBody <- paste0(mainBody, tmp)
     }
   }
 
-  mainBody <- paste0(mainBody, "WHEN (", field, " > ", limits[length(limits)], ") THEN '(", limits[length(limits)], ", +Inf)' ")
+  mainBody <- paste0(mainBody, "WHEN (", field, " > ", limits[length(limits)], ") THEN '", LETTERS[length(limits) + 1] ,") (", limits[length(limits)], ", +Inf)' ")
 
   res <- paste0(res, mainBody, "END AS ", alias)
   return (res)
