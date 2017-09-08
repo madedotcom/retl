@@ -400,3 +400,32 @@ bqCopyTable <- function(from, to) {
 
   return (bqTableExists(to))
 }
+
+#' Returns a case clause based on binning the input vector
+#' to n+1 bins
+#'
+#' @export
+#'
+#' @param field field name to be used for the binning
+#' @param limits vector of seperator values
+#' @param alias resulting field name for the case
+#'
+#' @return case clause to be included in a SQL statement
+#'
+bqVectorToCase <- function(field, limits, alias = field) {
+  res <- "CASE "
+  mainBody <- paste0("WHEN (", field, " <= ", limits[1], ") THEN '", LETTERS[1] ,") (-Inf, ", limits[1], "]' ")
+
+  if (length(limits) > 1) {
+    for (i in 2:(length(limits)) - 1) {
+      tmp <- paste0("WHEN (", field, " > ", limits[i], " AND ",
+                    field, " <= ", limits[i + 1], ") THEN '", LETTERS[i + 1] ,") (", limits[i], ", ", limits[i + 1], "]' ")
+      mainBody <- paste0(mainBody, tmp)
+    }
+  }
+
+  mainBody <- paste0(mainBody, "WHEN (", field, " > ", limits[length(limits)], ") THEN '", LETTERS[length(limits) + 1] ,") (", limits[length(limits)], ", +Inf)' ")
+
+  res <- paste0(res, mainBody, "END AS ", alias)
+  return (res)
+}
