@@ -5,16 +5,14 @@
 \title{Returns a case clause based on binning the input vector
 to n+1 bins}
 \usage{
-bqVectorToCase(field, limits, names, res.name)
+bqVectorToCase(field, limits, alias = field)
 }
 \arguments{
 \item{field}{field name to be used for the binning}
 
 \item{limits}{vector of seperator values}
 
-\item{names}{bin names for the given limits}
-
-\item{res.name}{resulting field name for the case}
+\item{alias}{resulting field name for the case}
 }
 \value{
 case clause to be included in a SQL statement
