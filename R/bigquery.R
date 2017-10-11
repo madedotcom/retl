@@ -21,7 +21,7 @@ getExistingPartitionDates <- function(table) {
   if(!exists_table(project = project,
                    dataset = dataset,
                    table = table)) {
-    return(NULL)
+    return(character())
   }
 
   sql <- paste0("SELECT partition_id from [", dataset , ".", table, "$__PARTITIONS_SUMMARY__];")
@@ -31,7 +31,7 @@ getExistingPartitionDates <- function(table) {
     return(res$partition_id)
   }
   else {
-    return(NULL)
+    return(character())
   }
 }
 
