@@ -31,7 +31,7 @@ getExistingPartitionDates <- function(table) {
     return(res$partition_id)
   }
   else {
-    return(NULL)
+    return(character())
   }
 }
 
