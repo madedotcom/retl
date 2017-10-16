@@ -22,18 +22,18 @@ library(aws.s3)
 #'
 #' @export
 #' @param df data.frame to save
-#' @param file.name name of the file to be uploaded to S3.
-#' @param path S3 path starting after root folder, excludes filename. example: "folder/"
+#' @param path S3 object path starting after root folder.
 #' @param bucket name of the S3 bucket
-#' @param root project root path that is appended before the path
-s3PutFile <- function (df, file.name, path="",
+#' @param root project root path that is appended before the path, e.g. "/prod/"
+s3PutFile <- function (df, path,
                        bucket = Sys.getenv("AWS_S3_BUCKET"),
                        root = Sys.getenv("AWS_S3_ROOT")) {
+  tmp.file <- tempfile()
+  on.exit(unlink(tmp.file))
 
-  write.csv(df, file = file.name, row.names = F)
-  full.path <- paste0(root, path, file.name)
-  put_object(file = file.name, object = full.path, bucket=bucket)
-  if (file.exists(file.name)) file.remove(file.name)
+  write.csv(df, file = tmp.file, row.names = F)
+  full.path <- paste0(root, path)
+  put_object(file = tmp.file, object = full.path, bucket=bucket)
 }
 
 
