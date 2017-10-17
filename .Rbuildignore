@@ -8,3 +8,4 @@
 .travis.yml
 access_token.json
 ^schema/
+^packrat/lib*/*
