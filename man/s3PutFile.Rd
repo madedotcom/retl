@@ -4,11 +4,11 @@
 \alias{s3PutFile}
 \title{Saves a data.frame structure to AWS S3 as a csv file}
 \usage{
-s3PutFile(df, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
+s3PutFile(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
   root = Sys.getenv("AWS_S3_ROOT"))
 }
 \arguments{
-\item{df}{data.frame to save}
+\item{dt}{data.table to save}
 
 \item{path}{S3 object path starting after root folder.}
 

@@ -21,17 +21,17 @@ library(aws.s3)
 #' Saves a data.frame structure to AWS S3 as a csv file
 #'
 #' @export
-#' @param df data.frame to save
+#' @param dt data.table to save
 #' @param path S3 object path starting after root folder.
 #' @param bucket name of the S3 bucket
 #' @param root project root path that is appended before the path, e.g. "/prod/"
-s3PutFile <- function(df, path,
+s3PutFile <- function(dt, path,
                        bucket = Sys.getenv("AWS_S3_BUCKET"),
                        root = Sys.getenv("AWS_S3_ROOT")) {
   tmp.file <- tempfile(fileext = ".csv")
   on.exit(unlink(tmp.file))
 
-  write.csv(df, file = tmp.file, row.names = F, fileEncoding = "UTF-8")
+  write.csv(dt, file = tmp.file, row.names = F, fileEncoding = "UTF-8")
   full.path <- paste0(root, path)
   put_object(file = tmp.file, object = full.path, bucket = bucket)
 }
@@ -56,10 +56,10 @@ s3GetFile <- function(path, header=T,
     stop(print(raw_data[1:3]))
 
   data <- iconv(readBin(raw_data, character()), from = "UTF-8", to = "UTF-8")
-  df <- fread(data, header = header, strip.white = F)
+  dt <- fread(data, header = header, strip.white = F)
   # Replace " ", "-" and "_" with "." in the header.
-  names(df) <- gsub(" |_|-", ".", tolower(names(df)))
-  invisible(df)
+  names(dt) <- gsub(" |_|-", ".", tolower(names(dt)))
+  invisible(dt)
 }
 
 #' Saves data.table as csv.gz to S3

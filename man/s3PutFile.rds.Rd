@@ -8,6 +8,8 @@ s3PutFile.rds(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
   root = Sys.getenv("AWS_S3_ROOT"))
 }
 \arguments{
+\item{dt}{data.table to save}
+
 \item{path}{S3 object path starting after root folder.}
 
 \item{bucket}{name of the S3 bucket}
