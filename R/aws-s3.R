@@ -64,6 +64,7 @@ s3GetFile <- function(path, header=T,
 
 #' Saves data.table as csv.gz to S3
 #'
+#' @export
 #' @inherit s3PutFile
 s3PutFile.gz <- function(dt, path,
                          bucket = Sys.getenv("AWS_S3_BUCKET"),
@@ -80,6 +81,8 @@ s3PutFile.gz <- function(dt, path,
 }
 
 #' Loads gz file from s3 and reads it as data.table from csv
+#'
+#' @export
 #' @inherit s3PutFile
 s3GetFile.gz <- function(path,
                          bucket = Sys.getenv("AWS_S3_BUCKET"),
@@ -96,6 +99,7 @@ s3GetFile.gz <- function(path,
 
 #' Saves file as rds to S3
 #'
+#' @export
 #' @inherit s3PutFile
 s3PutFile.rds <- function(dt, path,
                           bucket = Sys.getenv("AWS_S3_BUCKET"),
@@ -107,6 +111,7 @@ s3PutFile.rds <- function(dt, path,
 
 #' Saves file as rds to S3
 #'
+#' @export
 #' @inherit s3GetFile
 s3GetFile.rds <- function(path,
                           bucket = Sys.getenv("AWS_S3_BUCKET"),
