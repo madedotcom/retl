@@ -77,7 +77,6 @@ s3PutFile.gz <- function(dt, path,
 
   full.path <- paste0(root, path)
   put_object(file = tmp.file, object = full.path, bucket = bucket)
-
 }
 
 #' Loads gz file from s3 and reads it as data.table from csv
