@@ -118,7 +118,7 @@ s3GetFile.rds <- function(path,
                           root = Sys.getenv("AWS_S3_ROOT")) {
 
   full.path <- paste0(root, path)
-  s3readRDS(dt, bucket = bucket, object = full.path)
+  s3readRDS(bucket = bucket, object = full.path)
 }
 
 
