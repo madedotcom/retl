@@ -2,14 +2,14 @@
 % Please edit documentation in R/transformations.R
 \name{safeLookup}
 \alias{safeLookup}
-\title{Function to safely append values to a data set from another data set via keys}
+\title{Function to safely append values to a data.table from another data.table via keys}
 \usage{
 safeLookup(data, lookup, by, select = setdiff(colnames(lookup), by))
 }
 \arguments{
-\item{data}{data set to which fields will be appended}
+\item{data}{data.table to which fields will be appended}
 
-\item{lookup}{data set from which fields will be appended}
+\item{lookup}{data.table from which fields will be appended}
 
 \item{by}{fields that represent the keys}
 
@@ -20,5 +20,5 @@ data set with new fields
 TODO @Daniel : add unit tests
 }
 \description{
-Function to safely append values to a data set from another data set via keys
+Function to safely append values to a data.table from another data.table via keys
 }
