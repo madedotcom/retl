@@ -1,30 +1,32 @@
-#' Function to safely append values to a data set from another data set via keys
+#' Function to safely append values to a data.table from another data.table via keys
 #'
 #' @export
 #'
-#' @param data data set to which fields will be appended
-#' @param lookup data set from which fields will be appended
+#' @param data data.table to which fields will be appended
+#' @param lookup data.table from which fields will be appended
 #' @param by fields that represent the keys
 #' @param select fields taht will be appended
 #' @return data set with new fields
 #' TODO @Daniel : add unit tests
 safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by)) {
-  # Merges data to lookup making sure that the number of rows does not change. Keeps the original row order.
-  df <- data.frame(data)
-  lookup <- data.frame(lookup)
-  if(sum(duplicated(lookup[, by])) != 0) {
+
+  if (!is.data.table(data) | !is.data.table(lookup)) {
+    stop("safeLookup does not support data.frames. Convert datasets to data.table")
+  }
+
+  if (sum(duplicated(lookup, by = by)) != 0) {
     stop("The 'by' parameter must uniquely link the two data frames.")
   }
 
-  if(nrow(df) == 0) {
-    stop("Left side data frame must have non-zero number of recrods.")
+  if (nrow(data) == 0) {
+    stop("Left side data frame must have non-zero number of records.")
   }
 
-  tempColName <- paste0(rep(0, max(sapply(colnames(df), nchar)) +1), collapse = "")
+  tempColName <- paste0(rep(0, max(sapply(colnames(data), nchar)) + 1), collapse = "")
 
-  df[tempColName] <- 1:nrow(df)
-  res <- merge(df, lookup[, c(by, select)], by = by, all.x = T)
-  res <- res[order(res[tempColName][,1]), -grep(tempColName, colnames(res))]
-  if(is.data.table(data)==TRUE) {res <- data.table(res)}
+  data[, eval(tempColName) :=  1:.N]
+  res <- merge(data, lookup[, mget(c(by, select))], by = by, all.x = T)
+  res <- res[order(get(tempColName))]
+  res[, eval(tempColName) := NULL]
   return (res)
 }
