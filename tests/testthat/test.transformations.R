@@ -21,4 +21,12 @@ test_that("Safe lookup works", {
     dt.lookup <- data.frame(ref = c(1L, 2L, 3L), value = c("a", "b", NA_character_))
     res <- expect_error(safeLookup(dt, dt.lookup, by = "ref"), 'data.frame')
 
+    # can join by two columns
+    dt <- data.table(id = c(1L, 2L, 3L, 4L, 5L), ref = c(2L, 3L, 2L, 4L, 3L), ref.b = c(12L, 13L, 12L, 14L, 14L))
+    dt.lookup <- data.table(ref = c(4L, 1L, 2L, 3L, 3L), ref.b = c(14L, 11L, 12L, 13L, 14L), value = c("c", "a", "b", NA_character_, "x"))
+    res <- safeLookup(dt, dt.lookup, by = c("ref", "ref.b"))
+    expect <- c("b", NA_character_, "b", "c", "x")
+    expect_equal(res$value, expect)
+
+
 })
