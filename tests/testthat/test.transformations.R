@@ -1,10 +1,10 @@
 context("Transformations")
 
 test_that("Safe lookup works", {
-    dt <- data.table(id = c(1L, 2L, 3L), ref = c(2L, 3L, 2L))
-    dt.lookup <- data.table(ref = c(1L, 2L, 3L), value = c("a", "b", NA_character_))
+    dt <- data.table(id = c(1L, 2L, 3L, 4L), ref = c(2L, 3L, 2L, 4L))
+    dt.lookup <- data.table(ref = c(4L, 1L, 2L, 3L), value = c("c", "a", "b", NA_character_))
     res <- safeLookup(dt, dt.lookup, by = "ref")
-    expect <- c("b", NA_character_, "b")
+    expect <- c("b", NA_character_, "b", "c")
     expect_equal(res$value, expect)
 
 
