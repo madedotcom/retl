@@ -10,21 +10,24 @@
 #' TODO @Daniel : add unit tests
 safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by)) {
   # Merges data to lookup making sure that the number of rows does not change. Keeps the original row order.
-  df <- data.frame(data)
-  lookup <- data.frame(lookup)
-  if(sum(duplicated(lookup[, by])) != 0) {
+
+  if(sum(duplicated(lookup, by = by)) != 0) {
     stop("The 'by' parameter must uniquely link the two data frames.")
   }
 
-  if(nrow(df) == 0) {
+  if(nrow(data) == 0) {
     stop("Left side data frame must have non-zero number of recrods.")
   }
 
-  tempColName <- paste0(rep(0, max(sapply(colnames(df), nchar)) +1), collapse = "")
+  if(!is.data.table(data) | !is.data.table(lookup)) {
+    stop("safeLookup does not support data.frames. Convert datasets to data.table")
+  }
 
-  df[tempColName] <- 1:nrow(df)
-  res <- merge(df, lookup[, c(by, select)], by = by, all.x = T)
-  res <- res[order(res[tempColName][,1]), -grep(tempColName, colnames(res))]
-  if(is.data.table(data)==TRUE) {res <- data.table(res)}
+  tempColName <- paste0(rep(0, max(sapply(colnames(data), nchar)) +1), collapse = "")
+
+  data[, tempColName :=  1:.N]
+  res <- merge(data, lookup[, mget(c(by, select))], by = by, all.x = T)
+  res <- setorder(res,-tempColName)
+  res[, tempColName := NULL]
   return (res)
 }
