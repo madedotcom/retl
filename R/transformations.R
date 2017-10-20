@@ -24,9 +24,9 @@ safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by))
 
   tempColName <- paste0(rep(0, max(sapply(colnames(data), nchar)) + 1), collapse = "")
 
-  data[, tempColName :=  1:.N]
+  data[, eval(tempColName) :=  1:.N]
   res <- merge(data, lookup[, mget(c(by, select))], by = by, all.x = T)
-  res <- setorder(res,-tempColName)
-  res[, tempColName := NULL]
+  res <- res[order(get(tempColName))]
+  res[, eval(tempColName) := NULL]
   return (res)
 }
