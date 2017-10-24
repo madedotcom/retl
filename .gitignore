@@ -6,5 +6,6 @@ access_token.json
 .httr-oauth
 .DS_Store
 .Rhistory
+.RData
 R/.Rapp.history
-refresh_token.txt
+fresh_token.txt
