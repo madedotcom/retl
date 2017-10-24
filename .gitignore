@@ -8,4 +8,4 @@ access_token.json
 .Rhistory
 .RData
 R/.Rapp.history
-fresh_token.txt
+refresh_token.txt
