@@ -19,7 +19,9 @@ safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by))
   }
 
   if (nrow(data) == 0) {
-    stop("Left side data frame must have non-zero number of records.")
+    warning("Left side data frame must have non-zero number of records.")
+    data <- cbind(data, lookup[, mget(select)][0])
+    return(data)
   }
 
   tempColName <- paste0(rep(0, max(sapply(colnames(data), nchar)) + 1), collapse = "")
@@ -29,5 +31,5 @@ safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by))
   res <- res[order(get(tempColName))]
   res[, eval(tempColName) := NULL]
   data[, eval(tempColName) := NULL]
-  return (res)
+  return(res)
 }
