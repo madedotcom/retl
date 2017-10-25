@@ -20,6 +20,7 @@ safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by))
 
   if (nrow(data) == 0) {
     warning("Left side data frame must have non-zero number of records.")
+    data <- cbind(data, lookup[, mget(select)][0])
     return(data)
   }
 
