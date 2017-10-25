@@ -30,5 +30,5 @@ safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by))
   res <- res[order(get(tempColName))]
   res[, eval(tempColName) := NULL]
   data[, eval(tempColName) := NULL]
-  return (res)
+  return(res)
 }
