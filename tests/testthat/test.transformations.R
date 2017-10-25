@@ -15,7 +15,7 @@ test_that("Safe lookup works", {
     dt <- dt[id == 0]
     dt.lookup <- data.table(ref = c(0), value = c(0))
     expect_warning(res <- safeLookup(dt, dt.lookup, by = "ref"), regexp = "records")
-    expect_true(all(colnames(res) == c("id", "ref", "value")))
+    expect_equal(colnames(res), c("id", "ref", "value"))
 
     dt <- data.frame(id = c(1L, 2L, 3L), ref = c(2L, 3L, 2L))
     dt.lookup <- data.frame(ref = c(1L, 2L, 3L), value = c("a", "b", NA_character_))
