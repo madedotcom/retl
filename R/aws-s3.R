@@ -45,7 +45,7 @@ s3PutFile <- function(dt, path,
 #' @param bucket name of the S3 bucket
 #' @param root project root path that is appended before the path
 #' @return data.table from the source csv file
-s3GetFile <- function(path, header=T,
+s3GetFile <- function(path, header = T,
                       bucket = Sys.getenv("AWS_S3_BUCKET"),
                       root = Sys.getenv("AWS_S3_ROOT")) {
   full.path <- paste0(root, path)
@@ -61,6 +61,35 @@ s3GetFile <- function(path, header=T,
   names(dt) <- gsub(" |_|-", ".", tolower(names(dt)))
   invisible(dt)
 }
+
+#' Loads data from several files in S3 based on the path prefix
+#'
+#' @export
+#'
+#' @note You need make sure that all targeted files have the same header signature:
+#'   order of the fields should not matter.
+#'
+#' @inheritParams s3GetFile
+#' @param s3Get.FUN Function that will be used to read data from the individual files.
+#' @param fill see data.table::rbindList
+#' @return data.table with data combined from files. It will be Null data.table if path
+#' did not match any of the files in S3 bucket.
+s3GetData <- function(path, header = T,
+                      bucket = Sys.getenv("AWS_S3_BUCKET"),
+                      root = Sys.getenv("AWS_S3_ROOT"),
+                      s3Get.FUN = s3GetFile,
+                      fill = T) {
+
+  full.path <- paste0(root, path)
+  full.path <- gsub("^/", "", full.path)
+  objects <- aws.s3::get_bucket(bucket = bucket, prefix = full.path)
+  dt.list <- lapply(objects, function(o) {
+    s3Get.FUN(o$Key, bucket = bucket, root = "")
+  })
+
+  invisible(rbindlist(dt.list, use.names = T, fill = fill))
+}
+
 
 #' Saves data.table as csv.gz to S3
 #'
