@@ -5,7 +5,7 @@
 \title{Loads data from several files in S3 based on the path prefix}
 \usage{
 s3GetData(path, header = T, bucket = Sys.getenv("AWS_S3_BUCKET"),
-  root = Sys.getenv("AWS_S3_ROOT"), s3Get.FUN = s3GetFile)
+  root = Sys.getenv("AWS_S3_ROOT"), s3Get.FUN = s3GetFile, fill = T)
 }
 \arguments{
 \item{path}{is the path to the S3 object}
@@ -17,6 +17,8 @@ s3GetData(path, header = T, bucket = Sys.getenv("AWS_S3_BUCKET"),
 \item{root}{project root path that is appended before the path}
 
 \item{s3Get.FUN}{Function that will be used to read data from the individual files.}
+
+\item{fill}{see data.table::rbindList}
 }
 \value{
 data.table with data combined from files.
@@ -26,5 +28,5 @@ Loads data from several files in S3 based on the path prefix
 }
 \note{
 You need make sure that all targeted files have the same header signature:
-  order of the fields should be the same in all files.
+  order of the fields should not matter.
 }

@@ -64,16 +64,20 @@ s3GetFile <- function(path, header = T,
 
 #' Loads data from several files in S3 based on the path prefix
 #'
+#' @export
+#'
 #' @note You need make sure that all targeted files have the same header signature:
-#'   order of the fields should be the same in all files.
+#'   order of the fields should not matter.
 #'
 #' @inheritParams s3GetFile
 #' @param s3Get.FUN Function that will be used to read data from the individual files.
+#' @param fill see data.table::rbindList
 #' @return data.table with data combined from files.
 s3GetData <- function(path, header = T,
                       bucket = Sys.getenv("AWS_S3_BUCKET"),
                       root = Sys.getenv("AWS_S3_ROOT"),
-                      s3Get.FUN = s3GetFile) {
+                      s3Get.FUN = s3GetFile,
+                      fill = T) {
 
   full.path <- paste0(root, path)
   full.path <- gsub("^/", "", full.path)
@@ -82,7 +86,7 @@ s3GetData <- function(path, header = T,
     s3Get.FUN(o$Key, bucket = bucket, root = "")
   })
 
-  invisible(rbindlist(dt.list))
+  invisible(rbindlist(dt.list, use.names = T, fill = fill))
 }
 
 
