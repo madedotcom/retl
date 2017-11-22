@@ -79,7 +79,7 @@ s3GetData <- function(path, header = T,
   full.path <- gsub("^/", "", full.path)
   objects <- aws.s3::get_bucket(bucket = bucket, prefix = full.path)
   dt.list <- lapply(objects, function(o) {
-    s3Get.FUN(o$Key, root = "")
+    s3Get.FUN(o$Key, bucket = bucket, root = "")
   })
 
   invisible(rbindlist(dt.list))
