@@ -72,7 +72,8 @@ s3GetFile <- function(path, header = T,
 #' @inheritParams s3GetFile
 #' @param s3Get.FUN Function that will be used to read data from the individual files.
 #' @param fill see data.table::rbindList
-#' @return data.table with data combined from files.
+#' @return data.table with data combined from files. It will be Null data.table if path
+#' did not match any of the files in S3 bucket.
 s3GetData <- function(path, header = T,
                       bucket = Sys.getenv("AWS_S3_BUCKET"),
                       root = Sys.getenv("AWS_S3_ROOT"),
