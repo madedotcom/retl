@@ -231,10 +231,13 @@ bqExecuteSql <- function(sql, ...) {
     sql <- sql
   }
 
+  use.legacy.sql <- Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
+
   res <- query_exec(sql,
                     project = Sys.getenv("BIGQUERY_PROJECT"),
                     default_dataset = Sys.getenv("BIGQUERY_DATASET"),
-                    max_pages = Inf)
+                    max_pages = Inf,
+                    use_legacy_sql = use.legacy.sql)
   return(data.table(res))
 }
 
