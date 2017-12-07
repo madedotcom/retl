@@ -34,16 +34,6 @@ Source: CRAN
 Version: 0.1
 Hash: 0afb92b59b02593c70ff8046700ba9d3
 
-Package: aws.s3
-Source: github
-Version: 0.1.26
-Hash: bdac261808a48689d03b7286de23e8ba
-Requires: aws.signature, base64enc, curl, digest, httr, xml2
-GithubRepo: aws.s3
-GithubUsername: madedotcom
-GithubRef: master
-GithubSha1: aedc7c26b3d0578d792524ed6c39f6db09c6063a
-
 Package: aws.signature
 Source: CRAN
 Version: 0.3.2
