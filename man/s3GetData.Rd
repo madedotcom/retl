@@ -21,7 +21,8 @@ s3GetData(path, header = T, bucket = Sys.getenv("AWS_S3_BUCKET"),
 \item{fill}{see data.table::rbindList}
 }
 \value{
-data.table with data combined from files.
+data.table with data combined from files. It will be Null data.table if path
+did not match any of the files in S3 bucket.
 }
 \description{
 Loads data from several files in S3 based on the path prefix

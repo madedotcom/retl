@@ -52,9 +52,9 @@ Hash: c590d29e555926af053055e23ee79efb
 
 Package: bigrquery
 Source: CRAN
-Version: 0.3.0
-Hash: 732397d131d8b53df35dbcd356004bd0
-Requires: DBI, R6, assertthat, dplyr, httr, jsonlite
+Version: 0.4.1
+Hash: fbfb9dac5a0aff96eb8f4977d2bd58e0
+Requires: DBI, assertthat, httr, jsonlite, progress, readr
 
 Package: brew
 Source: CRAN
@@ -238,6 +238,18 @@ Package: praise
 Source: CRAN
 Version: 1.0.0
 Hash: 77da8f1df873a4b91e5c4a68fe2fb1b6
+
+Package: prettyunits
+Source: CRAN
+Version: 1.0.2
+Hash: 49286102a855640daaa38eafe8b1ec30
+Requires: assertthat, magrittr
+
+Package: progress
+Source: CRAN
+Version: 1.1.2
+Hash: ceef88c244d792a874bdacf72b6a30da
+Requires: R6, prettyunits
 
 Package: purrr
 Source: CRAN
