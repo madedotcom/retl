@@ -165,6 +165,8 @@ s3GetObjectPath <- function(relative.path) {
 #'
 #' @export
 #' @param path defines the path to the object post project root path.
+#' @param bucket name of the S3 bucket
+#' @param root project root path that is appended before the path, e.g. "/prod/"
 s3GetFile.zip <- function(path,
                          bucket = Sys.getenv("AWS_S3_BUCKET"),
                          root = Sys.getenv("AWS_S3_ROOT")) {
