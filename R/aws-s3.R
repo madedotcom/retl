@@ -160,3 +160,22 @@ s3GetObjectPath <- function(relative.path) {
   path <- paste0(Sys.getenv("AWS_S3_ROOT"), relative.path)
   return(path)
 }
+
+#' Loads zipped csv file from s3 and reads it as data.table
+#'
+#' @export
+#' @param path defines the path to the object post project root path.
+#' @param bucket name of the S3 bucket
+#' @param root project root path that is appended before the path, e.g. "/prod/"
+s3GetFile.zip <- function(path,
+                         bucket = Sys.getenv("AWS_S3_BUCKET"),
+                         root = Sys.getenv("AWS_S3_ROOT")) {
+
+  full.path <- paste0(root, path)
+  tmp.file <- tempfile(fileext = ".zip")
+  on.exit(unlink(tmp.file))
+
+  save_object(full.path, bucket, file = tmp.file)
+  dt <- fread(unzip(tmp.file), fill = TRUE)
+  invisible(dt)
+}
