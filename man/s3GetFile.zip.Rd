@@ -7,6 +7,9 @@
 s3GetFile.zip(path, bucket = Sys.getenv("AWS_S3_BUCKET"),
   root = Sys.getenv("AWS_S3_ROOT"))
 }
+\arguments{
+\item{path}{defines the path to the object post project root path.}
+}
 \description{
 Loads zipped csv file from s3 and reads it as data.table
 }

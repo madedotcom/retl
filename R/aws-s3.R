@@ -164,6 +164,7 @@ s3GetObjectPath <- function(relative.path) {
 #' Loads zipped csv file from s3 and reads it as data.table
 #'
 #' @export
+#' @param path defines the path to the object post project root path.
 s3GetFile.zip <- function(path,
                          bucket = Sys.getenv("AWS_S3_BUCKET"),
                          root = Sys.getenv("AWS_S3_ROOT")) {
