@@ -163,6 +163,24 @@ bqDeleteTable <- function(bq.table, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
   return(res)
 }
 
+#' Creates SQL statment from the source file
+#'
+#' @export
+#' @param file file with sql statment template
+#' @param ... any parameters that will be used to fill in placeholders in the template with sprintf
+#' @return SQL statment as a string
+readSql <- function(file, ...) {
+  sql <-  paste(readLines(file), collapse="\n")
+
+  if(length(list(...)) > 0) { # template requires parameters.
+    sql <- sprintf(sql, ...)
+  } else { # template does not have parameteres.
+    sql <- sql
+  }
+
+  return(sql)
+}
+
 #' Creates table using given sql
 #'
 #' @export
@@ -172,17 +190,25 @@ bqDeleteTable <- function(bq.table, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
 #' @param bq.dataset name of the destination dataset
 #' @param write_disposition defines whether records will be appended
 #' @return results of the exectuion as returned by bigrquery::query_exec
-bqCreateTable <- function(sql, bq.table, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
+bqCreateTable <- function(sql, bq.table,
+                          bq.project = Sys.getenv("BIGQUERY_PROJECT"),
                           bq.dataset = Sys.getenv("BIGQUERY_DATASET"),
                           write_disposition = "WRITE_APPEND" ) {
+
+  use.legacy.sql <- Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
+
   # Creates table from the given SQL.
-  res <- query_exec(query = sql,
-                    project = bq.project, default_dataset = bq.dataset,
-                    destination_table = paste0(bq.dataset, ".", bq.table),
-                    max_pages = 1,
-                    page_size = 1,
-                    create_disposition = "CREATE_IF_NEEDED",
-                    write_disposition = write_disposition)
+  res <- query_exec(
+    query = sql,
+    project = bq.project,
+    default_dataset = bq.dataset,
+    destination_table = paste0(bq.dataset, ".", bq.table),
+    max_pages = 1,
+    page_size = 1,
+    create_disposition = "CREATE_IF_NEEDED",
+    write_disposition = write_disposition,
+    use_legacy_sql = use.legacy.sql
+  )
   return(res)
 }
 
