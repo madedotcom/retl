@@ -4,7 +4,7 @@
 \alias{getMissingDates}
 \title{Gets dates that are missing from the date range for a give list of existing dates}
 \usage{
-getMissingDates(start.date, end.date, existing.dates)
+getMissingDates(start.date, end.date, existing.dates, format = "\%Y\%m\%d")
 }
 \arguments{
 \item{start.date}{begining of the period}
@@ -12,6 +12,8 @@ getMissingDates(start.date, end.date, existing.dates)
 \item{end.date}{end of the period}
 
 \item{existing.dates}{vector of existing dates that should be exlcuded}
+
+\item{format}{format for the date, see ?as.character}
 }
 \value{
 vector of dates from the period that don't exist in the give vector

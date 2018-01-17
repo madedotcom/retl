@@ -107,13 +107,14 @@ getExistingDates <- function(bq.dataset, table.prefix, bq.project = Sys.getenv("
 #' @param start.date begining of the period
 #' @param end.date end of the period
 #' @param existing.dates vector of existing dates that should be exlcuded
+#' @param format format for the date, see ?as.character
 #' @return vector of dates from the period that don't exist in the give vector
-getMissingDates <- function(start.date, end.date, existing.dates) {
+getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m%d") {
   # Gets list of dates for which date range table is missing.
   days <- rep(1, end.date - start.date + 1)
   days.sequence <- seq_along(days)
   dates <- start.date -1 + days.sequence
-  dates <- as.character(dates, "%Y%m%d")
+  dates <- as.character(dates, format)
   res <- setdiff(dates, existing.dates)
   return (res)
 }
