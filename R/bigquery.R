@@ -354,7 +354,9 @@ bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL
 #' @param job.name name of the ETL job that will be written to the metadata execution log
 #' @param increment.field specifies field that is used for incremental data loads
 #' @return results of execution
-bqInsertData <- function(table, data, append = TRUE, job.name = NULL, increment.field = NULL) {
+bqInsertData <- function(table, data,
+                         project = Sys.getenv("BIGQUERY_PROJECT"),
+                         dataset = Sys.getenv("BIGQUERY_DATASET"), append = TRUE, job.name = NULL, increment.field = NULL) {
 
   if(xor(is.null(job.name), is.null(increment.field))) {
     stop("increment.field and job.name arguments are both required if one is provided.")
