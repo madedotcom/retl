@@ -4,13 +4,18 @@
 \alias{bqInsertData}
 \title{Inserts data into BigQuery table}
 \usage{
-bqInsertData(table, data, append = TRUE, job.name = NULL,
-  increment.field = NULL)
+bqInsertData(table, data, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
+  bq.dataset = Sys.getenv("BIGQUERY_DATASET"), append = TRUE,
+  job.name = NULL, increment.field = NULL)
 }
 \arguments{
 \item{table}{name of the target table}
 
 \item{data}{data to be inserted}
+
+\item{bq.project}{name of the destination project}
+
+\item{bq.dataset}{name of the destination dataset}
 
 \item{append}{specifies if data should be appended or truncated}
 
