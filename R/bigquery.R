@@ -350,11 +350,16 @@ bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL
 #' @export
 #' @param table name of the target table
 #' @param data data to be inserted
+#' @param bq.project name of the destination project
+#' @param bq.dataset name of the destination dataset
 #' @param append specifies if data should be appended or truncated
 #' @param job.name name of the ETL job that will be written to the metadata execution log
 #' @param increment.field specifies field that is used for incremental data loads
 #' @return results of execution
-bqInsertData <- function(table, data, append = TRUE, job.name = NULL, increment.field = NULL) {
+bqInsertData <- function(table, data,
+                         bq.project = Sys.getenv("BIGQUERY_PROJECT"),
+                         bq.dataset = Sys.getenv("BIGQUERY_DATASET"),
+                         append = TRUE, job.name = NULL, increment.field = NULL) {
 
   if(xor(is.null(job.name), is.null(increment.field))) {
     stop("increment.field and job.name arguments are both required if one is provided.")
