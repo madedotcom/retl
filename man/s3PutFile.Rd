@@ -5,7 +5,7 @@
 \title{Saves a data.frame structure to AWS S3 as a csv file}
 \usage{
 s3PutFile(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
-  root = Sys.getenv("AWS_S3_ROOT"))
+  root = Sys.getenv("AWS_S3_ROOT"), na.value = "")
 }
 \arguments{
 \item{dt}{data.table to save}
@@ -15,6 +15,8 @@ s3PutFile(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
 \item{bucket}{name of the S3 bucket}
 
 \item{root}{project root path that is appended before the path, e.g. "/prod/"}
+
+\item{na.value}{the string to use for missing values in the data}
 }
 \description{
 Saves a data.frame structure to AWS S3 as a csv file
