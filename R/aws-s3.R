@@ -194,7 +194,7 @@ s3PutFile.json.gz <- function(dt, path,
   tmp.file <- tempfile(fileext = ".gz")
   on.exit(unlink(tmp.file))
   gz.connection <- gzfile(tmp.file, "w")
-  write_json(dt, path = gz.connection, na = "string")
+  write_json(dt, path = gz.connection)
   close(gz.connection)
 
   full.path <- paste0(root, path)
