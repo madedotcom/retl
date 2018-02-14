@@ -124,6 +124,8 @@ s3GetFile.gz <- function(path,
 
   save_object(full.path, bucket, file = tmp.file)
   dt <- fread(paste0('zcat < ', tmp.file))
+  # Replace " ", "-" and "_" with "." in the header.
+  names(dt) <- gsub(" |_|-", ".", tolower(names(dt)))
   invisible(dt)
 }
 
@@ -177,6 +179,8 @@ s3GetFile.zip <- function(path,
 
   save_object(full.path, bucket, file = tmp.file)
   dt <- fread(unzip(tmp.file), fill = TRUE)
+  # Replace " ", "-" and "_" with "." in the header.
+  names(dt) <- gsub(" |_|-", ".", tolower(names(dt)))
   invisible(dt)
 }
 
@@ -218,5 +222,7 @@ s3GetFile.json.gz <- function(path,
   save_object(full.path, bucket, file = tmp.file)
   dt <- fromJSON(tmp.file)
   dt <- data.table(dt)
+  # Replace " ", "-" and "_" with "." in the header.
+  names(dt) <- gsub(" |_|-", ".", tolower(names(dt)))
   invisible(dt)
 }
