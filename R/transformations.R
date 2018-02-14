@@ -33,3 +33,11 @@ safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by))
   data[, eval(tempColName) := NULL]
   return(res)
 }
+
+#' Replace " ", "-" and "_" with "." in the header.
+#'
+#' @param dt data.table to correc the header for.
+conformHeader <- function(dt) {
+  names(dt) <- gsub(" |_|-", ".", tolower(names(dt)))
+  return(dt)
+}

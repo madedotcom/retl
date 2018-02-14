@@ -34,3 +34,14 @@ test_that("Safe lookup works", {
     res <- safeLookup(dt, dt.lookup, by = c("ref", "ref.b"))
     expect_true(!"000000" %in% colnames(dt))
 })
+
+test_that("Header transformation works", {
+  dt <- data.table("_under_SCORE_" = "underscore",
+                   "-da-Sh-" = "dash",
+                   " sP ace " = "space",
+                   "C-om bin_ed" = "combined")
+  dt <- conformHeader(dt)
+  res <- names(dt)
+  expect <- c(".under.score.", ".da.sh.", ".sp.ace.", "c.om.bin.ed")
+  expect_identical(res, expect)
+})
