@@ -4,10 +4,12 @@
 \alias{dbExecuteQuery}
 \title{Executes SQL query agains the database}
 \usage{
-dbExecuteQuery(query)
+dbExecuteQuery(sql, ...)
 }
 \arguments{
-\item{query}{string with sql query}
+\item{sql}{string with sql query}
+
+\item{...}{any parameters that will be used to fill in placeholders with sprintf}
 }
 \description{
 Executes SQL query agains the database

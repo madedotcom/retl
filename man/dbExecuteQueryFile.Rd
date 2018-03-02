@@ -4,10 +4,12 @@
 \alias{dbExecuteQueryFile}
 \title{Executes statement in the SQL file}
 \usage{
-dbExecuteQueryFile(sql.file)
+dbExecuteQueryFile(file, ...)
 }
 \arguments{
-\item{sql.file}{path to the sql file}
+\item{file}{path to the sql file}
+
+\item{...}{any parameters that will be used to fill in placeholders with sprintf}
 }
 \description{
 Executes statement in the SQL file

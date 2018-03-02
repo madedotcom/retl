@@ -19,25 +19,33 @@ dbGetConnection <- function() {
 #' Executes statement in the SQL file
 #'
 #' @export
-#' @param sql.file path to the sql file
-dbExecuteQueryFile <- function(sql.file) {
+#' @param file path to the sql file
+#' @param ... any parameters that will be used to fill in placeholders with sprintf
+dbExecuteQueryFile <- function(file, ...) {
   # Executes SQL query from the given file and returns the result as a data.frame.
   #
   # Args:
   #   sql.file: file name of the query.
-  query <- paste0(readLines(sql.file), collapse = "\n")
-  return(dbExecuteQuery(query))
+  query <- paste0(readLines(file), collapse = "\n")
+  return(dbExecuteQuery(query, ...))
 }
 
 #' Executes SQL query agains the database
 #'
 #' @export
-#' @param query string with sql query
-dbExecuteQuery <- function(query) {
+#' @param sql string with sql query
+#' @param ... any parameters that will be used to fill in placeholders with sprintf
+dbExecuteQuery <- function(sql, ...) {
+
+  if(length(list(...)) > 0) { # template requires parameters.
+    sql <- sprintf(sql, ...)
+  } else { # template does not have parameteres.
+    sql <- sql
+  }
 
   con <- dbGetConnection()
   on.exit(dbDisconnect(con))
-  results <- dbGetQuery(con, query)
+  results <- dbGetQuery(con, sql)
 
   # replace underscore in colnames with dot.
   colnames(results) <- lapply(colnames(results), function(name) {return (gsub("_", ".", name))})
