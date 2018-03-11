@@ -8,6 +8,7 @@
 
 library(bigrquery)
 library(stringr)
+library(jsonlite)
 
 #' Gets existing dates for date partitioned table in BigQuery
 #'
