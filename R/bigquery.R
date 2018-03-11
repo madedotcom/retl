@@ -226,7 +226,7 @@ bqCreateTable <- function(sql,
 #' Creates table from the json schema file.
 #'
 #' @export
-#' @importFrom jsonlight read_json
+#' @importFrom jsonlite read_json
 #'
 #' @inheritParams bqCreateTable
 #' @param schema.file path to file with the table schema
