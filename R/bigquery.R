@@ -145,7 +145,7 @@ getLastID <- function(table,
 #' Checks if table exists
 #'
 #' @export
-#' @param table.name name of the table
+#' @param table name of the table
 #' @return TRUE if table exists
 bqTableExists <- function(table) {
   res <- exists_table(

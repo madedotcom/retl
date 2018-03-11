@@ -7,7 +7,7 @@
 bqTableExists(table)
 }
 \arguments{
-\item{table.name}{name of the table}
+\item{table}{name of the table}
 }
 \value{
 TRUE if table exists
