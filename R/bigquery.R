@@ -16,18 +16,13 @@ library(jsonlite)
 #' @param table name of a table
 #' @return string vector of dates
 getExistingPartitionDates <- function(table) {
-  project <- Sys.getenv("BIGQUERY_PROJECT")
-  dataset <- Sys.getenv("BIGQUERY_DATASET")
 
-  if (!exists_table(project = project,
-                   dataset = dataset,
-                   table = table)) {
+  if (!bqTableExists(table)) {
     return(character())
   }
 
-  sql <- paste0("SELECT partition_id from [", dataset , ".", table, "$__PARTITIONS_SUMMARY__];")
-  res <- query_exec(query = sql,
-                    project = project)
+  sql <- paste0("SELECT partition_id from [", table, "$__PARTITIONS_SUMMARY__];")
+  res <- bqExecuteSql(sql)
   if (nrow(res) > 0) {
     return(res$partition_id)
   }
@@ -132,15 +127,8 @@ getLastID <- function(table,
                       project = Sys.getenv("BIGQUERY_PROJECT"),
                       dataset =  Sys.getenv("BIGQUERY_DATASET")) {
 
-    sql.tempalte <- "SELECT MAX(%1$s) as ID FROM [%2$s.%3$s]"
-    sql <- sprintf(sql.tempalte, field, dataset, table)
-    res <- query_exec(sql, project = project)
-    res <- head(res$ID, 1)
-    if (is.na(res)) {
-      res <- 0
-    }
-    return(res)
-  }
+  .Deprecated("getLastID")
+}
 
 #' Checks if table exists
 #'
