@@ -13,6 +13,8 @@ bqInitiateTable(table, schema.file, partition = FALSE,
 
 \item{schema.file}{path to file with the table schema}
 
+\item{partition}{time partitioned table will be created if set to TRUE}
+
 \item{project}{name of the destination project}
 
 \item{dataset}{name of the destination dataset}
