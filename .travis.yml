@@ -7,6 +7,7 @@ sudo: false
 r_github_packages:
   - cloudyr/aws.s3
   - jimhester/covr
+  - byapparov/bigrquery
 
 after_success:
   - Rscript -e 'covr::codecov()'
