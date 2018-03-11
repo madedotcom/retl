@@ -3,10 +3,13 @@
 
 ## Purpose ##
 
-ETL project provides means to log data related job executions and facilitates incremental data processing.
+ETL project provides means to:
 
+- exchange data with different sources through packages: aws.s3, bigrquery, DBI.
+- log metadata related to job executions to facilitate incremental data processing.
+- defensive data transformations that preserve original granularity or total of a metric.
 
-## Schema ##
+## Schema for metadata ##
 
 ### etl_jobs ###
 

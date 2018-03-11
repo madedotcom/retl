@@ -4,17 +4,17 @@
 \alias{getLastID}
 \title{Gets last id from a given field}
 \usage{
-getLastID(bq.table, field, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
-  bq.dataset = Sys.getenv("BIGQUERY_DATASET"))
+getLastID(table, field, project = Sys.getenv("BIGQUERY_PROJECT"),
+  dataset = Sys.getenv("BIGQUERY_DATASET"))
 }
 \arguments{
-\item{bq.table}{name of the table}
+\item{table}{name of the table}
 
 \item{field}{name of the field}
 
-\item{bq.project}{name of the project}
+\item{project}{name of the project}
 
-\item{bq.dataset}{name of the dataset}
+\item{dataset}{name of the dataset}
 }
 \value{
 max value in a requested field
