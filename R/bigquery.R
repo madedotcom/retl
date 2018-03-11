@@ -226,6 +226,7 @@ bqCreateTable <- function(sql,
 #' Creates table from the json schema file.
 #'
 #' @export
+#' @importFrom jsonlight read_json
 #'
 #' @inheritParams bqCreateTable
 #' @param schema.file path to file with the table schema
@@ -239,7 +240,7 @@ bqInitiateTable <- function(table,
     project = project,
     dataset = dataset,
     table = table,
-    schema = jsonlite::read_json(schema.file),
+    schema = read_json(schema.file),
     partition = partition
   )
 }
