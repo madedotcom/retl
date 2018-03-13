@@ -4,15 +4,15 @@
 \alias{bqDeleteTable}
 \title{Deletes table}
 \usage{
-bqDeleteTable(bq.table, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
-  bq.dataset = Sys.getenv("BIGQUERY_DATASET"))
+bqDeleteTable(table, project = Sys.getenv("BIGQUERY_PROJECT"),
+  dataset = Sys.getenv("BIGQUERY_DATASET"))
 }
 \arguments{
-\item{bq.table}{name of the table}
+\item{table}{name of the table}
 
-\item{bq.project}{name of the project}
+\item{project}{name of the project}
 
-\item{bq.dataset}{name of the dataset}
+\item{dataset}{name of the dataset}
 }
 \value{
 results of the execution from bigrquery::delete_table

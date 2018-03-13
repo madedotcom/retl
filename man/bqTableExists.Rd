@@ -4,10 +4,10 @@
 \alias{bqTableExists}
 \title{Checks if table exists}
 \usage{
-bqTableExists(table.name)
+bqTableExists(table)
 }
 \arguments{
-\item{table.name}{name of the table}
+\item{table}{name of the table}
 }
 \value{
 TRUE if table exists

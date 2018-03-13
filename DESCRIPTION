@@ -26,4 +26,5 @@ Imports:
     googleAuthR,
     googlesheets,
     influxdbr,
-    xts
+    xts,
+    jsonlite

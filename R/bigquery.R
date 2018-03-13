@@ -8,6 +8,7 @@
 
 library(bigrquery)
 library(stringr)
+library(jsonlite)
 
 #' Gets existing dates for date partitioned table in BigQuery
 #'
@@ -15,19 +16,14 @@ library(stringr)
 #' @param table name of a table
 #' @return string vector of dates
 getExistingPartitionDates <- function(table) {
-  project <- Sys.getenv("BIGQUERY_PROJECT")
-  dataset <- Sys.getenv("BIGQUERY_DATASET")
 
-  if(!exists_table(project = project,
-                   dataset = dataset,
-                   table = table)) {
+  if (!bqTableExists(table)) {
     return(character())
   }
 
-  sql <- paste0("SELECT partition_id from [", dataset , ".", table, "$__PARTITIONS_SUMMARY__];")
-  res <- query_exec(query = sql,
-                    project = project)
-  if(nrow(res) > 0) {
+  sql <- paste0("SELECT partition_id from [", table, "$__PARTITIONS_SUMMARY__];")
+  res <- bqExecuteSql(sql)
+  if (nrow(res) > 0) {
     return(res$partition_id)
   }
   else {
@@ -55,9 +51,9 @@ createPartitionTable <- function(table, sql = NULL, file = NULL, existing.dates 
 #' @note sql or file must be provided
 createRangeTable <- function(table, sql = NULL, file = NULL) {
 
-  if(missing(sql)) {
+  if (missing(sql)) {
     # Build SQL from code in the file.
-    sql <- paste(readLines(file), collapse="\n")
+    sql <- paste(readLines(file), collapse = "\n")
   }
 
   # StartDate
@@ -66,7 +62,6 @@ createRangeTable <- function(table, sql = NULL, file = NULL) {
   end.date <- Sys.Date() - 1
 
 
-  project <- Sys.getenv("BIGQUERY_PROJECT")
   dataset <- Sys.getenv("BIGQUERY_DATASET")
 
   existing.dates <- getExistingPartitionDates(table)
@@ -89,13 +84,13 @@ createRangeTable <- function(table, sql = NULL, file = NULL) {
 #' Gets existing dates from wildcard tables in BigQuery
 #'
 #' @export
-#' @param bq.dataset name of a dataset
+#' @param dataset name of a dataset
 #' @param table.prefix name of the table before the wildcard
-#' @param bq.project name of the project
+#' @param project name of the project
 #' @return string vector of dates
-getExistingDates <- function(bq.dataset, table.prefix, bq.project = Sys.getenv("BIGQUERY_PROJECT")) {
+getExistingDates <- function(dataset, table.prefix, project = Sys.getenv("BIGQUERY_PROJECT")) {
   # Gets list of dates for which date range table exists.
-  tables <- list_tables(bq.project, bq.dataset, 10000)
+  tables <- list_tables(project, dataset, 10000)
   matches <- tables[grepl(table.prefix, tables)]
   res <- str_extract(matches,"\\d{8}")
   return(res)
@@ -113,54 +108,56 @@ getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m
   # Gets list of dates for which date range table is missing.
   days <- rep(1, end.date - start.date + 1)
   days.sequence <- seq_along(days)
-  dates <- start.date -1 + days.sequence
+  dates <- start.date - 1 + days.sequence
   dates <- as.character(dates, format)
   res <- setdiff(dates, existing.dates)
-  return (res)
+  return(res)
 }
 
 #' Gets last id from a given field
 #'
 #' @export
-#' @param bq.table name of the table
+#' @param table name of the table
 #' @param field name of the field
-#' @param bq.project name of the project
-#' @param bq.dataset name of the dataset
+#' @param project name of the project
+#' @param dataset name of the dataset
 #' @return max value in a requested field
-getLastID <- function(bq.table, field, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
-                                       bq.dataset =  Sys.getenv("BIGQUERY_DATASET")) {
-  sql.tempalte <- "SELECT MAX(%1$s) as ID FROM [%2$s.%3$s]"
-  sql <- sprintf(sql.tempalte, field, bq.dataset, bq.table)
-  res <- query_exec(sql, project = bq.project)
-  res <- head(res$ID, 1)
-  if(is.na(res)) {
-    res <- 0
-  }
-  return(res)
+getLastID <- function(table,
+                      field,
+                      project = Sys.getenv("BIGQUERY_PROJECT"),
+                      dataset =  Sys.getenv("BIGQUERY_DATASET")) {
+
+  .Deprecated("getLastID")
 }
 
 #' Checks if table exists
 #'
 #' @export
-#' @param table.name name of the table
+#' @param table name of the table
 #' @return TRUE if table exists
-bqTableExists <- function(table.name) {
-  res <- exists_table(Sys.getenv("BIGQUERY_PROJECT"),
-                      dataset = Sys.getenv("BIGQUERY_DATASET"),
-                      table = table.name)
+bqTableExists <- function(table) {
+  res <- exists_table(
+    project = Sys.getenv("BIGQUERY_PROJECT"),
+    dataset = Sys.getenv("BIGQUERY_DATASET"),
+    table = table
+  )
   return(res)
 }
 
 #' Deletes table
 #'
 #' @export
-#' @param bq.table name of the table
-#' @param bq.project name of the project
-#' @param bq.dataset name of the dataset
+#' @param table name of the table
+#' @param project name of the project
+#' @param dataset name of the dataset
 #' @return results of the execution from bigrquery::delete_table
-bqDeleteTable <- function(bq.table, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
-                                      bq.dataset = Sys.getenv("BIGQUERY_DATASET")) {
-  res <- delete_table(project = bq.project, dataset = bq.dataset, table = bq.table)
+bqDeleteTable <- function(table,
+                          project = Sys.getenv("BIGQUERY_PROJECT"),
+                          dataset = Sys.getenv("BIGQUERY_DATASET")) {
+
+  res <- delete_table(project = project,
+                      dataset = dataset,
+                      table = table)
   return(res)
 }
 
@@ -171,11 +168,12 @@ bqDeleteTable <- function(bq.table, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
 #' @param ... any parameters that will be used to fill in placeholders in the template with sprintf
 #' @return SQL statment as a string
 readSql <- function(file, ...) {
-  sql <-  paste(readLines(file), collapse="\n")
+  sql <-  paste(readLines(file), collapse = "\n")
 
-  if(length(list(...)) > 0) { # template requires parameters.
+  if (length(list(...)) > 0) { # template requires parameters.
     sql <- sprintf(sql, ...)
-  } else { # template does not have parameteres.
+  } else {
+    # template does not have parameteres.
     sql <- sql
   }
 
@@ -186,14 +184,15 @@ readSql <- function(file, ...) {
 #'
 #' @export
 #' @param sql SQL statement to use a source for a new table
-#' @param bq.table name of a table to be created
-#' @param bq.project name of the destination project
-#' @param bq.dataset name of the destination dataset
+#' @param table name of a table to be created
+#' @param project name of the destination project
+#' @param dataset name of the destination dataset
 #' @param write_disposition defines whether records will be appended
 #' @return results of the exectuion as returned by bigrquery::query_exec
-bqCreateTable <- function(sql, bq.table,
-                          bq.project = Sys.getenv("BIGQUERY_PROJECT"),
-                          bq.dataset = Sys.getenv("BIGQUERY_DATASET"),
+bqCreateTable <- function(sql,
+                          table,
+                          project = Sys.getenv("BIGQUERY_PROJECT"),
+                          dataset = Sys.getenv("BIGQUERY_DATASET"),
                           write_disposition = "WRITE_APPEND" ) {
 
   use.legacy.sql <- Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
@@ -201,9 +200,9 @@ bqCreateTable <- function(sql, bq.table,
   # Creates table from the given SQL.
   res <- query_exec(
     query = sql,
-    project = bq.project,
-    default_dataset = bq.dataset,
-    destination_table = paste0(bq.dataset, ".", bq.table),
+    project = project,
+    default_dataset = dataset,
+    destination_table = paste0(dataset, ".", table),
     max_pages = 1,
     page_size = 1,
     create_disposition = "CREATE_IF_NEEDED",
@@ -211,6 +210,29 @@ bqCreateTable <- function(sql, bq.table,
     use_legacy_sql = use.legacy.sql
   )
   return(res)
+}
+
+#' Creates table from the json schema file.
+#'
+#' @export
+#' @importFrom jsonlite read_json
+#'
+#' @inheritParams bqCreateTable
+#' @param schema.file path to file with the table schema
+#' @param partition time partitioned table will be created if set to TRUE
+#' @seealso https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#schema.fields
+bqInitiateTable <- function(table,
+                            schema.file,
+                            partition = FALSE,
+                            project = Sys.getenv("BIGQUERY_PROJECT"),
+                            dataset = Sys.getenv("BIGQUERY_DATASET")) {
+  insert_table(
+    project = project,
+    dataset = dataset,
+    table = table,
+    schema = read_json(schema.file),
+    partition = partition
+  )
 }
 
 #' Gets data for a given SQL statement or file that contains SQL
@@ -223,7 +245,7 @@ bqCreateTable <- function(sql, bq.table,
 bqGetData <- function(sql = NULL, file = NULL, ...) {
   # Wrapper function to load data from BigQuery.
 
-  if(!missing(file)) { # Gets sql from file.
+  if (!missing(file)) { # Gets sql from file.
     return(bqExecuteFile(file, ...))
   }
   else {
@@ -240,7 +262,7 @@ bqGetData <- function(sql = NULL, file = NULL, ...) {
 bqExecuteFile <- function(file, ...) {
   # Function to load data from BigQuery using file with SQL.
 
-  sql <-  paste(readLines(file), collapse="\n")
+  sql <-  paste(readLines(file), collapse = "\n")
   res <- bqExecuteSql(sql, ...)
   return(data.table(res))
 }
@@ -252,9 +274,10 @@ bqExecuteFile <- function(file, ...) {
 #' @param ... any parameters that will be used to fill in placeholders with sprintf
 #' @return results of execution as data.frame
 bqExecuteSql <- function(sql, ...) {
-  if(length(list(...)) > 0) { # template requires parameters.
+  if (length(list(...)) > 0) { # template requires parameters.
     sql <- sprintf(sql, ...)
-  } else { # template does not have parameteres.
+  } else {
+    # template does not have parameteres.
     sql <- sql
   }
 
@@ -298,25 +321,25 @@ bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL
   #   file - source for the tabel as file.
   # Note: sql or file must be provided.
 
-  if(missing(sql)) {
+  if (missing(sql)) {
     # Build SQL from code in the file.
-    sql <- paste(readLines(file), collapse="\n")
+    sql <- paste(readLines(file), collapse = "\n")
   }
 
   # StartDate - start of Custom Dimension for UserID
   start.date <- as.Date(Sys.getenv("BIGQUERY_START_DATE"))
   #EndDate
-  if (Sys.getenv("BIGQUERY_END_DATE") == ""){
+  if (Sys.getenv("BIGQUERY_END_DATE") == "") {
     end.date <- Sys.Date() - 1
   } else {
     end.date <- as.Date(Sys.getenv("BIGQUERY_END_DATE"))
   }
 
-  if(missing(existing.dates)) {
+  if (missing(existing.dates)) {
     existing.dates <- getExistingPartitionDates(table)
   }
 
-  if(missing(missing.dates)) {
+  if (missing(missing.dates)) {
     missing.dates <- getMissingDates(start.date, end.date, existing.dates)
   }
 
@@ -334,7 +357,7 @@ bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL
         query_exec(query = sql.exec,
                    project = Sys.getenv("BIGQUERY_PROJECT"),
                    default_dataset = Sys.getenv("BIGQUERY_DATASET"),
-                   destination_table =paste0(Sys.getenv("BIGQUERY_DATASET"), ".", destination.partition),
+                   destination_table = paste0(Sys.getenv("BIGQUERY_DATASET"), ".", destination.partition),
                    max_pages = 1,
                    page_size = 1,
                    create_disposition = "CREATE_IF_NEEDED",
@@ -342,7 +365,7 @@ bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL
       })
     })
 
-  return (res)
+  invisible(res)
 }
 
 #' Inserts data into BigQuery table
@@ -350,24 +373,24 @@ bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL
 #' @export
 #' @param table name of the target table
 #' @param data data to be inserted
-#' @param bq.project name of the destination project
-#' @param bq.dataset name of the destination dataset
+#' @param project name of the destination project
+#' @param dataset name of the destination dataset
 #' @param append specifies if data should be appended or truncated
 #' @param job.name name of the ETL job that will be written to the metadata execution log
 #' @param increment.field specifies field that is used for incremental data loads
 #' @return results of execution
 bqInsertData <- function(table, data,
-                         bq.project = Sys.getenv("BIGQUERY_PROJECT"),
-                         bq.dataset = Sys.getenv("BIGQUERY_DATASET"),
+                         project = Sys.getenv("BIGQUERY_PROJECT"),
+                         dataset = Sys.getenv("BIGQUERY_DATASET"),
                          append = TRUE, job.name = NULL, increment.field = NULL) {
 
-  if(xor(is.null(job.name), is.null(increment.field))) {
+  if (xor(is.null(job.name), is.null(increment.field))) {
     stop("increment.field and job.name arguments are both required if one is provided.")
   }
 
   write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
   rows <- nrow(data)
-  if(rows > 0) {
+  if (rows > 0) {
     job <- insert_upload_job(project = Sys.getenv("BIGQUERY_PROJECT"),
                              dataset = Sys.getenv("BIGQUERY_DATASET"),
                              table,
@@ -377,7 +400,7 @@ bqInsertData <- function(table, data,
 
     res <- wait_for(job)
 
-    if(!is.null(job.name)) {
+    if (!is.null(job.name)) {
       # Log metadata of the execution with number of rows and increment value
       increment.value <- as.integer(max(data[, get(increment.field)]))
       etlLogExecution(job.name, increment.value, rows)
@@ -433,7 +456,7 @@ bqCopyTable <- function(from, to) {
 
   wait_for(job)
 
-  return (bqTableExists(to))
+  return(bqTableExists(to))
 }
 
 #' Returns a case clause based on binning the input vector
@@ -462,5 +485,5 @@ bqVectorToCase <- function(field, limits, alias = field) {
   mainBody <- paste0(mainBody, "WHEN (", field, " > ", limits[length(limits)], ") THEN '", LETTERS[length(limits) + 1] ,") (", limits[length(limits)], ", +Inf)' ")
 
   res <- paste0(res, mainBody, "END AS ", alias)
-  return (res)
+  return(res)
 }

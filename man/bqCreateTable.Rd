@@ -4,18 +4,18 @@
 \alias{bqCreateTable}
 \title{Creates table using given sql}
 \usage{
-bqCreateTable(sql, bq.table, bq.project = Sys.getenv("BIGQUERY_PROJECT"),
-  bq.dataset = Sys.getenv("BIGQUERY_DATASET"),
+bqCreateTable(sql, table, project = Sys.getenv("BIGQUERY_PROJECT"),
+  dataset = Sys.getenv("BIGQUERY_DATASET"),
   write_disposition = "WRITE_APPEND")
 }
 \arguments{
 \item{sql}{SQL statement to use a source for a new table}
 
-\item{bq.table}{name of a table to be created}
+\item{table}{name of a table to be created}
 
-\item{bq.project}{name of the destination project}
+\item{project}{name of the destination project}
 
-\item{bq.dataset}{name of the destination dataset}
+\item{dataset}{name of the destination dataset}
 
 \item{write_disposition}{defines whether records will be appended}
 }
