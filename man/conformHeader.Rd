@@ -2,13 +2,15 @@
 % Please edit documentation in R/transformations.R
 \name{conformHeader}
 \alias{conformHeader}
-\title{Replace " ", "-" and "_" with "." in the header.}
+\title{Replace " ", "-" and "_" with a given separator in the header.}
 \usage{
-conformHeader(dt)
+conformHeader(names, separator = ".")
 }
 \arguments{
-\item{dt}{data.table to correc the header for.}
+\item{names}{column names to correct.}
+
+\item{separator}{char to use between words in colnumn names.}
 }
 \description{
-Replace " ", "-" and "_" with "." in the header.
+Replace " ", "-" and "_" with a given separator in the header.
 }

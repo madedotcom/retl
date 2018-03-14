@@ -34,10 +34,10 @@ safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by))
   return(res)
 }
 
-#' Replace " ", "-" and "_" with "." in the header.
-#'
-#' @param dt data.table to correc the header for.
-conformHeader <- function(dt) {
-  names(dt) <- gsub(" |_|-", ".", tolower(names(dt)))
-  return(dt)
+#' Replace " ", "-" and "_" with a given separator in the header.
+#' @export
+#' @param names column names to correct.
+#' @param separator char to use between words in colnumn names.
+conformHeader <- function(names, separator = ".") {
+ gsub("[\\.| |_|-]", separator, tolower(names))
 }
