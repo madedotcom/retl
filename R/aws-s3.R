@@ -58,7 +58,7 @@ s3GetFile <- function(path, header = T,
 
   data <- iconv(readBin(raw_data, character()), from = "UTF-8", to = "UTF-8")
   dt <- fread(data, header = header, strip.white = F)
-  dt <- conformHeader(dt)
+  names(dt) <- conformHeader(names(dt))
   invisible(dt)
 }
 
@@ -123,7 +123,7 @@ s3GetFile.gz <- function(path,
 
   save_object(full.path, bucket, file = tmp.file)
   dt <- fread(paste0('zcat < ', tmp.file))
-  dt <- conformHeader(dt)
+  names(dt) <- conformHeader(names(dt))
   invisible(dt)
 }
 
@@ -177,7 +177,7 @@ s3GetFile.zip <- function(path,
 
   save_object(full.path, bucket, file = tmp.file)
   dt <- fread(unzip(tmp.file), fill = TRUE)
-  dt <- conformHeader(dt)
+  names(dt) <- conformHeader(names(dt))
   invisible(dt)
 }
 
@@ -219,6 +219,6 @@ s3GetFile.json.gz <- function(path,
   save_object(full.path, bucket, file = tmp.file)
   dt <- fromJSON(tmp.file)
   dt <- data.table(dt)
-  dt <- conformHeader(dt)
+  names(dt) <- conformHeader(names(dt))
   invisible(dt)
 }

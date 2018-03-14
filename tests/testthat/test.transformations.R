@@ -39,9 +39,13 @@ test_that("Header transformation works", {
   dt <- data.table("_under_SCORE_" = "underscore",
                    "-da-Sh-" = "dash",
                    " sP ace " = "space",
-                   "C-om bin_ed" = "combined")
-  dt <- conformHeader(dt)
-  res <- names(dt)
+                   "C-om bin.ed" = "combined")
+  res <- conformHeader(names(dt))
   expect <- c(".under.score.", ".da.sh.", ".sp.ace.", "c.om.bin.ed")
   expect_identical(res, expect)
+
+  res <-  conformHeader(names(dt), separator = "_")
+  expect <- c("_under_score_", "_da_sh_", "_sp_ace_", "c_om_bin_ed")
+  expect_identical(res, expect)
 })
+
