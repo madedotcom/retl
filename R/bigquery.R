@@ -345,7 +345,7 @@ bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL
 
   res <-
     lapply(missing.dates, function(d) { # Create partition for every missing date.
-      destination.partition <- paste0(table, "$", d)
+      destination.partition <- bqPartitionName(table, d)
       print(paste0("Partition name: ", destination.partition))
 
       delete_table(project = Sys.getenv("BIGQUERY_PROJECT"),
