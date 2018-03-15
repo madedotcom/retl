@@ -348,9 +348,7 @@ bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL
       destination.partition <- bqPartitionName(table, d)
       print(paste0("Partition name: ", destination.partition))
 
-      delete_table(project = Sys.getenv("BIGQUERY_PROJECT"),
-                   dataset = Sys.getenv("BIGQUERY_DATASET"),
-                   table = destination.partition)
+      bqDeleteTable(destination.partition)
 
       lapply(ga.properties, function(p) {
         sql.exec <- sprintf(sql, p, d, gaGetShop(ga.properties, p)) # Replace placeholder in sql template.
