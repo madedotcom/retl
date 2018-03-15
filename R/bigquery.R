@@ -487,3 +487,40 @@ bqVectorToCase <- function(field, limits, alias = field) {
   res <- paste0(res, mainBody, "END AS ", alias)
   return(res)
 }
+
+#' Creates partition name by combining table and partition date.
+#'
+#' @export
+#' @param table Name of the table
+#' @param date Partition date
+#' @return Full partition table name
+bqPartitionName <- function(table, date) {
+  partition.time <- gsub("-","", date)
+  res <- paste0(table, "$", partition.time)
+  return(res)
+}
+
+#' Deletes a specific partition of a partition table.
+#'
+#' @export
+#' @param table Name of the table
+#' @param date Partition date
+bqDeletePartition <- function(table, date) {
+  name <- bqPartitionName(table, date)
+  bqDeleteTable(name)
+}
+
+#' Inserts data table into a specific partition of a partition table.
+#'
+#' @export
+#' @param table Name of the table
+#' @param date Partition date
+#' @param data Data table to insert
+#' @param append Append to the partition if TRUE else overwrite
+bqInsertPartition <- function(table, date, data, append) {
+  target.partition <- bqPartitionName(table, date)
+
+  bqInsertData(table = target.partition,
+               data = data,
+               append = append)
+}
