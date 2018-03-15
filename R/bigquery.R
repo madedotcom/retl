@@ -345,12 +345,10 @@ bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL
 
   res <-
     lapply(missing.dates, function(d) { # Create partition for every missing date.
-      destination.partition <- paste0(table, "$", d)
+      destination.partition <- bqPartitionName(table, d)
       print(paste0("Partition name: ", destination.partition))
 
-      delete_table(project = Sys.getenv("BIGQUERY_PROJECT"),
-                   dataset = Sys.getenv("BIGQUERY_DATASET"),
-                   table = destination.partition)
+      bqDeleteTable(destination.partition)
 
       lapply(ga.properties, function(p) {
         sql.exec <- sprintf(sql, p, d, gaGetShop(ga.properties, p)) # Replace placeholder in sql template.
@@ -486,4 +484,41 @@ bqVectorToCase <- function(field, limits, alias = field) {
 
   res <- paste0(res, mainBody, "END AS ", alias)
   return(res)
+}
+
+#' Creates partition name by combining table and partition date.
+#'
+#' @export
+#' @param table Name of the table
+#' @param date Partition date
+#' @return Full partition table name
+bqPartitionName <- function(table, date) {
+  partition.time <- gsub("-","", date)
+  res <- paste0(table, "$", partition.time)
+  return(res)
+}
+
+#' Deletes a specific partition of a partition table.
+#'
+#' @export
+#' @param table Name of the table
+#' @param date Partition date
+bqDeletePartition <- function(table, date) {
+  name <- bqPartitionName(table, date)
+  bqDeleteTable(name)
+}
+
+#' Inserts data table into a specific partition of a partition table.
+#'
+#' @export
+#' @param table Name of the table
+#' @param date Partition date
+#' @param data Data table to insert
+#' @param append Append to the partition if TRUE else overwrite
+bqInsertPartition <- function(table, date, data, append) {
+  target.partition <- bqPartitionName(table, date)
+
+  bqInsertData(table = target.partition,
+               data = data,
+               append = append)
 }
