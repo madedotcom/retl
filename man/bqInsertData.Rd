@@ -19,8 +19,6 @@ bqInsertData(table, data, dataset = Sys.getenv("BIGQUERY_DATASET"),
 \item{job.name}{name of the ETL job that will be written to the metadata execution log}
 
 \item{increment.field}{specifies field that is used for incremental data loads}
-
-\item{project}{name of the destination project}
 }
 \value{
 results of execution

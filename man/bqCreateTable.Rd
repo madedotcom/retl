@@ -15,8 +15,6 @@ bqCreateTable(sql, table, dataset = Sys.getenv("BIGQUERY_DATASET"),
 \item{dataset}{name of the destination dataset}
 
 \item{write_disposition}{defines whether records will be appended}
-
-\item{project}{name of the destination project}
 }
 \value{
 results of the exectuion as returned by bigrquery::query_exec

@@ -98,7 +98,6 @@ createRangeTable <- function(table, sql = NULL, file = NULL) {
 #' @export
 #' @param dataset name of a dataset
 #' @param table.prefix name of the table before the wildcard
-#' @param project name of the project
 #' @return string vector of dates
 getExistingDates <- function(dataset, table.prefix) {
   # Gets list of dates for which date range table exists.
@@ -131,7 +130,6 @@ getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m
 #' @export
 #' @param table name of the table
 #' @param field name of the field
-#' @param project name of the project
 #' @param dataset name of the dataset
 #' @return max value in a requested field
 getLastID <- function(table,
@@ -161,7 +159,6 @@ bqTableExists <- function(table) {
 #'
 #' @export
 #' @param table name of the table
-#' @param project name of the project
 #' @param dataset name of the dataset
 #' @return results of the execution from bigrquery::delete_table
 bqDeleteTable <- function(table,
@@ -197,7 +194,6 @@ readSql <- function(file, ...) {
 #' @export
 #' @param sql SQL statement to use a source for a new table
 #' @param table name of a table to be created
-#' @param project name of the destination project
 #' @param dataset name of the destination dataset
 #' @param write_disposition defines whether records will be appended
 #' @return results of the exectuion as returned by bigrquery::query_exec
@@ -383,7 +379,6 @@ bqCreatePartitionTable <- function(table, ga.properties,
 #' @export
 #' @param table name of the target table
 #' @param data data to be inserted
-#' @param project name of the destination project
 #' @param dataset name of the destination dataset
 #' @param append specifies if data should be appended or truncated
 #' @param job.name name of the ETL job that will be written to the metadata execution log

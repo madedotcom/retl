@@ -12,8 +12,6 @@ getLastID(table, field, project = Sys.getenv("BIGQUERY_PROJECT"),
 
 \item{field}{name of the field}
 
-\item{project}{name of the project}
-
 \item{dataset}{name of the dataset}
 }
 \value{

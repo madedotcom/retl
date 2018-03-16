@@ -10,8 +10,6 @@ bqDeleteTable(table, dataset = Sys.getenv("BIGQUERY_DATASET"))
 \item{table}{name of the table}
 
 \item{dataset}{name of the dataset}
-
-\item{project}{name of the project}
 }
 \value{
 results of the execution from bigrquery::delete_table

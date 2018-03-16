@@ -10,8 +10,6 @@ getExistingDates(dataset, table.prefix)
 \item{dataset}{name of a dataset}
 
 \item{table.prefix}{name of the table before the wildcard}
-
-\item{project}{name of the project}
 }
 \value{
 string vector of dates
