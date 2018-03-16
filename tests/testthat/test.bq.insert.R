@@ -2,15 +2,15 @@ library(bigrquery)
 library(mockery)
 library(data.table)
 context("BigQuery insert functions")
-
+auth_mock = mock(cycle = T)
 test_that("Data is inserted correctly without metadata", {
   upload_function <- mock(cycle = T)
   wait_function <- mock(cycle = T)
   with_mock(
     `bigrquery::insert_upload_job` = upload_function,
     `bigrquery::wait_for` = wait_function,
+    bqAuth = auth_mock,
     {
-
       res <- bqInsertData("test_table", data.table())
       expect_called(upload_function, 0)
 
@@ -26,6 +26,7 @@ test_that("Data is inserted correctly with metadata", {
   with_mock(
     `bigrquery::insert_upload_job` = upload_function,
     `bigrquery::wait_for` = wait_function,
+    bqAuth = auth_mock,
     {
       dt.test <- data.table(iris)
       res <- bqInsertData(table = "test_table", dt.test, job.name = "test", increment.field = "Sepal.Width")
