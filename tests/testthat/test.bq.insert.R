@@ -10,7 +10,7 @@ test_that("Data is inserted correctly without metadata", {
   with_mock(
     `bigrquery::insert_upload_job` = insert_upload_job_mock,
     `bigrquery::wait_for` = wait_mock,
-    bqAuth = auth_mock,
+    `retl::bqAuth` = auth_mock,
     {
       res <- bqInsertData("test_table", data.table())
       expect_called(insert_upload_job_mock, 0)
@@ -27,7 +27,7 @@ test_that("Data is inserted correctly with metadata", {
   with_mock(
     `bigrquery::insert_upload_job` = insert_upload_job_mock,
     `bigrquery::wait_for` = wait_mock,
-    bqAuth = auth_mock,
+    `retl::bqAuth` = auth_mock,
     {
       dt.test <- data.table(iris)
       res <- bqInsertData(table = "test_table", dt.test, job.name = "test", increment.field = "Sepal.Width")
