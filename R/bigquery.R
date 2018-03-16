@@ -126,21 +126,6 @@ getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m
   return(res)
 }
 
-#' Gets last id from a given field
-#'
-#' @export
-#' @param table name of the table
-#' @param field name of the field
-#' @param dataset name of the dataset
-#' @return max value in a requested field
-getLastID <- function(table,
-                      field,
-                      project = Sys.getenv("BIGQUERY_PROJECT"),
-                      dataset =  Sys.getenv("BIGQUERY_DATASET")) {
-
-  .Deprecated("getLastID")
-}
-
 #' Checks if table exists
 #'
 #' @export
