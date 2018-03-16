@@ -1,6 +1,7 @@
 #' @import utils
 #' @import bigrquery
 #' @import stringr
+#' @import assertthat
 
 # Required environment variables to use BigQuery helper functions:
 # BIGQUERY_PROJECT - name of the project in BigQuery.
