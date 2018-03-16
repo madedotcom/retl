@@ -13,6 +13,7 @@ License: GPL-2
 LazyData: TRUE
 Suggests:
     testthat,
+    devtools,
     mockery
 RoxygenNote: 6.0.1
 Imports:
