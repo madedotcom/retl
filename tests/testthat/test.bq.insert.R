@@ -1,36 +1,38 @@
 library(bigrquery)
 library(mockery)
 library(data.table)
+
 context("BigQuery insert functions")
-
+auth_mock = mock(cycle = T)
+insert_upload_job_mock <- mock(cycle = T)
+wait_mock <- mock(cycle = T)
 test_that("Data is inserted correctly without metadata", {
-  upload_function <- mock(cycle = T)
-  wait_function <- mock(cycle = T)
   with_mock(
-    `bigrquery::insert_upload_job` = upload_function,
-    `bigrquery::wait_for` = wait_function,
+    `bigrquery::insert_upload_job` = insert_upload_job_mock,
+    `bigrquery::wait_for` = wait_mock,
+    `retl::bqAuth` = auth_mock,
     {
-
       res <- bqInsertData("test_table", data.table())
-      expect_called(upload_function, 0)
+      expect_called(insert_upload_job_mock, 0)
 
       res <- bqInsertData("test_table", iris)
-      expect_called(upload_function, 1)
+      expect_called(insert_upload_job_mock, 1)
     }
   )
 })
 
+insert_upload_job_mock <- mock(cycle = T)
+wait_mock <- mock(cycle = T)
 test_that("Data is inserted correctly with metadata", {
-  upload_function <- mock(cycle = T)
-  wait_function <- mock(cycle = T)
   with_mock(
-    `bigrquery::insert_upload_job` = upload_function,
-    `bigrquery::wait_for` = wait_function,
+    `bigrquery::insert_upload_job` = insert_upload_job_mock,
+    `bigrquery::wait_for` = wait_mock,
+    `retl::bqAuth` = auth_mock,
     {
       dt.test <- data.table(iris)
       res <- bqInsertData(table = "test_table", dt.test, job.name = "test", increment.field = "Sepal.Width")
-      expect_called(upload_function, 2) # calls add up, so only two calls are attributed to this test
-      expect_args(upload_function, 2,
+      expect_called(insert_upload_job_mock, 2) # calls add up, so only two calls are attributed to this test
+      expect_args(insert_upload_job_mock, 2,
                   project = "",
                   dataset = "",
                   table = "etl_increments",
@@ -45,10 +47,12 @@ test_that("Data is inserted correctly with metadata", {
   )
 })
 
+insert_upload_job_mock <- mock(cycle = T)
+wait_for_mock <- mock(cycle = T)
 test_that("Metadata logged only if job.name and increment.field params are provided together", {
   with_mock(
-    `bigrquery::insert_upload_job` = mock(),
-    `bigrquery::wait_for` = mock(),
+    `bigrquery::insert_upload_job` = insert_upload_job_mock,
+    `bigrquery::wait_for` = wait_for_mock,
     expect_error(bqInsertData(table = "test_table", data.table(iris), job.name = "test"), "increment\\.field.*required"),
     expect_error(bqInsertData(table = "test_table", data.table(iris), increment.field = "test"), "job\\.name.*required")
   )

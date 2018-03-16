@@ -1,9 +1,13 @@
+library(bigrquery)
 library(mockery)
+
 context("BigQuery Create Table")
 
+auth_mock = mock(cycle = T)
 insert_table_mock <- mock()
 with_mock(
-  insert_table = insert_table_mock,
+  `bigrquery::insert_table` = insert_table_mock,
+  `retl::bqAuth` = auth_mock,
   test_that("Check that schema is passed to insert_table", {
 
     bqInitiateTable(table = "test_table",

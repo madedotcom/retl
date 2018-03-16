@@ -9,6 +9,9 @@ bqGetColumnNames(table)
 \arguments{
 \item{table}{name of the table}
 }
+\value{
+columns of a table
+}
 \description{
 Gets list of the column names for a given table
 }

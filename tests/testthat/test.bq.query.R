@@ -1,11 +1,12 @@
 library(bigrquery)
 library(mockery)
 context("BigQuery query functions.")
-
+auth_mock = mock(cycle = T)
 test_that("Correct sql is executed", {
   query_function <- mock(cycle = T)
   with_mock(
     `bigrquery::query_exec` = query_function,
+    `retl::bqAuth` = auth_mock,
     {
       res <- bqExecuteSql("SELECT %1$s", "TEST")
       expect <- "SELECT TEST"

@@ -1,14 +1,27 @@
 #' @import utils
 #' @import bigrquery
 #' @import stringr
+#' @import assertthat
 
 # Required environment variables to use BigQuery helper functions:
 # BIGQUERY_PROJECT - name of the project in BigQuery.
 # BIGQUERY_DATASET - name of the default dataset in BigQuery.
+# BIGQUERY_ACCESS_TOKEN_PATH - path to the json token file.
 
 library(bigrquery)
 library(stringr)
 library(jsonlite)
+library(assertthat)
+
+#' Wrapper for the set_service_token that uses BIGQUERY_ACCESS_TOKEN_PATH env var
+#'  as default value for the secret token location.
+bqAuth <- function() {
+  if (!is_set_access_cred()) {
+    token.file = Sys.getenv("BIGQUERY_ACCESS_TOKEN_PATH")
+    assert_that(token.file != "", file.exists(token.file))
+    set_service_token(token.file)
+  }
+}
 
 #' Gets existing dates for date partitioned table in BigQuery
 #'
@@ -86,11 +99,10 @@ createRangeTable <- function(table, sql = NULL, file = NULL) {
 #' @export
 #' @param dataset name of a dataset
 #' @param table.prefix name of the table before the wildcard
-#' @param project name of the project
 #' @return string vector of dates
-getExistingDates <- function(dataset, table.prefix, project = Sys.getenv("BIGQUERY_PROJECT")) {
-  # Gets list of dates for which date range table exists.
-  tables <- list_tables(project, dataset, 10000)
+getExistingDates <- function(dataset, table.prefix) {
+  bqAuth()
+  tables <- list_tables(project = Sys.getenv("BIGQUERY_PROJECT"), dataset, 10000)
   matches <- tables[grepl(table.prefix, tables)]
   res <- str_extract(matches,"\\d{8}")
   return(res)
@@ -114,28 +126,13 @@ getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m
   return(res)
 }
 
-#' Gets last id from a given field
-#'
-#' @export
-#' @param table name of the table
-#' @param field name of the field
-#' @param project name of the project
-#' @param dataset name of the dataset
-#' @return max value in a requested field
-getLastID <- function(table,
-                      field,
-                      project = Sys.getenv("BIGQUERY_PROJECT"),
-                      dataset =  Sys.getenv("BIGQUERY_DATASET")) {
-
-  .Deprecated("getLastID")
-}
-
 #' Checks if table exists
 #'
 #' @export
 #' @param table name of the table
 #' @return TRUE if table exists
 bqTableExists <- function(table) {
+  bqAuth()
   res <- exists_table(
     project = Sys.getenv("BIGQUERY_PROJECT"),
     dataset = Sys.getenv("BIGQUERY_DATASET"),
@@ -148,14 +145,12 @@ bqTableExists <- function(table) {
 #'
 #' @export
 #' @param table name of the table
-#' @param project name of the project
 #' @param dataset name of the dataset
 #' @return results of the execution from bigrquery::delete_table
 bqDeleteTable <- function(table,
-                          project = Sys.getenv("BIGQUERY_PROJECT"),
                           dataset = Sys.getenv("BIGQUERY_DATASET")) {
-
-  res <- delete_table(project = project,
+  bqAuth()
+  res <- delete_table(project = Sys.getenv("BIGQUERY_PROJECT"),
                       dataset = dataset,
                       table = table)
   return(res)
@@ -185,22 +180,20 @@ readSql <- function(file, ...) {
 #' @export
 #' @param sql SQL statement to use a source for a new table
 #' @param table name of a table to be created
-#' @param project name of the destination project
 #' @param dataset name of the destination dataset
 #' @param write_disposition defines whether records will be appended
 #' @return results of the exectuion as returned by bigrquery::query_exec
 bqCreateTable <- function(sql,
                           table,
-                          project = Sys.getenv("BIGQUERY_PROJECT"),
                           dataset = Sys.getenv("BIGQUERY_DATASET"),
                           write_disposition = "WRITE_APPEND" ) {
-
+  bqAuth()
   use.legacy.sql <- Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
 
   # Creates table from the given SQL.
   res <- query_exec(
     query = sql,
-    project = project,
+    project = Sys.getenv("BIGQUERY_PROJECT"),
     default_dataset = dataset,
     destination_table = paste0(dataset, ".", table),
     max_pages = 1,
@@ -224,10 +217,10 @@ bqCreateTable <- function(sql,
 bqInitiateTable <- function(table,
                             schema.file,
                             partition = FALSE,
-                            project = Sys.getenv("BIGQUERY_PROJECT"),
                             dataset = Sys.getenv("BIGQUERY_DATASET")) {
+  bqAuth()
   insert_table(
-    project = project,
+    project = Sys.getenv("BIGQUERY_PROJECT"),
     dataset = dataset,
     table = table,
     schema = read_json(schema.file),
@@ -283,6 +276,7 @@ bqExecuteSql <- function(sql, ...) {
 
   use.legacy.sql <- Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
 
+  bqAuth()
   res <- query_exec(sql,
                     project = Sys.getenv("BIGQUERY_PROJECT"),
                     default_dataset = Sys.getenv("BIGQUERY_DATASET"),
@@ -312,14 +306,14 @@ gaGetShop <- function(ga.properties, property) {
 #' @param file if sql is not provided it will be read from the file
 #' @param existing.dates dates that should be skipped
 #' @param missing.dates dates calculation for which will be enforced
-bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL, existing.dates = NULL, missing.dates = NULL) {
-  # Creates partition in specified table in BigQuery.
-  #
-  # Parameters:
-  #   table - name of the new table
-  #   sql - source for the table as string.
-  #   file - source for the tabel as file.
-  # Note: sql or file must be provided.
+bqCreatePartitionTable <- function(table, ga.properties,
+                                   sql = NULL, file = NULL,
+                                   existing.dates = NULL,
+                                   missing.dates = NULL) {
+
+  assert_that(xor(is.null(sql), is.null(file)), msg = "Either sql or file must be provided")
+
+  bqAuth()
 
   if (missing(sql)) {
     # Build SQL from code in the file.
@@ -371,26 +365,27 @@ bqCreatePartitionTable <- function(table, ga.properties, sql = NULL, file = NULL
 #' @export
 #' @param table name of the target table
 #' @param data data to be inserted
-#' @param project name of the destination project
 #' @param dataset name of the destination dataset
 #' @param append specifies if data should be appended or truncated
 #' @param job.name name of the ETL job that will be written to the metadata execution log
 #' @param increment.field specifies field that is used for incremental data loads
 #' @return results of execution
-bqInsertData <- function(table, data,
-                         project = Sys.getenv("BIGQUERY_PROJECT"),
+bqInsertData <- function(table,
+                         data,
                          dataset = Sys.getenv("BIGQUERY_DATASET"),
-                         append = TRUE, job.name = NULL, increment.field = NULL) {
+                         append = TRUE,
+                         job.name = NULL, increment.field = NULL) {
 
-  if (xor(is.null(job.name), is.null(increment.field))) {
-    stop("increment.field and job.name arguments are both required if one is provided.")
-  }
+  assert_that(!xor(is.null(job.name), is.null(increment.field)),
+    msg = "increment.field and job.name arguments are both required if one is provided.")
 
   write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
   rows <- nrow(data)
+
   if (rows > 0) {
+    bqAuth()
     job <- insert_upload_job(project = Sys.getenv("BIGQUERY_PROJECT"),
-                             dataset = Sys.getenv("BIGQUERY_DATASET"),
+                             dataset = dataset,
                              table,
                              data,
                              write_disposition = write.disposition,
@@ -413,9 +408,9 @@ bqInsertData <- function(table, data,
 #'
 #' @export
 #' @param table name of the table
+#' @return columns of a table
 bqGetColumnNames <- function(table) {
-  # Function which returns the columns of a table
-
+  bqAuth()
 
   info <- get_table(project = Sys.getenv("BIGQUERY_PROJECT"),
                     dataset = Sys.getenv("BIGQUERY_DATASET"),
@@ -431,29 +426,36 @@ bqGetColumnNames <- function(table) {
   return(fields)
 }
 
-#' Copies table
+#' Copies table in BigQuery
 #'
 #' @export
 #' @param from name of the source table
 #' @param to name of the desitnation table
-#' @return result of the exectuion
+#' @return TRUE if the table has been succesfully copied
 bqCopyTable <- function(from, to) {
-  # Function to copy a table in BigQuery
-  # returns TRUE if the table has been succesfully copied
-  src <- list(project_id = Sys.getenv("BIGQUERY_PROJECT"),
-              dataset_id = Sys.getenv("BIGQUERY_DATASET"),
-              table_id = from)
-  dest <- list(project_id = Sys.getenv("BIGQUERY_PROJECT"),
-               dataset_id = Sys.getenv("BIGQUERY_DATASET"),
-               table_id = to)
+  bqAuth()
 
-  job <- copy_table( src = src,
-                     dest = dest,
-                     write_disposition = "WRITE_TRUNCATE",
-                     project = Sys.getenv("BIGQUERY_PROJECT"))
+  src <- list(
+    project_id = Sys.getenv("BIGQUERY_PROJECT"),
+    dataset_id = Sys.getenv("BIGQUERY_DATASET"),
+    table_id = from
+  )
+
+  dest <- list(
+    project_id = Sys.getenv("BIGQUERY_PROJECT"),
+    dataset_id = Sys.getenv("BIGQUERY_DATASET"),
+    table_id = to
+  )
+
+  job <- copy_table(
+    src = src,
+    dest = dest,
+    write_disposition = "WRITE_TRUNCATE",
+    project = Sys.getenv("BIGQUERY_PROJECT")
+  )
 
   wait_for(job)
-
+  print(job)
   return(bqTableExists(to))
 }
 
@@ -461,13 +463,10 @@ bqCopyTable <- function(from, to) {
 #' to n+1 bins
 #'
 #' @export
-#'
 #' @param field field name to be used for the binning
 #' @param limits vector of seperator values
 #' @param alias resulting field name for the case
-#'
 #' @return case clause to be included in a SQL statement
-#'
 bqVectorToCase <- function(field, limits, alias = field) {
   res <- "CASE "
   mainBody <- paste0("WHEN (", field, " <= ", limits[1], ") THEN '", LETTERS[1] ,") (-Inf, ", limits[1], "]' ")

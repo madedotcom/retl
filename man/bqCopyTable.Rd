@@ -2,7 +2,7 @@
 % Please edit documentation in R/bigquery.R
 \name{bqCopyTable}
 \alias{bqCopyTable}
-\title{Copies table}
+\title{Copies table in BigQuery}
 \usage{
 bqCopyTable(from, to)
 }
@@ -12,8 +12,8 @@ bqCopyTable(from, to)
 \item{to}{name of the desitnation table}
 }
 \value{
-result of the exectuion
+TRUE if the table has been succesfully copied
 }
 \description{
-Copies table
+Copies table in BigQuery
 }

@@ -1,6 +1,7 @@
 #' @import utils
 #' @import data.table
 #' @import aws.s3
+#' @import jsonlite
 
 library(data.table)
 library(aws.s3)
