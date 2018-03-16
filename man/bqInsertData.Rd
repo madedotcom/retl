@@ -4,16 +4,13 @@
 \alias{bqInsertData}
 \title{Inserts data into BigQuery table}
 \usage{
-bqInsertData(table, data, project = Sys.getenv("BIGQUERY_PROJECT"),
-  dataset = Sys.getenv("BIGQUERY_DATASET"), append = TRUE,
-  job.name = NULL, increment.field = NULL)
+bqInsertData(table, data, dataset = Sys.getenv("BIGQUERY_DATASET"),
+  append = TRUE, job.name = NULL, increment.field = NULL)
 }
 \arguments{
 \item{table}{name of the target table}
 
 \item{data}{data to be inserted}
-
-\item{project}{name of the destination project}
 
 \item{dataset}{name of the destination dataset}
 
@@ -22,6 +19,8 @@ bqInsertData(table, data, project = Sys.getenv("BIGQUERY_PROJECT"),
 \item{job.name}{name of the ETL job that will be written to the metadata execution log}
 
 \item{increment.field}{specifies field that is used for incremental data loads}
+
+\item{project}{name of the destination project}
 }
 \value{
 results of execution

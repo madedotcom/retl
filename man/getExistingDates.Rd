@@ -4,8 +4,7 @@
 \alias{getExistingDates}
 \title{Gets existing dates from wildcard tables in BigQuery}
 \usage{
-getExistingDates(dataset, table.prefix,
-  project = Sys.getenv("BIGQUERY_PROJECT"))
+getExistingDates(dataset, table.prefix)
 }
 \arguments{
 \item{dataset}{name of a dataset}
