@@ -101,7 +101,7 @@ createRangeTable <- function(table, sql = NULL, file = NULL) {
 #' @param table.prefix name of the table before the wildcard
 #' @return string vector of dates
 getExistingDates <- function(dataset, table.prefix) {
-  # Gets list of dates for which date range table exists.
+  bqAuth()
   tables <- list_tables(project = Sys.getenv("BIGQUERY_PROJECT"), dataset, 10000)
   matches <- tables[grepl(table.prefix, tables)]
   res <- str_extract(matches,"\\d{8}")
