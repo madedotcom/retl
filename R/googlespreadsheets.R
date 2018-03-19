@@ -22,7 +22,6 @@ gsAuth <- function() {
 #' @import googlesheets
 #' @param key key of the google spreadsheet
 #' @param tab name of the tab from which data will be loaded
-#' @param token.file json access token file for Google API.
 gsLoadSheet <- function(key, tab) {
   gsAuth()
   gap <- gs_key(key, verbose = TRUE)
@@ -34,7 +33,6 @@ gsLoadSheet <- function(key, tab) {
 #' @export
 #' @import googlesheets
 #' @param key Key of the google spreadsheet.
-#' @param token.file Json access token file for Google API.
 gsLoadAll <- function(key) {
   gsAuth()
   tabs <- gs_key(key)$ws$ws_title

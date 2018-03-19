@@ -10,8 +10,6 @@ gsLoadSheet(key, tab)
 \item{key}{key of the google spreadsheet}
 
 \item{tab}{name of the tab from which data will be loaded}
-
-\item{token.file}{json access token file for Google API.}
 }
 \description{
 Loads google spreadsheet via key

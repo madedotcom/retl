@@ -8,8 +8,6 @@ gsLoadAll(key)
 }
 \arguments{
 \item{key}{Key of the google spreadsheet.}
-
-\item{token.file}{Json access token file for Google API.}
 }
 \description{
 Loads all sheets from a google spreadsheet into a list with the tab name as the list element name.
