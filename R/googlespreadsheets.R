@@ -5,7 +5,13 @@ library(googleAuthR)
 library(googlesheets)
 library(data.table)
 
-#' Requires access_token.json file the working directory
+#' Authentication for google sheets. Requires access_token.json path as env. var.
+gsAuth <- function() {
+  service_token <- gar_auth_service(json_file = Sys.getenv("BIGQUERY_ACCESS_TOKEN_PATH"),
+                                    scope = c("https://www.googleapis.com/auth/drive",
+                                              "https://spreadsheets.google.com/feeds"))
+  gs_auth(token = service_token)
+}
 
 #' Loads google spreadsheet via key
 #' @export
@@ -13,11 +19,9 @@ library(data.table)
 #' @param key key of the google spreadsheet
 #' @param tab name of the tab from which data will be loaded
 #' @param token.file json access token file for Google API.
-gsLoadSheet <- function(key, tab, token.file = "access_token.json") {
-  service_token <- gar_auth_service(json_file = token.file, scope = c("https://www.googleapis.com/auth/drive",
-                                                                      "https://spreadsheets.google.com/feeds"))
-  gs_auth(token = service_token)
-  gap <- gs_key(key, verbose = T)
+gsLoadSheet <- function(key, tab) {
+  gsAuth()
+  gap <- gs_key(key, verbose = TRUE)
   res <- gs_read(ss = gap, ws = tab)
   res <- data.table(res)
 }
@@ -27,13 +31,13 @@ gsLoadSheet <- function(key, tab, token.file = "access_token.json") {
 #' @import googlesheets
 #' @param key Key of the google spreadsheet.
 #' @param token.file Json access token file for Google API.
-gsLoadAll <- function(key, token.file = "access_token.json") {
+gsLoadAll <- function(key) {
+  gsAuth()
   tabs <- gs_key(key)$ws$ws_title
   sheets <- lapply(tabs,
                    function(sheet) {
                      dt <- gsLoadSheet(key = key,
-                                       tab = sheet,
-                                       token.file = token.file)
+                                       tab = sheet)
                      return(dt)})
   names(sheets) <- tabs
   return(sheets)
