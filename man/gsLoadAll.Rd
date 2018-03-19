@@ -4,7 +4,7 @@
 \alias{gsLoadAll}
 \title{Loads all sheets from a google spreadsheet into a list with the tab name as the list element name.}
 \usage{
-gsLoadAll(key, token.file = "access_token.json")
+gsLoadAll(key)
 }
 \arguments{
 \item{key}{Key of the google spreadsheet.}

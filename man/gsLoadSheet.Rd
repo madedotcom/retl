@@ -2,10 +2,9 @@
 % Please edit documentation in R/googlespreadsheets.R
 \name{gsLoadSheet}
 \alias{gsLoadSheet}
-\title{Requires access_token.json file the working directory
-Loads google spreadsheet via key}
+\title{Loads google spreadsheet via key}
 \usage{
-gsLoadSheet(key, tab, token.file = "access_token.json")
+gsLoadSheet(key, tab)
 }
 \arguments{
 \item{key}{key of the google spreadsheet}
@@ -15,6 +14,5 @@ gsLoadSheet(key, tab, token.file = "access_token.json")
 \item{token.file}{json access token file for Google API.}
 }
 \description{
-Requires access_token.json file the working directory
 Loads google spreadsheet via key
 }
