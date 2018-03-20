@@ -377,7 +377,7 @@ bqInsertData <- function(table,
                          dataset = Sys.getenv("BIGQUERY_DATASET"),
                          append = TRUE,
                          job.name = NULL, increment.field = NULL) {
-  assert_that(nchar(dataset) > 0, msg = "Set dataset aparameter or BIGQUERY_DATASET env var.")
+  assert_that(nchar(dataset) > 0, msg = "Set dataset parameter or BIGQUERY_DATASET env var.")
 
   assert_that(!xor(is.null(job.name), is.null(increment.field)),
     msg = "increment.field and job.name arguments are both required if one is provided.")
