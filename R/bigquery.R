@@ -529,6 +529,7 @@ bqInsertPartition <- function(table, date, data, append) {
 #'
 #' @export
 #' @param table destination partition table where resutls of the query will be saved
+#' @param file query from the partitioned table
 bqTransformPartition <- function(table, file, ...) {
     existing.dates <- getExistingPartitionDates(table)
     existing.dates <- as.Date(existing.dates, "%Y%m%d")
@@ -538,15 +539,15 @@ bqTransformPartition <- function(table, file, ...) {
     missing.dates <- getMissingDates(start.date, end.date, existing.dates, "%Y-%m-%d")
     lapply(missing.dates, function(d) {
         partition <- gsub("-", "", d)
-        
+
         destination.partition <- paste0(table, "$", partition)
         delete_table(project = Sys.getenv("BIGQUERY_PROJECT"),
         dataset = Sys.getenv("BIGQUERY_DATASET"),
         table = destination.partition)
-        
+
         sql.exec <- readSql(file, d, ...)
         print(destination.partition)
-        
+
         use.legacy.sql <- Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
         query_exec(query = sql.exec,
         project = Sys.getenv("BIGQUERY_PROJECT"),
