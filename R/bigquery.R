@@ -524,3 +524,45 @@ bqInsertPartition <- function(table, date, data, append) {
                data = data,
                append = append)
 }
+
+#' Transforms data from one partition table to another partition table
+#'
+#' @export
+#' @param table destination partition table where resutls of the query will be saved
+#' @param file query from the partitioned table
+#' @param ... any query parameters
+bqTransformPartition <- function(table, file, ...) {
+    existing.dates <- getExistingPartitionDates(table)
+    existing.dates <- as.Date(existing.dates, "%Y%m%d")
+    existing.dates <- as.character(existing.dates)
+    start.date <- as.Date(Sys.getenv("BIGQUERY_START_DATE", unset = "2017-01-01"))
+    end.date <- as.Date(Sys.getenv("BIGQUERY_END_DATE", Sys.Date() - 1))
+    missing.dates <- getMissingDates(start.date, end.date, existing.dates, "%Y-%m-%d")
+    lapply(missing.dates, function(d) {
+        partition <- gsub("-", "", d)
+
+        destination.partition <- paste0(table, "$", partition)
+        delete_table(project = Sys.getenv("BIGQUERY_PROJECT"),
+        dataset = Sys.getenv("BIGQUERY_DATASET"),
+        table = destination.partition)
+
+        sql.exec <- readSql(file, d, ...)
+        print(destination.partition)
+
+        use.legacy.sql <- Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
+        query_exec(query = sql.exec,
+        project = Sys.getenv("BIGQUERY_PROJECT"),
+        default_dataset = Sys.getenv("BIGQUERY_DATASET"),
+        destination_table = paste0(Sys.getenv("BIGQUERY_DATASET"), ".", destination.partition),
+        max_pages = 1,
+        page_size = 1,
+        create_disposition = "CREATE_IF_NEEDED",
+        write_disposition = "WRITE_TRUNCATE",
+        use_legacy_sql = use.legacy.sql)
+    })
+}
+
+
+getInString <- function(x) {
+    paste0("'", paste(x, collapse = "', '"), "'")
+}
