@@ -149,7 +149,7 @@ bqTableExists <- function(table) {
 #' @return results of the execution from bigrquery::delete_table
 bqDeleteTable <- function(table,
                           dataset = Sys.getenv("BIGQUERY_DATASET")) {
-  assert_that(nchar(dataset) > 0, msg = "Set dataset aparameter or BIGQUERY_DATASET env var.")
+  assert_that(nchar(dataset) > 0, msg = "Set dataset parameter or BIGQUERY_DATASET env var.")
 
   bqAuth()
   res <- delete_table(project = Sys.getenv("BIGQUERY_PROJECT"),
