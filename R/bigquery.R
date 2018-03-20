@@ -149,6 +149,8 @@ bqTableExists <- function(table) {
 #' @return results of the execution from bigrquery::delete_table
 bqDeleteTable <- function(table,
                           dataset = Sys.getenv("BIGQUERY_DATASET")) {
+  assert_that(nchar(dataset) > 0, msg = "Set dataset parameter or BIGQUERY_DATASET env var.")
+
   bqAuth()
   res <- delete_table(project = Sys.getenv("BIGQUERY_PROJECT"),
                       dataset = dataset,
@@ -375,6 +377,7 @@ bqInsertData <- function(table,
                          dataset = Sys.getenv("BIGQUERY_DATASET"),
                          append = TRUE,
                          job.name = NULL, increment.field = NULL) {
+  assert_that(nchar(dataset) > 0, msg = "Set dataset parameter or BIGQUERY_DATASET env var.")
 
   assert_that(!xor(is.null(job.name), is.null(increment.field)),
     msg = "increment.field and job.name arguments are both required if one is provided.")
