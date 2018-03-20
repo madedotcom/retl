@@ -527,6 +527,7 @@ bqInsertPartition <- function(table, date, data, append) {
 
 #' Transforms data from one partition table to another partition table
 #'
+#' @export
 #' @param table destination partition table where resutls of the query will be saved
 bqTransformPartition <- function(table, file, ...) {
     existing.dates <- getExistingPartitionDates(table)
