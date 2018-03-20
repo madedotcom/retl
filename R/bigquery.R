@@ -530,6 +530,7 @@ bqInsertPartition <- function(table, date, data, append) {
 #' @export
 #' @param table destination partition table where resutls of the query will be saved
 #' @param file query from the partitioned table
+#' @param ... any query parameters
 bqTransformPartition <- function(table, file, ...) {
     existing.dates <- getExistingPartitionDates(table)
     existing.dates <- as.Date(existing.dates, "%Y%m%d")

@@ -10,6 +10,8 @@ bqTransformPartition(table, file, ...)
 \item{table}{destination partition table where resutls of the query will be saved}
 
 \item{file}{query from the partitioned table}
+
+\item{...}{any query parameters}
 }
 \description{
 Transforms data from one partition table to another partition table
