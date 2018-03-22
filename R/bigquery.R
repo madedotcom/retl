@@ -35,7 +35,10 @@ getExistingPartitionDates <- function(table) {
   }
 
   sql <- paste0("SELECT partition_id from [", table, "$__PARTITIONS_SUMMARY__];")
+  currentVar <- Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE")
+  Sys.setenv(BIGQUERY_LEGACY_SQL = "TRUE")
   res <- bqExecuteSql(sql)
+  Sys.setenv(BIGQUERY_LEGACY_SQL = currentVar)
   if (nrow(res) > 0) {
     return(res$partition_id)
   }
