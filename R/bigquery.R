@@ -28,7 +28,7 @@ bqAuth <- function() {
 #' @export
 #' @param table name of a table
 #' @return string vector of dates
-getExistingPartitionDates <- function(table) {
+bqExistingPartitionDates <- function(table) {
   if (!bqTableExists(table)) {
     return(character())
   }
@@ -42,19 +42,28 @@ getExistingPartitionDates <- function(table) {
   }
 }
 
+#' @noRd
+#' @export
+getExistingPartitionDates <- function(table) {
+  .Deprecated("bqExistingPartitionDates")
+  bqExistingPartitionDates(table)
+}
+
 #' Generates sql for extraction of existing partition date
+#' @noRd
 bqPartitionDatesSql <- function(table) {
   if (bqUseLegacySql()) {
     paste0("SELECT partition_id from [", table, "$__PARTITIONS_SUMMARY__];")
   } else {
     paste0("SELECT
-              FORMAT_DATE('%Y%m%d', DATE(_PARTITIONTIME)) as partition_id from `", table, "`
-            GROUP BY 1;")
+           FORMAT_DATE('%Y%m%d', DATE(_PARTITIONTIME)) as partition_id from `", table, "`
+           GROUP BY 1;")
   }
-}
+  }
 
 #' Gest the value from the corresponding environment variable as boolean
 #' Determins which flavour of sql should be used by default.
+#' @noRd
 bqUseLegacySql <- function() {
   Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
 }
@@ -205,7 +214,6 @@ bqCreateTable <- function(sql,
                           dataset = Sys.getenv("BIGQUERY_DATASET"),
                           write_disposition = "WRITE_APPEND" ) {
   bqAuth()
-  use.legacy.sql <- bqUseLegacySql()
 
   # Creates table from the given SQL.
   res <- query_exec(
@@ -217,7 +225,7 @@ bqCreateTable <- function(sql,
     page_size = 1,
     create_disposition = "CREATE_IF_NEEDED",
     write_disposition = write_disposition,
-    use_legacy_sql = use.legacy.sql
+    use_legacy_sql = bqUseLegacySql()
   )
   return(res)
 }
@@ -309,6 +317,7 @@ bqExecuteSql <- function(sql, ...) {
 #' @param  property number of a property in Google Analytics.
 #' @return gets site code for a given propertiy code
 gaGetShop <- function(ga.properties, property) {
+  .Deprecated(msg = "GA related logic should be moved to another package")
   shops <- names(ga.properties)
   names(shops) <- ga.properties
   return(shops[as.character(property)])
@@ -395,7 +404,7 @@ bqInsertData <- function(table,
   assert_that(nchar(dataset) > 0, msg = "Set dataset parameter or BIGQUERY_DATASET env var.")
 
   assert_that(!xor(is.null(job.name), is.null(increment.field)),
-    msg = "increment.field and job.name arguments are both required if one is provided.")
+              msg = "increment.field and job.name arguments are both required if one is provided.")
 
   write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
   rows <- nrow(data)
@@ -547,37 +556,34 @@ bqInsertPartition <- function(table, date, data, append) {
 #' @param file query from the partitioned table
 #' @param ... any query parameters
 bqTransformPartition <- function(table, file, ...) {
-    existing.dates <- getExistingPartitionDates(table)
-    existing.dates <- as.Date(existing.dates, "%Y%m%d")
-    existing.dates <- as.character(existing.dates)
-    start.date <- as.Date(Sys.getenv("BIGQUERY_START_DATE", unset = "2017-01-01"))
-    end.date <- as.Date(Sys.getenv("BIGQUERY_END_DATE", Sys.Date() - 1))
-    missing.dates <- getMissingDates(start.date, end.date, existing.dates, "%Y-%m-%d")
-    lapply(missing.dates, function(d) {
-        partition <- gsub("-", "", d)
+  existing.dates <- getExistingPartitionDates(table)
+  start.date <- bqStartDate(unset = "2017-01-01")
+  end.date <- bqEndDate()
+  missing.dates <- getMissingDates(start.date,
+                                   end.date,
+                                   existing.dates,
+                                   "%Y-%m-%d")
 
-        destination.partition <- paste0(table, "$", partition)
-        delete_table(project = Sys.getenv("BIGQUERY_PROJECT"),
-        dataset = Sys.getenv("BIGQUERY_DATASET"),
-        table = destination.partition)
+  lapply(missing.dates, function(d) {
+    partition <- gsub("-", "", d)
+    destination.partition <- paste0(table, "$", partition)
+    print(destination.partition)
 
-        sql.exec <- readSql(file, d, ...)
-        print(destination.partition)
-
-        use.legacy.sql <- bqUseLegacySql()
-        query_exec(query = sql.exec,
-        project = Sys.getenv("BIGQUERY_PROJECT"),
-        default_dataset = Sys.getenv("BIGQUERY_DATASET"),
-        destination_table = paste0(Sys.getenv("BIGQUERY_DATASET"), ".", destination.partition),
-        max_pages = 1,
-        page_size = 1,
-        create_disposition = "CREATE_IF_NEEDED",
-        write_disposition = "WRITE_TRUNCATE",
-        use_legacy_sql = use.legacy.sql)
-    })
+    sql.exec <- readSql(file, d, ...)
+    bqCreateTable(sql.exec,
+                  table = destination.partition,
+                  write_disposition = "WRITE_TRUNCATE")
+  })
 }
 
+bqStartDate <- function(unset = "2016-01-01") {
+  as.Date(Sys.getenv("BIGQUERY_START_DATE", unset))
+}
+
+bqEndDate <- function(unset = as.character(Sys.Date() - 1)) {
+  as.Date(Sys.getenv("BIGQUERY_END_DATE", unset))
+}
 
 getInString <- function(x) {
-    paste0("'", paste(x, collapse = "', '"), "'")
+  paste0("'", paste(x, collapse = "', '"), "'")
 }
