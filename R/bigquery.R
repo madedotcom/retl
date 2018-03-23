@@ -29,7 +29,6 @@ bqAuth <- function() {
 #' @param table name of a table
 #' @return string vector of dates
 getExistingPartitionDates <- function(table) {
-
   if (!bqTableExists(table)) {
     return(character())
   }
@@ -48,7 +47,9 @@ bqPartitionDatesSql <- function(table) {
   if (bqUseLegacySql()) {
     paste0("SELECT partition_id from [", table, "$__PARTITIONS_SUMMARY__];")
   } else {
-    paste0("SELECT _PARTITIONTIME as partition_id from `crm.sessions`;")
+    paste0("SELECT
+              FORMAT_DATE('%Y%m%d', DATE(_PARTITIONTIME)) as partition_id from `", table, "`
+            GROUP BY 1;")
   }
 }
 
