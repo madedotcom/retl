@@ -43,6 +43,8 @@ getExistingPartitionDates <- function(table) {
 }
 
 #' Generates sql for extraction of existing partition date
+#' @noRd
+#'
 bqPartitionDatesSql <- function(table) {
   if (bqUseLegacySql()) {
     paste0("SELECT partition_id from [", table, "$__PARTITIONS_SUMMARY__];")
@@ -55,6 +57,7 @@ bqPartitionDatesSql <- function(table) {
 
 #' Gest the value from the corresponding environment variable as boolean
 #' Determins which flavour of sql should be used by default.
+#' @noRd
 bqUseLegacySql <- function() {
   Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
 }
@@ -144,7 +147,8 @@ getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m
 #' Checks if dataset exists in the project
 #'
 #' @export
-#' @param name of the dataset
+#' @param dataset name of the dataset
+#' @param project name of the project
 #' @return TRUE if dataset exists
 bqDatasetExists <- function(dataset, project = Sys.getenv("BIGQUERY_PROJECT")) {
   dataset %in% list_datasets(project)

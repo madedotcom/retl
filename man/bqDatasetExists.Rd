@@ -7,7 +7,9 @@
 bqDatasetExists(dataset, project = Sys.getenv("BIGQUERY_PROJECT"))
 }
 \arguments{
-\item{name}{of the dataset}
+\item{dataset}{name of the dataset}
+
+\item{project}{name of the project}
 }
 \value{
 TRUE if dataset exists
