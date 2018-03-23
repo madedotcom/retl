@@ -33,18 +33,29 @@ getExistingPartitionDates <- function(table) {
   if (!bqTableExists(table)) {
     return(character())
   }
-
-  sql <- paste0("SELECT partition_id from [", table, "$__PARTITIONS_SUMMARY__];")
-  currentVar <- Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE")
-  Sys.setenv(BIGQUERY_LEGACY_SQL = "TRUE")
+  sql <- bqPartitionDatesSql(table)
   res <- bqExecuteSql(sql)
-  Sys.setenv(BIGQUERY_LEGACY_SQL = currentVar)
   if (nrow(res) > 0) {
     return(res$partition_id)
   }
   else {
     return(character())
   }
+}
+
+#' Generates sql for extraction of existing partition date
+bqPartitionDatesSql <- function(table) {
+  if (bqUseLegacySql()) {
+    paste0("SELECT partition_id from [", table, "$__PARTITIONS_SUMMARY__];")
+  } else {
+    paste0("SELECT _PARTITIONTIME as partition_id from `crm.sessions`;")
+  }
+}
+
+#' Gest the value from the corresponding environment variable as boolean
+#' Determins which flavour of sql should be used by default.
+bqUseLegacySql <- function() {
+  Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
 }
 
 #' Creates partition in specified table in BigQuery.
@@ -193,7 +204,7 @@ bqCreateTable <- function(sql,
                           dataset = Sys.getenv("BIGQUERY_DATASET"),
                           write_disposition = "WRITE_APPEND" ) {
   bqAuth()
-  use.legacy.sql <- Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
+  use.legacy.sql <- bqUseLegacySql()
 
   # Creates table from the given SQL.
   res <- query_exec(
@@ -279,7 +290,7 @@ bqExecuteSql <- function(sql, ...) {
     sql <- sql
   }
 
-  use.legacy.sql <- Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
+  use.legacy.sql <- bqUseLegacySql()
 
   bqAuth()
   res <- query_exec(sql,
@@ -552,7 +563,7 @@ bqTransformPartition <- function(table, file, ...) {
         sql.exec <- readSql(file, d, ...)
         print(destination.partition)
 
-        use.legacy.sql <- Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
+        use.legacy.sql <- bqUseLegacySql()
         query_exec(query = sql.exec,
         project = Sys.getenv("BIGQUERY_PROJECT"),
         default_dataset = Sys.getenv("BIGQUERY_DATASET"),
