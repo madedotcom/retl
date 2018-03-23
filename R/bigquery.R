@@ -150,6 +150,16 @@ getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m
   return(res)
 }
 
+#' Checks if dataset exists in the project
+#'
+#' @export
+#' @param dataset name of the dataset
+#' @param project name of the project
+#' @return TRUE if dataset exists
+bqDatasetExists <- function(dataset, project = Sys.getenv("BIGQUERY_PROJECT")) {
+  dataset %in% list_datasets(project)
+}
+
 #' Checks if table exists
 #'
 #' @export

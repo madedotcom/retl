@@ -3,6 +3,7 @@
 export(bqCopyTable)
 export(bqCreatePartitionTable)
 export(bqCreateTable)
+export(bqDatasetExists)
 export(bqDeletePartition)
 export(bqDeleteTable)
 export(bqExecuteFile)
