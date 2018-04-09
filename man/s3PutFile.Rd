@@ -2,10 +2,22 @@
 % Please edit documentation in R/aws-s3.R
 \name{s3PutFile}
 \alias{s3PutFile}
-\title{Saves a data.frame structure to AWS S3 as a csv file}
+\alias{s3PutFile.gz}
+\alias{s3PutFile.rds}
+\alias{s3PutFile.json.gz}
+\title{Saves data to a file in AWS S3}
 \usage{
 s3PutFile(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
   root = Sys.getenv("AWS_S3_ROOT"), na.value = "")
+
+s3PutFile.gz(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
+  root = Sys.getenv("AWS_S3_ROOT"), na.value = "")
+
+s3PutFile.rds(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
+  root = Sys.getenv("AWS_S3_ROOT"))
+
+s3PutFile.json.gz(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
+  root = Sys.getenv("AWS_S3_ROOT"))
 }
 \arguments{
 \item{dt}{data.table to save}
@@ -18,6 +30,17 @@ s3PutFile(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
 
 \item{na.value}{the string to use for missing values in the data}
 }
+\value{
+`s3PutFile` TRUE if csv file was saved to S3
+
+`s3PutFile.gz` TRUE if `.gz` (csv archived) file was saved to S3.
+
+`s3PutFile.rds` TRUE if `.rds` file was saved to S3
+
+`s3PutFile.json.gz` TRUE if `.json.gz` (json archived) file was saved to S3
+}
 \description{
-Saves a data.frame structure to AWS S3 as a csv file
+Convention based wrapper functions that allow to save data in S3
+
+Saves data.table as csv.gz to S3
 }

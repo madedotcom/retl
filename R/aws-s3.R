@@ -19,14 +19,16 @@ library(jsonlite)
 #            "AWS_SESSION_TOKEN" = "mytoken")
 # See: https://github.com/cloudyr/aws.s3
 
-#' Saves a data.frame structure to AWS S3 as a csv file
+#' Saves data to a file in AWS S3
 #'
+#' Convention based wrapper functions that allow to save data in S3
 #' @export
 #' @param dt data.table to save
 #' @param path S3 object path starting after root folder.
 #' @param bucket name of the S3 bucket
 #' @param root project root path that is appended before the path, e.g. "/prod/"
 #' @param na.value the string to use for missing values in the data
+#' @return `s3PutFile` TRUE if csv file was saved to S3
 s3PutFile <- function(dt, path,
                       bucket = Sys.getenv("AWS_S3_BUCKET"),
                       root = Sys.getenv("AWS_S3_ROOT"),
@@ -39,14 +41,19 @@ s3PutFile <- function(dt, path,
   put_object(file = tmp.file, object = full.path, bucket = bucket)
 }
 
-#' Loads data from a csv file in AWS S3 to data.table
+#' Loads data from AWS S3 into data.table object
+#'
+#' Convention based wrapper functions that allow to load
+#' data files in S3 into data.table
 #'
 #' @export
 #' @param path is the path to the S3 object
 #' @param header flag defines whether file has header
-#' @param bucket name of the S3 bucket
-#' @param root project root path that is appended before the path
-#' @return data.table from the source csv file
+#' @param bucket name of the S3 bucket.
+#'     Defautls to value in `AWS_S3_BUCKET` environment variable.
+#' @param root project root path that is appended before the path in the argument.
+#'     Defaults to value in `AWS_S3_ROOT` environment variable.
+#' @return `s3GetFile` gets data from source `.csv` file
 s3GetFile <- function(path, header = T,
                       bucket = Sys.getenv("AWS_S3_BUCKET"),
                       root = Sys.getenv("AWS_S3_ROOT")) {
@@ -94,7 +101,8 @@ s3GetData <- function(path, header = T,
 #' Saves data.table as csv.gz to S3
 #'
 #' @export
-#' @inherit s3PutFile
+#' @rdname s3PutFile
+#' @return `s3PutFile.gz` TRUE if `.gz` (csv archived) file was saved to S3.
 s3PutFile.gz <- function(dt, path,
                          bucket = Sys.getenv("AWS_S3_BUCKET"),
                          root = Sys.getenv("AWS_S3_ROOT"),
@@ -110,10 +118,10 @@ s3PutFile.gz <- function(dt, path,
   put_object(file = tmp.file, object = full.path, bucket = bucket)
 }
 
-#' Loads gz file from s3 and reads it as data.table from csv
-#'
+
 #' @export
-#' @inherit s3PutFile
+#' @rdname s3GetFile
+#' @return `s3GetFile.gz` loads data from `.gz` files
 s3GetFile.gz <- function(path,
                          bucket = Sys.getenv("AWS_S3_BUCKET"),
                          root = Sys.getenv("AWS_S3_ROOT")) {
@@ -128,10 +136,9 @@ s3GetFile.gz <- function(path,
   invisible(dt)
 }
 
-#' Saves file as rds to S3
-#'
 #' @export
-#' @inherit s3PutFile
+#' @rdname s3PutFile
+#' @return `s3PutFile.rds` TRUE if `.rds` file was saved to S3
 s3PutFile.rds <- function(dt, path,
                           bucket = Sys.getenv("AWS_S3_BUCKET"),
                           root = Sys.getenv("AWS_S3_ROOT")) {
@@ -140,10 +147,9 @@ s3PutFile.rds <- function(dt, path,
   s3saveRDS(dt, bucket = bucket, object = full.path)
 }
 
-#' Saves file as rds to S3
-#'
 #' @export
-#' @inherit s3GetFile
+#' @rdname s3GetFile
+#' @return `s3GetFile.rds` loads data from `.rds` files
 s3GetFile.rds <- function(path,
                           bucket = Sys.getenv("AWS_S3_BUCKET"),
                           root = Sys.getenv("AWS_S3_ROOT")) {
@@ -162,12 +168,9 @@ s3GetObjectPath <- function(relative.path) {
   return(path)
 }
 
-#' Loads zipped csv file from s3 and reads it as data.table
-#'
+#' @rdname s3GetFile
 #' @export
-#' @param path defines the path to the object post project root path.
-#' @param bucket name of the S3 bucket
-#' @param root project root path that is appended before the path, e.g. "/prod/"
+#' @return `s3GetFile.zip` loads data from `.zip` files
 s3GetFile.zip <- function(path,
                          bucket = Sys.getenv("AWS_S3_BUCKET"),
                          root = Sys.getenv("AWS_S3_ROOT")) {
@@ -182,13 +185,9 @@ s3GetFile.zip <- function(path,
   invisible(dt)
 }
 
-#' Saves data.table as gzip-ed JSON to S3.
-#'
+#' @rdname s3PutFile
 #' @export
-#' @param dt data table to upload
-#' @param path defines the path to the object post project root path.
-#' @param bucket name of the S3 bucket
-#' @param root project root path that is appended before the path, e.g. "/prod/"
+#' @return `s3PutFile.json.gz` TRUE if `.json.gz` (json archived) file was saved to S3
 s3PutFile.json.gz <- function(dt, path,
                          bucket = Sys.getenv("AWS_S3_BUCKET"),
                          root = Sys.getenv("AWS_S3_ROOT")) {
@@ -203,12 +202,9 @@ s3PutFile.json.gz <- function(dt, path,
   put_object(file = tmp.file, object = full.path, bucket = bucket)
 }
 
-#' Loads gzip-ed JSON file from S3 and reads it as data.table.
-#'
+#' @rdname s3GetFile
 #' @export
-#' @param path defines the path to the object post project root path.
-#' @param bucket name of the S3 bucket
-#' @param root project root path that is appended before the path, e.g. "/prod/"
+#' @return `s3GetFile.json.gz` loads data from `.json.gz` files
 s3GetFile.json.gz <- function(path,
                          bucket = Sys.getenv("AWS_S3_BUCKET"),
                          root = Sys.getenv("AWS_S3_ROOT")) {
