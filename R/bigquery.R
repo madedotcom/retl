@@ -16,10 +16,10 @@ library(assertthat)
 #' Wrapper for the set_service_token that uses BIGQUERY_ACCESS_TOKEN_PATH env var
 #'  as default value for the secret token location.
 bqAuth <- function() {
-  if (!is_set_access_cred()) {
+  if (!bigrquery::has_access_cred()) {
     token.file = Sys.getenv("BIGQUERY_ACCESS_TOKEN_PATH")
     assert_that(token.file != "", file.exists(token.file))
-    set_service_token(token.file)
+    bigrquery::set_service_token(token.file)
   }
 }
 

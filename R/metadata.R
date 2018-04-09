@@ -3,12 +3,12 @@
 #' @export
 #' @param job name of the ETL job
 etlJobExists <- function(job) {
-
+  bqAuth()
   table.exists <- exists_table(Sys.getenv("BIGQUERY_PROJECT"),
                                dataset = Sys.getenv("BIGQUERY_METADATA_DATASET"),
                                "etl_jobs")
   if (!table.exists) {
-    return (FALSE)
+    return(FALSE)
   }
 
   sql.tempalte <-
@@ -23,11 +23,11 @@ etlJobExists <- function(job) {
                      default_dataset = Sys.getenv("BIGQUERY_METADATA_DATASET"),
                      page_size = 1)
 
-  if(nrow(data) > 0) {
-    return (TRUE)
+  if (nrow(data) > 0) {
+    return(TRUE)
   }
   else {
-    return (FALSE)
+    return(FALSE)
   }
 }
 
@@ -38,14 +38,14 @@ etlJobExists <- function(job) {
 #' @param increment.name name of the increment
 #' @param increment.type type of the increment
 etlAddJob <- function(job, increment.name, increment.type) {
-
-  if(etlJobExists(job)) {
-    return (FALSE)
+  bqAuth()
+  if (etlJobExists(job)) {
+    return(FALSE)
   }
 
   etl.jobs <- data.frame(list(job = job,
                               increment_name = increment.name,
-                              increment_type =increment.type), stringsAsFactors = F)
+                              increment_type = increment.type), stringsAsFactors = F)
 
   job <- insert_upload_job(project = Sys.getenv("BIGQUERY_PROJECT"),
                            dataset = Sys.getenv("BIGQUERY_METADATA_DATASET"),
@@ -54,17 +54,17 @@ etlAddJob <- function(job, increment.name, increment.type) {
                            write_disposition = "WRITE_APPEND",
                            create_disposition = "CREATE_IF_NEEDED")
   res <- wait_for(job)
-  return (res)
+  return(res)
 }
 
-#' Logs execution of the ETL job
+#' Logs execution of the ETL job with increment and number of recors.
 #'
 #' @export
 #' @param job name of the etl job
 #' @param increment.value maximum value in the field that used for increment
 #' @param records number of records processed by execution
 etlLogExecution <- function(job, increment.value, records = 0) {
-  # Logs job execution with increment and number of recors.
+  bqAuth()
 
   etl.increments <- data.table(job = job,
                                     increment_value = increment.value,
@@ -78,7 +78,7 @@ etlLogExecution <- function(job, increment.value, records = 0) {
                            write_disposition = "WRITE_APPEND",
                            create_disposition = "CREATE_NEVER")
   res <- wait_for(job)
-  return (res)
+  return(res)
 }
 
 #' Gets increment value from
@@ -94,12 +94,13 @@ etlGetIncrementType <- function(job) {
      WHERE job = '%1$s'
      LIMIT 1"
   sql <- sprintf(sql.template, job)
+  bqAuth()
   data <- query_exec(sql,
                      project = Sys.getenv("BIGQUERY_PROJECT"),
                      default_dataset = Sys.getenv("BIGQUERY_METADATA_DATASET"),
                      page_size = 1000)
-  if(nrow(data) == 0) {
-    return (NULL)
+  if (nrow(data) == 0) {
+    return(NULL)
   }
 
   return(data[1, ]$increment_type)
@@ -119,12 +120,13 @@ etlGetIncrement <- function(job) {
      ORDER BY datetime DESC
      LIMIT 1"
   sql <- sprintf(sql.tempalte, job)
+  bqAuth()
   data <- query_exec(sql,
                      project = Sys.getenv("BIGQUERY_PROJECT"),
                      default_dataset = Sys.getenv("BIGQUERY_METADATA_DATASET"),
                      page_size = 1000)
-  if(nrow(data) == 0) {
-    return (as.integer(0))
+  if (nrow(data) == 0) {
+    return(as.integer(0))
   }
   return(data$increment_value)
 }
