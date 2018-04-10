@@ -31,13 +31,15 @@ s3PutFile.json.gz(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
 \item{na.value}{the string to use for missing values in the data}
 }
 \value{
-`s3PutFile` TRUE if csv file was saved to S3
+TRUE if data was saved to S3.
 
-`s3PutFile.gz` TRUE if `.gz` (csv archived) file was saved to S3.
+`s3PutFile` saves data into csv file in S3
 
-`s3PutFile.rds` TRUE if `.rds` file was saved to S3
+`s3PutFile.gz` saves data into `.gz` (csv archived) file in S3.
 
-`s3PutFile.json.gz` TRUE if `.json.gz` (json archived) file was saved to S3
+`s3PutFile.rds` saves data as `.rds` file in S3
+
+`s3PutFile.json.gz` saves data as `.json.gz` (json archived) file in S3
 }
 \description{
 Convention based wrapper functions that allow to save data in S3

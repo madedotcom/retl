@@ -28,7 +28,9 @@ library(jsonlite)
 #' @param bucket name of the S3 bucket
 #' @param root project root path that is appended before the path, e.g. "/prod/"
 #' @param na.value the string to use for missing values in the data
-#' @return `s3PutFile` TRUE if csv file was saved to S3
+#' @return TRUE if data was saved to S3.
+#'
+#' `s3PutFile` saves data into csv file in S3
 s3PutFile <- function(dt, path,
                       bucket = Sys.getenv("AWS_S3_BUCKET"),
                       root = Sys.getenv("AWS_S3_ROOT"),
@@ -102,7 +104,7 @@ s3GetData <- function(path, header = T,
 #'
 #' @export
 #' @rdname s3PutFile
-#' @return `s3PutFile.gz` TRUE if `.gz` (csv archived) file was saved to S3.
+#' @return `s3PutFile.gz` saves data into `.gz` (csv archived) file in S3.
 s3PutFile.gz <- function(dt, path,
                          bucket = Sys.getenv("AWS_S3_BUCKET"),
                          root = Sys.getenv("AWS_S3_ROOT"),
@@ -138,7 +140,7 @@ s3GetFile.gz <- function(path,
 
 #' @export
 #' @rdname s3PutFile
-#' @return `s3PutFile.rds` TRUE if `.rds` file was saved to S3
+#' @return `s3PutFile.rds` saves data as `.rds` file in S3
 s3PutFile.rds <- function(dt, path,
                           bucket = Sys.getenv("AWS_S3_BUCKET"),
                           root = Sys.getenv("AWS_S3_ROOT")) {
@@ -187,7 +189,7 @@ s3GetFile.zip <- function(path,
 
 #' @rdname s3PutFile
 #' @export
-#' @return `s3PutFile.json.gz` TRUE if `.json.gz` (json archived) file was saved to S3
+#' @return `s3PutFile.json.gz` saves data as `.json.gz` (json archived) file in S3
 s3PutFile.json.gz <- function(dt, path,
                          bucket = Sys.getenv("AWS_S3_BUCKET"),
                          root = Sys.getenv("AWS_S3_ROOT")) {
