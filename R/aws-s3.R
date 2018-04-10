@@ -22,7 +22,7 @@
 #' `s3PutFile` saves data into csv file in S3
 #'
 #' @seealso aws.s3 package documentation for access details:
-#'   \ulr{https://github.com/cloudyr/aws.s3}
+#'   \url{https://github.com/cloudyr/aws.s3}
 #' @import aws.s3
 #' @md
 s3PutFile <- function(dt, path,
