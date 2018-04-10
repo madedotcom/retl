@@ -46,7 +46,7 @@ s3PutFile <- function(dt, path,
 #'  * `AWS_ACCESS_KEY_ID` = "mykey"
 #'  * `AWS_SECRET_ACCESS_KEY` = "mysecretkey"
 #'  * `AWS_DEFAULT_REGION` = "us-east-1"
-#'  * `AWS_SESSION_TOKEN` = "mytoke
+#'  * `AWS_SESSION_TOKEN` = "mytoken"
 #'
 #' @export
 #' @param path is the path to the S3 object

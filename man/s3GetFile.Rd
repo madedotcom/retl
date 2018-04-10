@@ -55,7 +55,7 @@ Environment variables required for aws.s3 access:
 \item \code{AWS_ACCESS_KEY_ID} = "mykey"
 \item \code{AWS_SECRET_ACCESS_KEY} = "mysecretkey"
 \item \code{AWS_DEFAULT_REGION} = "us-east-1"
-\item \code{AWS_SESSION_TOKEN} = "mytoke
+\item \code{AWS_SESSION_TOKEN} = "mytoken"
 }
 }
 \seealso{
