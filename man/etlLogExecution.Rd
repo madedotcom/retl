@@ -2,7 +2,7 @@
 % Please edit documentation in R/metadata.R
 \name{etlLogExecution}
 \alias{etlLogExecution}
-\title{Logs execution of the ETL job}
+\title{Logs execution of the ETL job with increment and number of recors.}
 \usage{
 etlLogExecution(job, increment.value, records = 0)
 }
@@ -14,5 +14,5 @@ etlLogExecution(job, increment.value, records = 0)
 \item{records}{number of records processed by execution}
 }
 \description{
-Logs execution of the ETL job
+Logs execution of the ETL job with increment and number of recors.
 }

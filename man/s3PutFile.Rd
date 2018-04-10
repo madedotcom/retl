@@ -2,22 +2,61 @@
 % Please edit documentation in R/aws-s3.R
 \name{s3PutFile}
 \alias{s3PutFile}
-\title{Saves a data.frame structure to AWS S3 as a csv file}
+\alias{s3PutFile.gz}
+\alias{s3PutFile.rds}
+\alias{s3PutFile.json.gz}
+\title{Saves data to a file in AWS S3}
 \usage{
 s3PutFile(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
   root = Sys.getenv("AWS_S3_ROOT"), na.value = "")
+
+s3PutFile.gz(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
+  root = Sys.getenv("AWS_S3_ROOT"), na.value = "")
+
+s3PutFile.rds(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
+  root = Sys.getenv("AWS_S3_ROOT"))
+
+s3PutFile.json.gz(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
+  root = Sys.getenv("AWS_S3_ROOT"))
 }
 \arguments{
 \item{dt}{data.table to save}
 
 \item{path}{S3 object path starting after root folder.}
 
-\item{bucket}{name of the S3 bucket}
+\item{bucket}{name of the S3 bucket.
+Defaults to value in \code{AWS_S3_BUCKET} environment variable.}
 
-\item{root}{project root path that is appended before the path, e.g. "/prod/"}
+\item{root}{project root path that is appended before the path, e.g. "/prod/".
+Defaults to value in \code{AWS_S3_ROOT} environment variable.}
 
-\item{na.value}{the string to use for missing values in the data}
+\item{na.value}{the string to use for missing values in the data.
+Defaults to empty string.}
+}
+\value{
+TRUE if data was saved to S3.
+
+\code{s3PutFile} saves data into csv file in S3
+
+`s3PutFile.gz` saves data into `.gz` (csv archived) file in S3.
+
+`s3PutFile.rds` saves data as `.rds` file in S3
+
+`s3PutFile.json.gz` saves data as `.json.gz` (json archived) file in S3
 }
 \description{
-Saves a data.frame structure to AWS S3 as a csv file
+Convention based wrapper functions that allow to save data in S3
+}
+\details{
+Environment variables required for aws.s3 access:
+\itemize{
+\item \code{AWS_ACCESS_KEY_ID} = "mykey"
+\item \code{AWS_SECRET_ACCESS_KEY} = "mysecretkey"
+\item \code{AWS_DEFAULT_REGION} = "us-east-1"
+\item \code{AWS_SESSION_TOKEN} = "mytoken"
+}
+}
+\seealso{
+aws.s3 package documentation for access details:
+\ulr{https://github.com/cloudyr/aws.s3}
 }
