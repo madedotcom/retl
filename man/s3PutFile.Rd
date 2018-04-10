@@ -58,5 +58,5 @@ Environment variables required for aws.s3 access:
 }
 \seealso{
 aws.s3 package documentation for access details:
-\ulr{https://github.com/cloudyr/aws.s3}
+\url{https://github.com/cloudyr/aws.s3}
 }
