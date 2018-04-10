@@ -42,7 +42,7 @@ bqExistingPartitionDates <- function(table) {
   }
 }
 
-#' @noRd
+#' @rdname bqExistingPartitionDates
 #' @export
 getExistingPartitionDates <- function(table) {
   .Deprecated("bqExistingPartitionDates")
