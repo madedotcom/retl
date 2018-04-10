@@ -1,36 +1,30 @@
-#' @import utils
-#' @import data.table
-#' @import aws.s3
-#' @import jsonlite
-
-library(data.table)
-library(aws.s3)
-library(jsonlite)
-
-# To access AWS S3 following environment variables are required:
-#
-# AWS_S3_BUCKET - defines the name of the bucket in aws s3.
-# AWS_S3_ROOT - defines the root path for the project.
-#
-# Also aws.s3 package required following env variables:
-# Sys.setenv("AWS_ACCESS_KEY_ID" = "mykey",
-#            "AWS_SECRET_ACCESS_KEY" = "mysecretkey",
-#            "AWS_DEFAULT_REGION" = "us-east-1",
-#            "AWS_SESSION_TOKEN" = "mytoken")
-# See: https://github.com/cloudyr/aws.s3
-
 #' Saves data to a file in AWS S3
 #'
-#' Convention based wrapper functions that allow to save data in S3
+#' @description Convention based wrapper functions that allow to save data in S3
+#'
+#' @details Environment variables required for aws.s3 access:
+#'  * `AWS_ACCESS_KEY_ID` = "mykey"
+#'  * `AWS_SECRET_ACCESS_KEY` = "mysecretkey"
+#'  * `AWS_DEFAULT_REGION` = "us-east-1"
+#'  * `AWS_SESSION_TOKEN` = "mytoken"
+#'
 #' @export
 #' @param dt data.table to save
 #' @param path S3 object path starting after root folder.
-#' @param bucket name of the S3 bucket
-#' @param root project root path that is appended before the path, e.g. "/prod/"
-#' @param na.value the string to use for missing values in the data
+#' @param bucket name of the S3 bucket.
+#'     Defaults to value in `AWS_S3_BUCKET` environment variable.
+#' @param root project root path that is appended before the path, e.g. "/prod/".
+#'     Defaults to value in `AWS_S3_ROOT` environment variable.
+#' @param na.value the string to use for missing values in the data.
+#'     Defaults to empty string.
 #' @return TRUE if data was saved to S3.
 #'
 #' `s3PutFile` saves data into csv file in S3
+#'
+#' @seealso aws.s3 package documentation for access details:
+#'   \ulr{https://github.com/cloudyr/aws.s3}
+#' @import aws.s3
+#' @md
 s3PutFile <- function(dt, path,
                       bucket = Sys.getenv("AWS_S3_BUCKET"),
                       root = Sys.getenv("AWS_S3_ROOT"),
@@ -48,6 +42,12 @@ s3PutFile <- function(dt, path,
 #' Convention based wrapper functions that allow to load
 #' data files in S3 into data.table
 #'
+#' @details Environment variables required for aws.s3 access:
+#'  * `AWS_ACCESS_KEY_ID` = "mykey"
+#'  * `AWS_SECRET_ACCESS_KEY` = "mysecretkey"
+#'  * `AWS_DEFAULT_REGION` = "us-east-1"
+#'  * `AWS_SESSION_TOKEN` = "mytoke
+#'
 #' @export
 #' @param path is the path to the S3 object
 #' @param header flag defines whether file has header
@@ -56,6 +56,11 @@ s3PutFile <- function(dt, path,
 #' @param root project root path that is appended before the path in the argument.
 #'     Defaults to value in `AWS_S3_ROOT` environment variable.
 #' @return `s3GetFile` gets data from source `.csv` file
+#' @seealso aws.s3 package documentation for access details:
+#'   \url{https://github.com/cloudyr/aws.s3}
+#' @import aws.s3
+#' @importFrom data.table fread
+#' @md
 s3GetFile <- function(path, header = T,
                       bucket = Sys.getenv("AWS_S3_BUCKET"),
                       root = Sys.getenv("AWS_S3_ROOT")) {
@@ -100,8 +105,6 @@ s3GetData <- function(path, header = T,
   invisible(rbindlist(dt.list, use.names = T, fill = fill))
 }
 
-#' Saves data.table as csv.gz to S3
-#'
 #' @export
 #' @rdname s3PutFile
 #' @return `s3PutFile.gz` saves data into `.gz` (csv archived) file in S3.
@@ -173,6 +176,7 @@ s3GetObjectPath <- function(relative.path) {
 #' @rdname s3GetFile
 #' @export
 #' @return `s3GetFile.zip` loads data from `.zip` files
+#' @importFrom utils unzip
 s3GetFile.zip <- function(path,
                          bucket = Sys.getenv("AWS_S3_BUCKET"),
                          root = Sys.getenv("AWS_S3_ROOT")) {
@@ -190,6 +194,7 @@ s3GetFile.zip <- function(path,
 #' @rdname s3PutFile
 #' @export
 #' @return `s3PutFile.json.gz` saves data as `.json.gz` (json archived) file in S3
+#' @importFrom jsonlite write_json
 s3PutFile.json.gz <- function(dt, path,
                          bucket = Sys.getenv("AWS_S3_BUCKET"),
                          root = Sys.getenv("AWS_S3_ROOT")) {
@@ -207,6 +212,8 @@ s3PutFile.json.gz <- function(dt, path,
 #' @rdname s3GetFile
 #' @export
 #' @return `s3GetFile.json.gz` loads data from `.json.gz` files
+#' @import data.table
+#' @importFrom jsonlite fromJSON
 s3GetFile.json.gz <- function(path,
                          bucket = Sys.getenv("AWS_S3_BUCKET"),
                          root = Sys.getenv("AWS_S3_ROOT")) {

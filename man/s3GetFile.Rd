@@ -29,13 +29,13 @@ s3GetFile.json.gz(path, bucket = Sys.getenv("AWS_S3_BUCKET"),
 \item{header}{flag defines whether file has header}
 
 \item{bucket}{name of the S3 bucket.
-Defautls to value in `AWS_S3_BUCKET` environment variable.}
+Defautls to value in \code{AWS_S3_BUCKET} environment variable.}
 
 \item{root}{project root path that is appended before the path in the argument.
-Defaults to value in `AWS_S3_ROOT` environment variable.}
+Defaults to value in \code{AWS_S3_ROOT} environment variable.}
 }
 \value{
-`s3GetFile` gets data from source `.csv` file
+\code{s3GetFile} gets data from source \code{.csv} file
 
 `s3GetFile.gz` loads data from `.gz` files
 
@@ -48,4 +48,17 @@ Defaults to value in `AWS_S3_ROOT` environment variable.}
 \description{
 Convention based wrapper functions that allow to load
 data files in S3 into data.table
+}
+\details{
+Environment variables required for aws.s3 access:
+\itemize{
+\item \code{AWS_ACCESS_KEY_ID} = "mykey"
+\item \code{AWS_SECRET_ACCESS_KEY} = "mysecretkey"
+\item \code{AWS_DEFAULT_REGION} = "us-east-1"
+\item \code{AWS_SESSION_TOKEN} = "mytoke
+}
+}
+\seealso{
+aws.s3 package documentation for access details:
+\url{https://github.com/cloudyr/aws.s3}
 }
