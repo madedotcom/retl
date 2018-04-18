@@ -484,15 +484,13 @@ bqCopyTable <- function(from, to) {
     table_id = to
   )
 
-  job <- copy_table(
+  copy_table(
     src = src,
     dest = dest,
     write_disposition = "WRITE_TRUNCATE",
     project = Sys.getenv("BIGQUERY_PROJECT")
   )
 
-  wait_for(job)
-  print(job)
   return(bqTableExists(to))
 }
 
