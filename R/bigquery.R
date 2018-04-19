@@ -59,7 +59,7 @@ bqPartitionDatesSql <- function(table) {
            FORMAT_DATE('%Y%m%d', DATE(_PARTITIONTIME)) as partition_id from `", table, "`
            GROUP BY 1;")
   }
-  }
+}
 
 #' Gest the value from the corresponding environment variable as boolean
 #' Determins which flavour of sql should be used by default.
@@ -101,7 +101,7 @@ createRangeTable <- function(table, sql = NULL, file = NULL) {
 
   dataset <- Sys.getenv("BIGQUERY_DATASET")
 
-  existing.dates <- getExistingPartitionDates(table)
+  existing.dates <- bqExistingPartitionDates(table)
   missing.dates <- getMissingDates(start.date, end.date, existing.dates)
 
   lapply(missing.dates, function(d) {
@@ -309,14 +309,12 @@ bqExecuteSql <- function(sql, ...) {
     sql <- sql
   }
 
-  use.legacy.sql <- bqUseLegacySql()
-
   bqAuth()
   res <- query_exec(sql,
                     project = Sys.getenv("BIGQUERY_PROJECT"),
                     default_dataset = Sys.getenv("BIGQUERY_DATASET"),
                     max_pages = Inf,
-                    use_legacy_sql = use.legacy.sql)
+                    use_legacy_sql = bqUseLegacySql())
   return(data.table(res))
 }
 
@@ -356,21 +354,12 @@ bqCreatePartitionTable <- function(table, ga.properties,
     sql <- paste(readLines(file), collapse = "\n")
   }
 
-  # StartDate - start of Custom Dimension for UserID
-  start.date <- as.Date(Sys.getenv("BIGQUERY_START_DATE"))
-  #EndDate
-  if (Sys.getenv("BIGQUERY_END_DATE") == "") {
-    end.date <- Sys.Date() - 1
-  } else {
-    end.date <- as.Date(Sys.getenv("BIGQUERY_END_DATE"))
-  }
-
   if (missing(existing.dates)) {
-    existing.dates <- getExistingPartitionDates(table)
+    existing.dates <- bqExistingPartitionDates(table)
   }
 
   if (missing(missing.dates)) {
-    missing.dates <- getMissingDates(start.date, end.date, existing.dates)
+    missing.dates <- getMissingDates(bqStartDate(), bqEndDate(), existing.dates)
   }
 
   res <-
@@ -494,32 +483,6 @@ bqCopyTable <- function(from, to) {
   return(bqTableExists(to))
 }
 
-#' Returns a case clause based on binning the input vector
-#' to n+1 bins
-#'
-#' @export
-#' @param field field name to be used for the binning
-#' @param limits vector of seperator values
-#' @param alias resulting field name for the case
-#' @return case clause to be included in a SQL statement
-bqVectorToCase <- function(field, limits, alias = field) {
-  res <- "CASE "
-  mainBody <- paste0("WHEN (", field, " <= ", limits[1], ") THEN '", LETTERS[1] ,") (-Inf, ", limits[1], "]' ")
-
-  if (length(limits) > 1) {
-    for (i in 2:(length(limits)) - 1) {
-      tmp <- paste0("WHEN (", field, " > ", limits[i], " AND ",
-                    field, " <= ", limits[i + 1], ") THEN '", LETTERS[i + 1] ,") (", limits[i], ", ", limits[i + 1], "]' ")
-      mainBody <- paste0(mainBody, tmp)
-    }
-  }
-
-  mainBody <- paste0(mainBody, "WHEN (", field, " > ", limits[length(limits)], ") THEN '", LETTERS[length(limits) + 1] ,") (", limits[length(limits)], ", +Inf)' ")
-
-  res <- paste0(res, mainBody, "END AS ", alias)
-  return(res)
-}
-
 #' Creates partition name by combining table and partition date.
 #'
 #' @export
@@ -557,30 +520,63 @@ bqInsertPartition <- function(table, date, data, append) {
                append = append)
 }
 
-#' Transforms data from one partition table to another partition table
+#' Functions to transforms partitioned data into a partitioned table
 #'
+#' @description `bqTransformPartition` creates new partitions for the missing dates
+#' @rdname bqPartition
 #' @export
 #' @param table destination partition table where resutls of the query will be saved
-#' @param file query from the partitioned table
-#' @param ... any query parameters
+#' @param file path to the sql file that will be used for the transformation
+#' @param ...  parameters that will be passed via `sprintf` to build dynamic SQL.
+#'    partition date will be always passed first in format `yyyymmdd` followed by arguments in `...`
 bqTransformPartition <- function(table, file, ...) {
-  existing.dates <- getExistingPartitionDates(table)
+  existing.dates <- bqExistingPartitionDates(table)
   start.date <- bqStartDate(unset = "2017-01-01")
   end.date <- bqEndDate()
-  missing.dates <- getMissingDates(start.date,
-                                   end.date,
-                                   existing.dates,
-                                   "%Y-%m-%d")
+
+  missing.dates <- getMissingDates(
+    start.date,
+    end.date,
+    existing.dates,
+    "%Y-%m-%d"
+  )
 
   lapply(missing.dates, function(d) {
     partition <- gsub("-", "", d)
     destination.partition <- paste0(table, "$", partition)
     print(destination.partition)
-
     sql.exec <- readSql(file, d, ...)
-    bqCreateTable(sql.exec,
-                  table = destination.partition,
-                  write_disposition = "WRITE_TRUNCATE")
+
+    bqCreateTable(
+      sql.exec,
+      table = destination.partition,
+      write_disposition = "WRITE_TRUNCATE")
+  })
+}
+
+#' @description `bqRefreshPartitionData` updates existing partitions in the target table
+#'
+#' @rdname bqPartition
+#' @export
+bqRefreshPartitionData <- function(table, file, ...) {
+  existing.dates <- getExistingPartitionDates(table)
+  lapply(existing.dates, function(d) {
+    partition <- gsub("-", "", d)
+    destination.partition <- paste0(table, "$", partition)
+    sql <- readSql(file, d, ...)
+
+    bigrquery::insert_query_job(
+      query = sql,
+      project = Sys.getenv("BIGQUERY_PROJECT"),
+      destination_table = list(
+        project_id = Sys.getenv("BIGQUERY_PROJECT"),
+        dataset_id = Sys.getenv("BIGQUERY_DATASET"),
+        table_id = destination.partition
+      ),
+      use_legacy_sql = bqUseLegacySql(),
+      priority = "BATCH"
+    )
+
   })
 }
 
@@ -595,3 +591,56 @@ bqEndDate <- function(unset = as.character(Sys.Date() - 1)) {
 getInString <- function(x) {
   paste0("'", paste(x, collapse = "', '"), "'")
 }
+
+#' Returns a case clause based on binning the input vector
+#' to n+1 bins
+#'
+#' @export
+#' @param field field name to be used for the binning
+#' @param limits vector of seperator values
+#' @param alias resulting field name for the case
+#' @return case clause to be included in a SQL statement
+bqVectorToCase <- function(field, limits, alias = field) {
+  assert_that(
+    length(limits) > 0,
+    is.numeric(limits),
+    is.character(field)
+  )
+
+  limits <- c(-Inf, limits, Inf)
+
+  case.body <- sapply(1:(length(limits) - 1), function(i) {
+    paste0(
+      "WHEN (",
+      case_condition(field, limits[i], limits[i + 1]),
+      ") THEN '",
+      case_label(i, limits[i], limits[i + 1])
+    )
+  })
+  case.body <- paste0(case.body, collapse = "")
+
+  paste0("CASE ", case.body, "END AS ", alias)
+}
+
+case_condition <- function(field, low, high) {
+  low.limit <- paste0(field, " > ", low)
+  high.limit <- paste0(field, " <= ", high)
+  if (is.infinite(low)) {
+    return(high.limit)
+  }
+  if (is.infinite(high)) {
+    return(low.limit)
+  }
+  paste0(
+    low.limit, " AND ", high.limit
+  )
+}
+
+case_label <- function(index, low, high) {
+  paste0(LETTERS[index], ") (", low, ", ", high, case_right_bracket(high), "' ")
+}
+
+case_right_bracket <- function(high) {
+  ifelse(is.infinite(high), ")", "]")
+}
+
