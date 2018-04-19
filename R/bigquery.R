@@ -559,7 +559,7 @@ bqTransformPartition <- function(table, file, ...) {
 #' @rdname bqPartition
 #' @export
 bqRefreshPartitionData <- function(table, file, ...) {
-  existing.dates <- getExistingPartitionDates(table)
+  existing.dates <- bqExistingPartitionDates(table)
   lapply(existing.dates, function(d) {
     partition <- gsub("-", "", d)
     destination.partition <- paste0(table, "$", partition)
