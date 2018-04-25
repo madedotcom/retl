@@ -15,6 +15,6 @@ test_that("Case is calculated correctly", {
 
   res <- retl::bqVectorToCase(field, limits, res.name)
 
-  expect_true(grepl("WHEN \\(test_me <= 0\\) THEN 'A\\) \\(\\-Inf, 0\\]' WHEN \\(test_me > 0\\) THEN 'B\\) \\(0, \\+Inf\\)' END",
+  expect_true(grepl("WHEN \\(test_me <= 0\\) THEN 'A\\) \\(\\-Inf, 0\\]' WHEN \\(test_me > 0\\) THEN 'B\\) \\(0, \\Inf\\)' END",
                     res), "Constrains correctly identified")
 })
