@@ -564,7 +564,7 @@ bqInsertPartition <- function(table, date, data, append) {
 #' @param file query from the partitioned table
 #' @param ... any query parameters
 bqTransformPartition <- function(table, file, ...) {
-  existing.dates <- getExistingPartitionDates(table)
+  existing.dates <- bqExistingPartitionDates(table)
   start.date <- bqStartDate(unset = "2017-01-01")
   end.date <- bqEndDate()
   missing.dates <- getMissingDates(start.date,
