@@ -537,9 +537,8 @@ bqTransformPartition <- function(table, file, ...) {
   missing.dates <- getMissingDates(
     start.date,
     end.date,
-    existing.dates,
-    "%Y-%m-%d"
-  )
+    existing.dates
+    )
 
   lapply(missing.dates, function(d) {
     partition <- gsub("-", "", d)
