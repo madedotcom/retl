@@ -146,7 +146,12 @@ getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m
   days.sequence <- seq_along(days)
   dates <- start.date - 1 + days.sequence
   dates <- as.character(dates, format)
-  res <- setdiff(dates, existing.dates)
+  # existing dates come in "%Y%m%d" format
+  existing.dates.asdate <- as.Date(existing.dates, "%Y%m%d")
+  # we need to convert existing dates to format, which is in 'format' parameter
+  existing.dates.formated <- as.character(existing.dates.asdate, format)
+  # now we can compare dates, as they are in the same format
+  res <- setdiff(dates, existing.dates.formated)
   return(res)
 }
 
@@ -537,7 +542,8 @@ bqTransformPartition <- function(table, file, ...) {
   missing.dates <- getMissingDates(
     start.date,
     end.date,
-    existing.dates
+    existing.dates,
+    "%Y-%m-%d"
     )
 
   lapply(missing.dates, function(d) {
