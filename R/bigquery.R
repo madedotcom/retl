@@ -259,13 +259,15 @@ bqInitiateTable <- function(table,
                             partition = FALSE,
                             dataset = Sys.getenv("BIGQUERY_DATASET")) {
   bqAuth()
-  insert_table(
-    project = Sys.getenv("BIGQUERY_PROJECT"),
-    dataset = dataset,
-    table = table,
-    schema = read_json(schema.file),
-    partition = partition
-  )
+  if (!bqTableExists(table)) {
+    insert_table(
+      project = Sys.getenv("BIGQUERY_PROJECT"),
+      dataset = dataset,
+      table = table,
+      schema = read_json(schema.file),
+      partition = partition
+    )
+  }
 }
 
 #' Gets data for a given SQL statement or file that contains SQL
