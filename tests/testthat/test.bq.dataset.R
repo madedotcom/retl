@@ -3,11 +3,10 @@ library(mockery)
 
 context("BigQuery Dataset")
 
-list_datasets_mock <- function(project) {
-  list("a", "b", "c")
-}
+bq_dataset_exists_mock <- mock(TRUE, FALSE)
 with_mock(
-  `bigrquery::list_datasets` = list_datasets_mock,
+  `bigrquery::bq_dataset_exists` = bq_dataset_exists_mock,
+  `retl::bqAuth` = mock(),
   test_that("Check that datasets can be checked", {
       res <- bqDatasetExists("b", project = "test")
       expect_true(res, label = "b dataset exists")

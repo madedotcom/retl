@@ -239,11 +239,13 @@ readSql <- function(file, ...) {
 #' @param table name of a table to be created
 #' @param dataset name of the destination dataset
 #' @param write_disposition defines whether records will be appended
+#' @param priority defines whether query will have interactive or batch priority
 #' @return results of the exectuion as returned by bigrquery::query_exec
 bqCreateTable <- function(sql,
                           table,
                           dataset = Sys.getenv("BIGQUERY_DATASET"),
-                          write_disposition = "WRITE_APPEND" ) {
+                          write_disposition = "WRITE_APPEND",
+                          priority = "INTERACTIVE") {
   bqAuth()
   tbl <- bq_table(
     project = bqDefaultProject(),
@@ -262,7 +264,7 @@ bqCreateTable <- function(sql,
     create_disposition = "CREATE_IF_NEEDED",
     write_disposition = write_disposition,
     use_legacy_sql = bqUseLegacySql(),
-    priority = "INTERACTIVE"
+    priority = priority
   )
   bq_job_wait(job)
 }
@@ -288,12 +290,18 @@ bqInitiateTable <- function(table,
       dataset = dataset,
       table = table
     )
-    bigrquery::bq_table_create(
-      tbl,
-      fields = read_json(schema.file)
-      # TODO there is no option of partitioned table
-      # partition = partition
-    )
+    if (partition) {
+      bigrquery::bq_table_create(
+        tbl,
+        fields = read_json(schema.file),
+        time_partitioning = bq_time_partitioning()
+      )
+    } else {
+      bigrquery::bq_table_create(
+        tbl,
+        fields = read_json(schema.file)
+      )
+    }
   }
 }
 
@@ -498,8 +506,9 @@ bqGetColumnNames <- function(table) {
 #' @export
 #' @param from name of the source table
 #' @param to name of the desitnation table
+#' @param override defines if command will override existing table if it is not empty.
 #' @return TRUE if the table has been succesfully copied
-bqCopyTable <- function(from, to) {
+bqCopyTable <- function(from, to, override = TRUE) {
   bqAuth()
 
   src <- list(
@@ -514,11 +523,11 @@ bqCopyTable <- function(from, to) {
     table_id = to
   )
 
-  copy_table(
-    src = src,
+  write_disposition <- ifelse(override, "WRITE_TRUNCATE", "WRITE_EMPTY")
+  bq_table_copy(
+    x = src,
     dest = dest,
-    write_disposition = "WRITE_TRUNCATE",
-    project = Sys.getenv("BIGQUERY_PROJECT")
+    write_disposition = write_disposition
   )
 
   return(bqTableExists(to))
@@ -606,18 +615,12 @@ bqRefreshPartitionData <- function(table, file, ...) {
     destination.partition <- paste0(table, "$", partition)
     sql <- readSql(file, d, ...)
 
-    bigrquery::insert_query_job(
-      query = sql,
-      project = Sys.getenv("BIGQUERY_PROJECT"),
-      destination_table = list(
-        project_id = Sys.getenv("BIGQUERY_PROJECT"),
-        dataset_id = Sys.getenv("BIGQUERY_DATASET"),
-        table_id = destination.partition
-      ),
-      use_legacy_sql = bqUseLegacySql(),
+    bqCreateTable(
+      sql = sql,
+      table = destination.partition,
+      write_disposition = "WRITE_TRUNCATE",
       priority = "BATCH"
     )
-
   })
 }
 
