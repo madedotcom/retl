@@ -68,6 +68,18 @@ bqUseLegacySql <- function() {
   Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
 }
 
+bqDefaultProject <- function() {
+  Sys.getenv("BIGQUERY_PROJECT")
+}
+
+bqDefaultDataset <- function() {
+  Sys.getenv("BIGQUERY_DATASET")
+}
+
+bqBillingProject <- function() {
+  bqDefaultProject()
+}
+
 #' Creates partition in specified table in BigQuery.
 #
 #' @param table name of the new table
@@ -162,7 +174,9 @@ getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m
 #' @param project name of the project
 #' @return TRUE if dataset exists
 bqDatasetExists <- function(dataset, project = Sys.getenv("BIGQUERY_PROJECT")) {
-  dataset %in% list_datasets(project)
+  bqAuth()
+  ds <- bq_dataset(project, dataset)
+  bq_dataset_exists(ds)
 }
 
 #' Checks if table exists
@@ -172,12 +186,12 @@ bqDatasetExists <- function(dataset, project = Sys.getenv("BIGQUERY_PROJECT")) {
 #' @return TRUE if table exists
 bqTableExists <- function(table) {
   bqAuth()
-  res <- exists_table(
+  bt <- bigrquery::bq_table(
     project = Sys.getenv("BIGQUERY_PROJECT"),
     dataset = Sys.getenv("BIGQUERY_DATASET"),
-    table = table
+    table
   )
-  return(res)
+  bigrquery::bq_table_exists(bt)
 }
 
 #' Deletes table
@@ -191,10 +205,12 @@ bqDeleteTable <- function(table,
   assert_that(nchar(dataset) > 0, msg = "Set dataset parameter or BIGQUERY_DATASET env var.")
 
   bqAuth()
-  res <- delete_table(project = Sys.getenv("BIGQUERY_PROJECT"),
-                      dataset = dataset,
-                      table = table)
-  return(res)
+  bt <- bq_table(
+    project = Sys.getenv("BIGQUERY_PROJECT"),
+    dataset = dataset,
+    table = table
+  )
+  bq_table_delete(bt)
 }
 
 #' Creates SQL statment from the source file
@@ -229,20 +245,26 @@ bqCreateTable <- function(sql,
                           dataset = Sys.getenv("BIGQUERY_DATASET"),
                           write_disposition = "WRITE_APPEND" ) {
   bqAuth()
-
-  # Creates table from the given SQL.
-  res <- query_exec(
+  tbl <- bq_table(
+    project = bqDefaultProject(),
+    dataset = dataset,
+    table = table
+  )
+  ds <- bq_dataset(
+    project = bqDefaultProject(),
+    dataset = dataset
+  )
+  job <- bq_perform_query(
     query = sql,
-    project = Sys.getenv("BIGQUERY_PROJECT"),
-    default_dataset = dataset,
-    destination_table = paste0(dataset, ".", table),
-    max_pages = 1,
-    page_size = 1,
+    billing = bqBillingProject(),
+    destination_table = tbl,
+    default_dataset = ds,
     create_disposition = "CREATE_IF_NEEDED",
     write_disposition = write_disposition,
-    use_legacy_sql = bqUseLegacySql()
+    use_legacy_sql = bqUseLegacySql(),
+    priority = "INTERACTIVE"
   )
-  return(res)
+  bq_job_wait(job)
 }
 
 #' Creates table from the json schema file.
@@ -259,13 +281,18 @@ bqInitiateTable <- function(table,
                             partition = FALSE,
                             dataset = Sys.getenv("BIGQUERY_DATASET")) {
   bqAuth()
+
   if (!bqTableExists(table)) {
-    insert_table(
+    tbl <- bigrquery::bq_table(
       project = Sys.getenv("BIGQUERY_PROJECT"),
       dataset = dataset,
-      table = table,
-      schema = read_json(schema.file),
-      partition = partition
+      table = table
+    )
+    bigrquery::bq_table_create(
+      tbl,
+      fields = read_json(schema.file)
+      # TODO there is no option of partitioned table
+      # partition = partition
     )
   }
 }
@@ -315,14 +342,18 @@ bqExecuteSql <- function(sql, ...) {
     # template does not have parameteres.
     sql <- sql
   }
-
   bqAuth()
-  res <- query_exec(sql,
-                    project = Sys.getenv("BIGQUERY_PROJECT"),
-                    default_dataset = Sys.getenv("BIGQUERY_DATASET"),
-                    max_pages = Inf,
-                    use_legacy_sql = bqUseLegacySql())
-  return(data.table(res))
+  ds <- bigrquery::bq_dataset(
+    project = bqDefaultProject(),
+    dataset = bqDefaultDataset()
+  )
+  tb <- bigrquery::bq_dataset_query(
+    x = ds,
+    query = sql,
+    billing = bqBillingProject(),
+    use_legacy_sql = bqUseLegacySql()
+  )
+  data.table(bigrquery::bq_table_download(tb))
 }
 
 #' Gets the shop code from the GA properties vector.
@@ -378,14 +409,10 @@ bqCreatePartitionTable <- function(table, ga.properties,
 
       lapply(ga.properties, function(p) {
         sql.exec <- sprintf(sql, p, d, gaGetShop(ga.properties, p)) # Replace placeholder in sql template.
-        query_exec(query = sql.exec,
-                   project = Sys.getenv("BIGQUERY_PROJECT"),
-                   default_dataset = Sys.getenv("BIGQUERY_DATASET"),
-                   destination_table = paste0(Sys.getenv("BIGQUERY_DATASET"), ".", destination.partition),
-                   max_pages = 1,
-                   page_size = 1,
-                   create_disposition = "CREATE_IF_NEEDED",
-                   write_disposition = "WRITE_APPEND")
+        bqCreateTable(
+          sql = sql.exec,
+          table =  paste0(Sys.getenv("BIGQUERY_DATASET"), ".", destination.partition)
+        )
       })
     })
 
@@ -404,7 +431,7 @@ bqCreatePartitionTable <- function(table, ga.properties,
 #' @return results of execution
 bqInsertData <- function(table,
                          data,
-                         dataset = Sys.getenv("BIGQUERY_DATASET"),
+                         dataset = bqDefaultDataset(),
                          append = TRUE,
                          job.name = NULL, increment.field = NULL) {
   assert_that(nchar(dataset) > 0, msg = "Set dataset parameter or BIGQUERY_DATASET env var.")
@@ -417,12 +444,19 @@ bqInsertData <- function(table,
 
   if (rows > 0) {
     bqAuth()
-    job <- insert_upload_job(project = Sys.getenv("BIGQUERY_PROJECT"),
-                             dataset = dataset,
-                             table,
-                             data,
-                             write_disposition = write.disposition,
-                             create_disposition = "CREATE_IF_NEEDED")
+
+    tbl <- bigrquery::bq_table(
+      project = bqDefaultProject(),
+      dataset = dataset,
+      table = table
+    )
+
+    job <- bigrquery::bq_perform_upload(
+      x = tbl,
+      values = data,
+      write_disposition = write.disposition,
+      create_disposition = "CREATE_IF_NEEDED"
+    )
 
     res <- wait_for(job)
 
