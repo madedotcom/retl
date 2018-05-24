@@ -569,7 +569,8 @@ bqInsertPartition <- function(table, date, data, append) {
 #' @param table destination partition table where resutls of the query will be saved
 #' @param file path to the sql file that will be used for the transformation
 #' @param ...  parameters that will be passed via `sprintf` to build dynamic SQL.
-#'    partition date will be always passed first in format `yyyymmdd` followed by arguments in `...`
+#'    partition date will be always passed first in format `yyyymmdd`
+#'    followed by arguments in `...`
 bqTransformPartition <- function(table, file, ...) {
   existing.dates <- bqExistingPartitionDates(table)
   start.date <- bqStartDate(unset = "2017-01-01")
@@ -622,11 +623,15 @@ bqRefreshPartitionData <- function(table, file, ...) {
 }
 
 bqStartDate <- function(unset = "2016-01-01") {
-  as.Date(Sys.getenv("BIGQUERY_START_DATE", unset))
+  date <- Sys.getenv("BIGQUERY_START_DATE")
+  date <- ifelse(nchar(date) > 0, date, unset)
+  as.Date(date)
 }
 
 bqEndDate <- function(unset = as.character(Sys.Date() - 1)) {
-  as.Date(Sys.getenv("BIGQUERY_END_DATE", unset))
+  date <- Sys.getenv("BIGQUERY_END_DATE")
+  date <- ifelse(nchar(date) > 0, date, unset)
+  as.Date(date)
 }
 
 getInString <- function(x) {
