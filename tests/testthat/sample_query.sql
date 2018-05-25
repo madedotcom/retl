@@ -1,1 +1,1 @@
-SELECT TEST_%1$i
+SELECT %1$i AS value

@@ -5,7 +5,7 @@
 \title{Creates table using given sql}
 \usage{
 bqCreateTable(sql, table, dataset = Sys.getenv("BIGQUERY_DATASET"),
-  write_disposition = "WRITE_APPEND")
+  write_disposition = "WRITE_APPEND", priority = "INTERACTIVE")
 }
 \arguments{
 \item{sql}{SQL statement to use a source for a new table}
@@ -15,6 +15,8 @@ bqCreateTable(sql, table, dataset = Sys.getenv("BIGQUERY_DATASET"),
 \item{dataset}{name of the destination dataset}
 
 \item{write_disposition}{defines whether records will be appended}
+
+\item{priority}{defines whether query will have interactive or batch priority}
 }
 \value{
 results of the exectuion as returned by bigrquery::query_exec

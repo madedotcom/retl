@@ -169,14 +169,29 @@ getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m
 
 #' Checks if dataset exists in the project
 #'
+#' @name bqDataset
+#'
 #' @export
 #' @param dataset name of the dataset
 #' @param project name of the project
-#' @return TRUE if dataset exists
-bqDatasetExists <- function(dataset, project = Sys.getenv("BIGQUERY_PROJECT")) {
+#' @return `bqDatasetExists` TRUE if dataset exists
+bqDatasetExists <- function(dataset = bqDefaultDataset(), project = bqDefaultProject()) {
   bqAuth()
   ds <- bq_dataset(project, dataset)
   bq_dataset_exists(ds)
+}
+
+#' @name bqDataset
+#'
+#' @export
+bqCreateDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultProject()) {
+  bqAuth()
+  bq_dataset_create(
+    bq_dataset(
+      project = project,
+      dataset = dataset
+    )
+  )
 }
 
 #' Checks if table exists
@@ -466,7 +481,7 @@ bqInsertData <- function(table,
       create_disposition = "CREATE_IF_NEEDED"
     )
 
-    res <- wait_for(job)
+    res <- bq_job_wait(job)
 
     if (!is.null(job.name)) {
       # Log metadata of the execution with number of rows and increment value

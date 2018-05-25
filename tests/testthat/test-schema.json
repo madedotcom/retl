@@ -1,0 +1,8 @@
+[
+      {
+        "description": "records count",
+        "mode": "NULLABLE",
+        "name": "count",
+        "type": "integer"
+      }
+]

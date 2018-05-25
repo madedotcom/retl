@@ -15,7 +15,8 @@ bqRefreshPartitionData(table, file, ...)
 \item{file}{path to the sql file that will be used for the transformation}
 
 \item{...}{parameters that will be passed via `sprintf` to build dynamic SQL.
-partition date will be always passed first in format `yyyymmdd` followed by arguments in `...`}
+partition date will be always passed first in format `yyyymmdd`
+followed by arguments in `...`}
 }
 \description{
 `bqTransformPartition` creates new partitions for the missing dates
