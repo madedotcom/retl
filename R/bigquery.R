@@ -13,14 +13,27 @@ library(stringr)
 library(jsonlite)
 library(assertthat)
 
+
 #' Wrapper for the set_service_token that uses BIGQUERY_ACCESS_TOKEN_PATH env var
 #'  as default value for the secret token location.
 bqAuth <- function() {
   if (!bigrquery::has_access_cred()) {
-    token.file = Sys.getenv("BIGQUERY_ACCESS_TOKEN_PATH")
-    assert_that(token.file != "", file.exists(token.file))
-    bigrquery::set_service_token(token.file)
+    bigrquery::set_service_token(bqTokenFile())
   }
+}
+
+bqTokenFile <- function() {
+  assert_that(bqTokenFileValid())
+  bqTokenFilePath()
+}
+
+bqTokenFilePath <- function() {
+  Sys.getenv("BIGQUERY_ACCESS_TOKEN_PATH")
+}
+
+bqTokenFileValid <- function() {
+  token.file <- bqTokenFilePath()
+  token.file != "" && file.exists(token.file)
 }
 
 #' Gets existing dates for date partitioned table in BigQuery

@@ -1,4 +1,5 @@
 library(bigrquery)
+
 bqAuth()
 ds <- bq_test_dataset()
 Sys.setenv(BIGQUERY_DATASET = ds$dataset)

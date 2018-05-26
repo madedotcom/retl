@@ -4,17 +4,17 @@ library(data.table)
 
 context("BigQuery insert functions")
 test_that("Data is inserted correctly without metadata", {
+  skip_on_travis()
+  res <- bqInsertData("test_table_insert_empty", data.table())
 
-
-    res <- bqInsertData("test_table_insert_empty", data.table())
-
-    dt.test <- data.table(iris)
-    colnames(dt.test) <- conformHeader(colnames(dt.test), separator = "_")
-    bqInsertData("test_table_insert_iris", dt.test)
+  dt.test <- data.table(iris)
+  colnames(dt.test) <- conformHeader(colnames(dt.test), separator = "_")
+  bqInsertData("test_table_insert_iris", dt.test)
 })
 
 
 test_that("Data is inserted correctly with metadata", {
+  skip_on_travis()
   sepal_length <- NULL
   dt.test <- data.table(iris)
 
@@ -34,7 +34,7 @@ test_that("Data is inserted correctly with metadata", {
 })
 
 test_that("table can be created from schema", {
-
+  skip_on_travis()
   bqInitiateTable(
     table = "table_from_schema",
     schema.file = "test-schema.json"
@@ -43,6 +43,7 @@ test_that("table can be created from schema", {
 })
 
 test_that("partitioned table can be created and data is added", {
+  skip_on_travis()
   table.name <- "table_daily_from_schema"
   res <- bqInitiateTable(
     table = table.name,
@@ -106,6 +107,7 @@ test_that("partitioned table can be created and data is added", {
 })
 
 test_that("shard tables from several datasets can be tranformed in day partitioned tables", {
+  skip_on_travis()
   Sys.setenv(BIGQUERY_START_DATE = "2015-01-01")
   Sys.setenv(BIGQUERY_END_DATE = "2015-01-02")
   datasets <- c(a = "ds_retl_test_1", b = "ds_retl_test_2")
