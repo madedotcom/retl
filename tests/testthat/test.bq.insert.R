@@ -111,8 +111,8 @@ test_that("shard tables from several datasets can be tranformed in day partition
   datasets <- c(a = "ds_retl_test_1", b = "ds_retl_test_2")
   lapply(datasets, function(ds) {
     if (bqDatasetExists(ds)) {
-      bqDeleteTable("shard_20150101")
-      bqDeleteTable("shard_20150102")
+      bqDeleteTable("shard_20150101", ds)
+      bqDeleteTable("shard_20150102", ds)
     } else {
       bqCreateDataset(ds)
     }
