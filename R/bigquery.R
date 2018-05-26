@@ -105,13 +105,8 @@ createRangeTable <- function(table, sql = NULL, file = NULL) {
     sql <- paste(readLines(file), collapse = "\n")
   }
 
-  # StartDate
   start.date <- as.Date("2016-01-08")
-  #EndDate
   end.date <- Sys.Date() - 1
-
-
-  dataset <- Sys.getenv("BIGQUERY_DATASET")
 
   existing.dates <- bqExistingPartitionDates(table)
   missing.dates <- getMissingDates(start.date, end.date, existing.dates)
@@ -119,14 +114,11 @@ createRangeTable <- function(table, sql = NULL, file = NULL) {
   lapply(missing.dates, function(d) {
     print(d)
     sql.exec <- sprintf(sql, d)
-    query_exec(query = sql.exec,
-               project = Sys.getenv("BIGQUERY_PROJECT"),
-               destination_table = paste0(dataset, ".", table, d),
-               max_pages = 1,
-               page_size = 1,
-               create_disposition = "CREATE_IF_NEEDED",
-               write_disposition = "WRITE_TRUNCATE")
-
+    bqCreateTable(
+      sql = sql.exec,
+      table = paste0(table, d),
+      write_disposition = "WRITE_TRUNCATE"
+    )
   })
 }
 
@@ -138,7 +130,11 @@ createRangeTable <- function(table, sql = NULL, file = NULL) {
 #' @return string vector of dates
 getExistingDates <- function(dataset, table.prefix) {
   bqAuth()
-  tables <- list_tables(project = Sys.getenv("BIGQUERY_PROJECT"), dataset, 10000)
+  tables <- list_tables(
+    project = bqDefaultProject(),
+    dataset,
+    10000
+  )
   matches <- tables[grepl(table.prefix, tables)]
   res <- str_extract(matches,"\\d{8}")
   return(res)
@@ -194,6 +190,19 @@ bqCreateDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultPro
   )
 }
 
+#' @name bqDataset
+#'
+#' @export
+bqDeleteDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultProject()) {
+  bqAuth()
+  bq_dataset_delete(
+    bq_dataset(
+      project = project,
+      dataset = dataset
+    )
+  )
+}
+
 #' Functions to work with BigQuery tables
 #'
 #' Family of functions for common operations on tables
@@ -228,7 +237,7 @@ bqDeleteTable <- function(table, dataset = bqDefaultDataset()) {
 
   bqAuth()
   bt <- bq_table(
-    project = Sys.getenv("BIGQUERY_PROJECT"),
+    project = bqDefaultProject(),
     dataset = dataset,
     table = table
   )
@@ -265,7 +274,7 @@ readSql <- function(file, ...) {
 #' @return results of the exectuion as returned by bigrquery::query_exec
 bqCreateTable <- function(sql,
                           table,
-                          dataset = Sys.getenv("BIGQUERY_DATASET"),
+                          dataset = bqDefaultDataset(),
                           write_disposition = "WRITE_APPEND",
                           priority = "INTERACTIVE") {
   bqAuth()
@@ -309,7 +318,7 @@ bqInitiateTable <- function(table,
 
   if (!bqTableExists(table)) {
     tbl <- bigrquery::bq_table(
-      project = Sys.getenv("BIGQUERY_PROJECT"),
+      project = bqDefaultProject(),
       dataset = dataset,
       table = table
     )
@@ -416,12 +425,12 @@ gaGetShop <- function(ga.properties, property) {
 #'
 #' @export
 #' @param table name of the destination table
-#' @param ga.properties list of Google Analytics properties to populate table for
+#' @param datasets list of Google Analytics properties to populate table for
 #' @param sql sql to use a source of the data
 #' @param file if sql is not provided it will be read from the file
 #' @param existing.dates dates that should be skipped
 #' @param missing.dates dates calculation for which will be enforced
-bqCreatePartitionTable <- function(table, ga.properties,
+bqCreatePartitionTable <- function(table, datasets,
                                    sql = NULL, file = NULL,
                                    existing.dates = NULL,
                                    missing.dates = NULL) {
@@ -450,11 +459,11 @@ bqCreatePartitionTable <- function(table, ga.properties,
 
       bqDeleteTable(destination.partition)
 
-      lapply(ga.properties, function(p) {
-        sql.exec <- sprintf(sql, p, d, gaGetShop(ga.properties, p)) # Replace placeholder in sql template.
+      lapply(datasets, function(p) {
+        sql.exec <- sprintf(sql, p, d, gaGetShop(datasets, p)) # Replace placeholder in sql template.
         bqCreateTable(
           sql = sql.exec,
-          table =  paste0(Sys.getenv("BIGQUERY_DATASET"), ".", destination.partition)
+          table =  destination.partition
         )
       })
     })
@@ -522,8 +531,8 @@ bqInsertData <- function(table,
 bqGetColumnNames <- function(table) {
   bqAuth()
 
-  info <- get_table(project = Sys.getenv("BIGQUERY_PROJECT"),
-                    dataset = Sys.getenv("BIGQUERY_DATASET"),
+  info <- get_table(project = bqDefaultProject(),
+                    dataset = bqDefaultDataset(),
                     table)
 
   # Unlist all the schema data and keep only the name fields
@@ -547,14 +556,14 @@ bqCopyTable <- function(from, to, override = TRUE) {
   bqAuth()
 
   src <- list(
-    project_id = Sys.getenv("BIGQUERY_PROJECT"),
-    dataset_id = Sys.getenv("BIGQUERY_DATASET"),
+    project_id = bqDefaultProject(),
+    dataset_id = bqDefaultDataset(),
     table_id = from
   )
 
   dest <- list(
-    project_id = Sys.getenv("BIGQUERY_PROJECT"),
-    dataset_id = Sys.getenv("BIGQUERY_DATASET"),
+    project_id = bqDefaultProject(),
+    dataset_id = bqDefaultDataset(),
     table_id = to
   )
 
@@ -597,7 +606,7 @@ bqDeletePartition <- function(table, date) {
 #' @param date Partition date
 #' @param data Data table to insert
 #' @param append Append to the partition if TRUE else overwrite
-bqInsertPartition <- function(table, date, data, append) {
+bqInsertPartition <- function(table, date, data, append = FALSE) {
   target.partition <- bqPartitionName(table, date)
 
   bqInsertData(table = target.partition,
@@ -644,7 +653,7 @@ bqTransformPartition <- function(table, file, ...) {
 #'
 #' @rdname bqPartition
 #' @export
-bqRefreshPartitionData <- function(table, file, ...) {
+bqRefreshPartitionData <- function(table, file, ..., priority = "BATCH") {
   existing.dates <- bqExistingPartitionDates(table)
   lapply(existing.dates, function(d) {
     partition <- gsub("-", "", d)
@@ -655,7 +664,7 @@ bqRefreshPartitionData <- function(table, file, ...) {
       sql = sql,
       table = destination.partition,
       write_disposition = "WRITE_TRUNCATE",
-      priority = "BATCH"
+      priority = priority
     )
   })
 }

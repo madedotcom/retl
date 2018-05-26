@@ -5,11 +5,15 @@
 \alias{bqDatasetExists}
 \alias{bqDataset}
 \alias{bqCreateDataset}
+\alias{bqDataset}
+\alias{bqDeleteDataset}
 \title{Checks if dataset exists in the project}
 \usage{
 bqDatasetExists(dataset = bqDefaultDataset(), project = bqDefaultProject())
 
 bqCreateDataset(dataset = bqDefaultDataset(), project = bqDefaultProject())
+
+bqDeleteDataset(dataset = bqDefaultDataset(), project = bqDefaultProject())
 }
 \arguments{
 \item{dataset}{name of the dataset}

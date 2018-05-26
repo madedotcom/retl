@@ -7,7 +7,7 @@
 \usage{
 bqTransformPartition(table, file, ...)
 
-bqRefreshPartitionData(table, file, ...)
+bqRefreshPartitionData(table, file, ..., priority = "BATCH")
 }
 \arguments{
 \item{table}{destination partition table where resutls of the query will be saved}

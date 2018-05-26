@@ -4,7 +4,7 @@
 \alias{bqCreateTable}
 \title{Creates table using given sql}
 \usage{
-bqCreateTable(sql, table, dataset = Sys.getenv("BIGQUERY_DATASET"),
+bqCreateTable(sql, table, dataset = bqDefaultDataset(),
   write_disposition = "WRITE_APPEND", priority = "INTERACTIVE")
 }
 \arguments{

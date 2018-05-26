@@ -4,13 +4,13 @@
 \alias{bqCreatePartitionTable}
 \title{Creates partition table for a given sql}
 \usage{
-bqCreatePartitionTable(table, ga.properties, sql = NULL, file = NULL,
+bqCreatePartitionTable(table, datasets, sql = NULL, file = NULL,
   existing.dates = NULL, missing.dates = NULL)
 }
 \arguments{
 \item{table}{name of the destination table}
 
-\item{ga.properties}{list of Google Analytics properties to populate table for}
+\item{datasets}{list of Google Analytics properties to populate table for}
 
 \item{sql}{sql to use a source of the data}
 
