@@ -33,6 +33,24 @@ test_that("Data is inserted correctly with metadata", {
   expect_equal(res$cnt, nrow(iris))
 })
 
+test_that("table can be created from schema", {
+
+  bqInitiateTable(
+    table = "table_from_schema",
+    schema.file = "test-schema.json"
+  )
+  expect_true(bqTableExists("table_from_schema"))
+
+  res <- bqInitiateTable(
+    table = "table_daily_from_schema",
+    schema.file = "test-schema.json",
+    partition = TRUE
+  )
+  res <- bqExecuteSql("SELECT _PARTITIONTIME AS value FROM table_daily_from_schema")
+  expect_equal(nrow(res), 0L)
+
+})
+
 bq_perform_upload_mock <- mock(cycle = T)
 wait_for_mock <- mock(cycle = T)
 test_that("Metadata logged only if job.name and increment.field params are provided together", {

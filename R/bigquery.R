@@ -194,29 +194,36 @@ bqCreateDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultPro
   )
 }
 
-#' Checks if table exists
+#' Functions to work with BigQuery tables
+#'
+#' Family of functions for common operations on tables
+#'
+#' @name bqTable
+NULL
+
+
+#' @name bqTable
 #'
 #' @export
 #' @param table name of the table
-#' @return TRUE if table exists
-bqTableExists <- function(table) {
+#' @param dataset name of the dataset
+#' @return `bqTableExists` TRUE if table exists
+bqTableExists <- function(table, dataset = bqDefaultDataset()) {
   bqAuth()
   bt <- bigrquery::bq_table(
-    project = Sys.getenv("BIGQUERY_PROJECT"),
-    dataset = Sys.getenv("BIGQUERY_DATASET"),
+    project = bqDefaultProject(),
+    dataset = dataset,
     table
   )
   bigrquery::bq_table_exists(bt)
 }
 
-#' Deletes table
+
+#' @name bqTable
 #'
 #' @export
-#' @param table name of the table
-#' @param dataset name of the dataset
-#' @return results of the execution from bigrquery::delete_table
-bqDeleteTable <- function(table,
-                          dataset = Sys.getenv("BIGQUERY_DATASET")) {
+#' @return `bqDeleteTable` TRUE if table was deleted
+bqDeleteTable <- function(table, dataset = bqDefaultDataset()) {
   assert_that(nchar(dataset) > 0, msg = "Set dataset parameter or BIGQUERY_DATASET env var.")
 
   bqAuth()
@@ -284,7 +291,8 @@ bqCreateTable <- function(sql,
   bq_job_wait(job)
 }
 
-#' Creates table from the json schema file.
+
+#' @name bqTable
 #'
 #' @export
 #' @importFrom jsonlite read_json
@@ -296,7 +304,7 @@ bqCreateTable <- function(sql,
 bqInitiateTable <- function(table,
                             schema.file,
                             partition = FALSE,
-                            dataset = Sys.getenv("BIGQUERY_DATASET")) {
+                            dataset = bqDefaultDataset()) {
   bqAuth()
 
   if (!bqTableExists(table)) {
@@ -318,6 +326,18 @@ bqInitiateTable <- function(table,
       )
     }
   }
+}
+
+#' @export
+#' @name bqTable
+bqTableSchema <- function(table, dataset = bqDefaultDataset()) {
+  bq_table_fields(
+    bq_table(
+      project = bqDefaultProject(),
+      dataset = dataset,
+      table = table
+    )
+  )
 }
 
 #' Gets data for a given SQL statement or file that contains SQL
