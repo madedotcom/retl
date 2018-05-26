@@ -665,6 +665,7 @@ bqTransformPartition <- function(table, file, ...) {
 #' @description `bqRefreshPartitionData` updates existing partitions in the target table
 #'
 #' @rdname bqPartition
+#' @param priority sets priority of the execution, BATCH or INTERACTIVE
 #' @export
 bqRefreshPartitionData <- function(table, file, ..., priority = "BATCH") {
   existing.dates <- bqExistingPartitionDates(table)

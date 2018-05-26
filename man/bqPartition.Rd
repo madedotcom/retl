@@ -17,6 +17,8 @@ bqRefreshPartitionData(table, file, ..., priority = "BATCH")
 \item{...}{parameters that will be passed via `sprintf` to build dynamic SQL.
 partition date will be always passed first in format `yyyymmdd`
 followed by arguments in `...`}
+
+\item{priority}{sets priority of the execution, BATCH or INTERACTIVE}
 }
 \description{
 `bqTransformPartition` creates new partitions for the missing dates
