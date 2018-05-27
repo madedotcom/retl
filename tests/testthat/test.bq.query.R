@@ -3,6 +3,7 @@ library(mockery)
 context("BigQuery query functions.")
 
 test_that("Correct sql is executed", {
+  skip_on_travis()
 
   res <- bqExecuteSql("SELECT %1$s AS value", "'TEST'")
   expect_equal(res$value, "TEST")

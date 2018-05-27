@@ -153,15 +153,19 @@ test_that("Metadata logged only if job.name and increment.field params are provi
     expect_error(
       bqInsertData(
         table = "test_table",
+        dataset = "test",
         data.table(iris),
-        job.name = "test"),
+        job.name = "test"
+      ),
       "increment\\.field.*required"
     ),
     expect_error(
       bqInsertData(
         table = "test_table",
+        dataset = "test",
         data.table(iris),
-        increment.field = "test"),
+        increment.field = "test"
+      ),
       "job\\.name.*required"
     )
   )
