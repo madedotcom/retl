@@ -178,7 +178,7 @@ getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m
 
 #' Checks if dataset exists in the project
 #'
-#' @name bqDataset
+#' @rdname bqDataset
 #'
 #' @export
 #' @param dataset name of the dataset
@@ -190,7 +190,7 @@ bqDatasetExists <- function(dataset = bqDefaultDataset(), project = bqDefaultPro
   bq_dataset_exists(ds)
 }
 
-#' @name bqDataset
+#' @rdname bqDataset
 #'
 #' @export
 bqCreateDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultProject()) {
@@ -203,7 +203,7 @@ bqCreateDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultPro
   )
 }
 
-#' @name bqDataset
+#' @rdname bqDataset
 #'
 #' @export
 bqDeleteDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultProject()) {
@@ -220,7 +220,7 @@ bqDeleteDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultPro
 #'
 #' Family of functions for common operations on tables
 #'
-#' @name bqTable
+#' @rdname bqTable
 NULL
 
 
@@ -314,7 +314,7 @@ bqCreateTable <- function(sql,
 }
 
 
-#' @name bqTable
+#' @rdname bqTable
 #'
 #' @export
 #' @importFrom jsonlite read_json
@@ -351,7 +351,7 @@ bqInitiateTable <- function(table,
 }
 
 #' @export
-#' @name bqTable
+#' @rdname bqTable
 bqTableSchema <- function(table, dataset = bqDefaultDataset()) {
   bq_table_fields(
     bq_table(
@@ -362,7 +362,17 @@ bqTableSchema <- function(table, dataset = bqDefaultDataset()) {
   )
 }
 
+#' Functions that execute query against BigQuery database
+#'
+#' Execute templated query given as string or file.
+#' Placeholders in template are replaced with values provided in ellipsis parameter with sprintf.
+#'
+#' @rdname bqQuery
+NULL
+
 #' Gets data for a given SQL statement or file that contains SQL
+#'
+#' @rdname bqQuery
 #'
 #' @export
 #' @param sql sql statement
@@ -382,6 +392,8 @@ bqGetData <- function(sql = NULL, file = NULL, ...) {
 
 #' Gets data for a given file that contains SQL statement
 #'
+#' @rdname bqQuery
+#'
 #' @export
 #' @param file file with sql statment
 #' @param ... any parameters that will be used to fill in placeholders with sprintf
@@ -394,7 +406,17 @@ bqExecuteFile <- function(file, ...) {
   return(data.table(res))
 }
 
+#' @rdname bqQuery
+#'
+#' @export
+#' @param query template of the sql statement
+bqExecuteQuery <- function(query, ...) {
+  bqExecuteSql(query, ...)
+}
+
 #' Gets data for a given SQL statement
+#'
+#' @rdname bqQuery
 #'
 #' @export
 #' @param sql string with sql statment
