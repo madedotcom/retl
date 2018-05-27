@@ -38,7 +38,7 @@ bqDatasetExists()
 bqCreateDataset("my_dataset")
 
 # Drop dataset
-bqDeleteDataset()
+bqDeleteDataset("my_dataset")
 ```
 
 ## AWS S3 ##
