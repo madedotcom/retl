@@ -434,6 +434,12 @@ gaGetShop <- function(ga.properties, property) {
   return(shops[as.character(property)])
 }
 
+bqDatasetLabel <- function(datasets, dataset) {
+  labels <- names(datasets)
+  names(labels) <- datasets
+  return(labels[as.character(dataset)])
+}
+
 #' Creates partition table for a given sql
 #'
 #' @export
@@ -473,7 +479,7 @@ bqCreatePartitionTable <- function(table, datasets,
       bqDeleteTable(destination.partition)
 
       lapply(datasets, function(p) {
-        sql.exec <- sprintf(sql, p, d, gaGetShop(datasets, p)) # Replace placeholder in sql template.
+        sql.exec <- sprintf(sql, p, d, bqDatasetLabel(datasets, p)) # Replace placeholder in sql template.
         bqCreateTable(
           sql = sql.exec,
           table =  destination.partition
