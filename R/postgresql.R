@@ -8,12 +8,14 @@ library(RPostgreSQL)
 dbGetConnection <- function() {
   # Creates connection to ERP db using environment variables.
   drv <- dbDriver(Sys.getenv("ERP_DB"))
-  con <- dbConnect(drv, dbname = Sys.getenv("ERP_DB_NAME"),
-                   host = Sys.getenv("ERP_DB_HOST"),
-                   port = Sys.getenv("ERP_DB_PORT"),
-                   user = Sys.getenv("ERP_DB_USER"),
-                   password = Sys.getenv("ERP_DB_PASSWORD"))
-  return(con)
+  conn <- dbConnect(
+    drv,
+    dbname = Sys.getenv("ERP_DB_NAME"),
+    host = Sys.getenv("ERP_DB_HOST"),
+    port = Sys.getenv("ERP_DB_PORT"),
+    user = Sys.getenv("ERP_DB_USER"),
+    password = Sys.getenv("ERP_DB_PASSWORD")
+  )
 }
 
 #' Executes statement in the SQL file
@@ -37,9 +39,11 @@ dbExecuteQueryFile <- function(file, ...) {
 #' @param ... any parameters that will be used to fill in placeholders with sprintf
 dbExecuteQuery <- function(sql, ...) {
 
-  if(length(list(...)) > 0) { # template requires parameters.
+  if (length(list(...)) > 0) {
+    # template requires parameters.
     sql <- sprintf(sql, ...)
-  } else { # template does not have parameteres.
+  } else {
+    # template does not have parameteres.
     sql <- sql
   }
 
@@ -48,6 +52,8 @@ dbExecuteQuery <- function(sql, ...) {
   results <- dbGetQuery(con, sql)
 
   # replace underscore in colnames with dot.
-  colnames(results) <- lapply(colnames(results), function(name) {return (gsub("_", ".", name))})
-  return(data.table(results))
+  colnames(results) <- lapply(colnames(results), function(name) {
+    gsub("_", ".", name)
+  })
+  data.table(results)
 }

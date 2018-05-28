@@ -30,6 +30,7 @@ dt <-  bqExecuteFile("group-size.sql", "A")
 ```
 
 ### dataset
+
 ```R
 # Check if default dataset exists
 bqDatasetExists()
@@ -41,6 +42,42 @@ bqCreateDataset("my_dataset")
 bqDeleteDataset("my_dataset")
 ```
 
+### transform partitioned data
+
+If your raw data is in daily partitioned tables you can transform
+data into a new partitioned table with transformation defined in the
+query template file. Date of each partition is passed into template as
+first parameter in `yyyymmdd` format.
+
+```sql
+-- transformation_count.sql
+SELECT COUNT(*) AS rows FROM my_table$%1$s
+```
+
+```R
+# etl.R
+bqTransformPartition("my_new_table_1", "transformation_count.sql")
+```
+
+### Create tables
+
+```R
+# Initiate empty table from json schema
+bqInitiateTable("new_talbe", "new_table_chema.json", partition = TRUE)
+
+# Create table from results of a query
+bqCreateTable("SELECT * FROM my_table", "my_table_2")
+
+# Create table by uploading data.table
+bqInsertData("my_table", cars)
+```
+
+### Upload data
+
+```R
+bqInsertData("my_table", cars)
+```
+
 ## AWS S3 ##
 
 To access AWS S3 storage provide following environment variables:
@@ -50,6 +87,7 @@ To access AWS S3 storage provide following environment variables:
 - `AWS_DEFAULT_REGION` - Default region (e.g. `us-east-1`)
 - `AWS_S3_BUCKET` - Name of the S3 bucket
 - `AWS_S3_ROOT` - Root path which will be added to your path. If you full path is "myproject/data/file_a.csv", you can access it as `s3GetFile("data/file_a.csv")` if root variable is set to `myproject/`.
+
 
 ## Schema for metadata ##
 
