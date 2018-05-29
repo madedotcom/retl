@@ -110,7 +110,11 @@ s3GetData <- function(path, header = T,
 
   full.path <- paste0(root, path)
   full.path <- gsub("^/", "", full.path)
-  objects <- aws.s3::get_bucket(bucket = bucket, prefix = full.path)
+  objects <- aws.s3::get_bucket(
+    bucket = bucket,
+    prefix = full.path,
+    check_region = FALSE
+  )
   dt.list <- lapply(objects, function(o) {
     s3Get.FUN(o$Key, bucket = bucket, root = "")
   })
