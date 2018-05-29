@@ -224,7 +224,7 @@ bqDeleteDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultPro
 NULL
 
 
-#' @name bqTable
+#' @rdname bqTable
 #'
 #' @export
 #' @param table name of the table
@@ -241,7 +241,7 @@ bqTableExists <- function(table, dataset = bqDefaultDataset()) {
 }
 
 
-#' @name bqTable
+#' @rdname bqTable
 #'
 #' @export
 #' @return `bqDeleteTable` TRUE if table was deleted

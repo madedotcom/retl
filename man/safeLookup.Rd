@@ -17,7 +17,6 @@ safeLookup(data, lookup, by, select = setdiff(colnames(lookup), by))
 }
 \value{
 data set with new fields
-TODO @Daniel : add unit tests
 }
 \description{
 Function to safely append values to a data.table from another data.table via keys
