@@ -11,7 +11,8 @@ safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by))
 
   assert_that(
     is.data.table(data),
-    is.data.table(lookup)
+    is.data.table(lookup),
+    msg = "safeLookup does not support data.frames. Convert datasets to data.table"
   )
 
   assert_that(
