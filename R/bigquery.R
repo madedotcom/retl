@@ -339,7 +339,7 @@ bqInitiateTable <- function(table,
       bigrquery::bq_table_create(
         tbl,
         fields = read_json(schema.file),
-        time_partitioning = bq_time_partitioning()
+        time_partitioning = list(type = "DAY")
       )
     } else {
       bigrquery::bq_table_create(
