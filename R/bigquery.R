@@ -368,16 +368,14 @@ bqTableSchema <- function(table, dataset = bqDefaultDataset()) {
 #' Execute templated query given as string or file.
 #' Placeholders in template are replaced with values provided in ellipsis parameter with sprintf.
 #'
+#' @param ... any parameters that will be used to fill in placeholders with sprintf
+#' @return results of execution as data.table
 #' @name bqQuery
 NULL
 
 #' @rdname bqQuery
 #'
 #' @export
-#' @param sql sql statement
-#' @param file file with sql statment
-#' @param ... any parameters that will be used to fill in placeholders with sprintf
-#' @return results of execution as data.frame
 bqGetData <- function(sql = NULL, file = NULL, ...) {
   # Wrapper function to load data from BigQuery.
 
@@ -394,8 +392,6 @@ bqGetData <- function(sql = NULL, file = NULL, ...) {
 #'
 #' @export
 #' @param file file with sql statment
-#' @param ... any parameters that will be used to fill in placeholders with sprintf
-#' @return results of execution as data.frame
 bqExecuteFile <- function(file, ...) {
   # Function to load data from BigQuery using file with SQL.
 
@@ -417,8 +413,6 @@ bqExecuteQuery <- function(query, ...) {
 #'
 #' @export
 #' @param sql string with sql statment
-#' @param ... any parameters that will be used to fill in placeholders with sprintf
-#' @return results of execution as data.frame
 bqExecuteSql <- function(sql, ...) {
   if (length(list(...)) > 0) { # template requires parameters.
     sql <- sprintf(sql, ...)

@@ -17,36 +17,18 @@ bqExecuteQuery(query, ...)
 bqExecuteSql(sql, ...)
 }
 \arguments{
-\item{sql}{sql statement}
+\item{sql}{string with sql statment}
 
 \item{file}{file with sql statment}
 
 \item{...}{any parameters that will be used to fill in placeholders with sprintf}
 
 \item{query}{template of the sql statement}
-
-\item{file}{file with sql statment}
-
-\item{...}{any parameters that will be used to fill in placeholders with sprintf}
-
-\item{sql}{string with sql statment}
-
-\item{...}{any parameters that will be used to fill in placeholders with sprintf}
 }
 \value{
-results of execution as data.frame
-
-results of execution as data.frame
-
-results of execution as data.frame
+results of execution as data.table
 }
 \description{
 Execute templated query given as string or file.
 Placeholders in template are replaced with values provided in ellipsis parameter with sprintf.
-
-Gets data for a given SQL statement or file that contains SQL
-
-Gets data for a given file that contains SQL statement
-
-Gets data for a given SQL statement
 }
