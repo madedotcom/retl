@@ -220,7 +220,7 @@ bqDeleteDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultPro
 #'
 #' Family of functions for common operations on tables
 #'
-#' @rdname bqTable
+#' @name bqTable
 NULL
 
 
@@ -362,12 +362,13 @@ bqTableSchema <- function(table, dataset = bqDefaultDataset()) {
   )
 }
 
+
 #' Functions that execute query against BigQuery database
 #'
 #' Execute templated query given as string or file.
 #' Placeholders in template are replaced with values provided in ellipsis parameter with sprintf.
 #'
-#' @rdname bqQuery
+#' @name bqQuery
 NULL
 
 #' Gets data for a given SQL statement or file that contains SQL
