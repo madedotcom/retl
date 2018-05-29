@@ -76,21 +76,10 @@ GithubUsername: r-dbi
 GithubRef: master
 GithubSha1: ee2507f32f1164a033512e945fc7eb35e0ef6544
 
-Package: bitops
-Source: CRAN
-Version: 1.0-6
-Hash: 67d0775189fd0041d95abca618c5c07e
-
 Package: brew
 Source: CRAN
 Version: 1.0-6
 Hash: 931f9972deae0f205e1c78a51f33149b
-
-Package: caTools
-Source: CRAN
-Version: 1.17.1
-Hash: 97cb6f6293cd18d17df77a6383cc6763
-Requires: bitops
 
 Package: cellranger
 Source: CRAN
@@ -176,11 +165,6 @@ Version: 0.2.1
 Hash: 342a70ab2fd21b7829a2acfbd1e31c3a
 Requires: cellranger, dplyr, httr, jsonlite, purrr, readr, stringr,
     tidyr, xml2
-
-Package: highr
-Source: CRAN
-Version: 0.6
-Hash: aa3d5b7912b5fed4b546ed5cd2a1760b
 
 Package: hms
 Source: CRAN
