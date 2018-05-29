@@ -371,8 +371,6 @@ bqTableSchema <- function(table, dataset = bqDefaultDataset()) {
 #' @name bqQuery
 NULL
 
-#' Gets data for a given SQL statement or file that contains SQL
-#'
 #' @rdname bqQuery
 #'
 #' @export
@@ -391,8 +389,7 @@ bqGetData <- function(sql = NULL, file = NULL, ...) {
   }
 }
 
-#' Gets data for a given file that contains SQL statement
-#'
+
 #' @rdname bqQuery
 #'
 #' @export
@@ -415,8 +412,7 @@ bqExecuteQuery <- function(query, ...) {
   bqExecuteSql(query, ...)
 }
 
-#' Gets data for a given SQL statement
-#'
+
 #' @rdname bqQuery
 #'
 #' @export
