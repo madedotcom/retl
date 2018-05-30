@@ -17,20 +17,22 @@ retl_env <- new.env(parent = emptyenv())
 #'
 #' @export
 influxConnection <- function(scheme = "http",
-                                host = Sys.getenv("INFLUX_HOST"),
-                                user = Sys.getenv("INFLUX_USER"),
-                                port = 8086,
-                                pwd = Sys.getenv("INFLUX_PASSWORD")) {
-
+                             host = Sys.getenv("INFLUX_HOST"),
+                             user = Sys.getenv("INFLUX_USER"),
+                             port = 8086,
+                             pwd = Sys.getenv("INFLUX_PASSWORD")) {
   if (!is.null(retl_env$influx_conn)) {
     return(retl_env$influx_conn)
   }
   # Creates connection to the influxdb in test consul
-  retl_env$influx_conn <- influxdbr::influx_connection(scheme = scheme,
-                                      host = host,
-                                      port = port,
-                                      user = user,
-                                      pass = pwd)
+  retl_env$influx_conn <-
+    influxdbr::influx_connection(
+      scheme = scheme,
+      host = host,
+      port = port,
+      user = user,
+      pass = pwd
+    )
   retl_env$influx_conn
 
 }
@@ -47,18 +49,16 @@ influxConnection <- function(scheme = "http",
 #'
 #'@export
 influxLog <- function(con = influxConnection(),
-                         db = Sys.getenv("INFLUX_DB"),
-                         job,
-                         val,
-                         metric = Sys.getenv("INFLUX_METRIC"),
-                         env = Sys.getenv("INFLUX_PROJECT")) {
-  data <- data.table(time = Sys.time(),
-                     value = val)
+                      db = Sys.getenv("INFLUX_DB"),
+                      job,
+                      val,
+                      metric = Sys.getenv("INFLUX_METRIC"),
+                      env = Sys.getenv("INFLUX_PROJECT")) {
+  data <- data.table(time = Sys.time(), value = val)
 
   xts.data <- as.xts.data.table(data)
 
-  xts::xtsAttributes(xts.data) <- list(job = job,
-                                       env = env)
+  xts::xtsAttributes(xts.data) <- list(job = job, env = env)
 
   influxdbr::influx_write(
     con = con,

@@ -4,8 +4,8 @@
 \alias{bqInsertData}
 \title{Inserts data into BigQuery table}
 \usage{
-bqInsertData(table, data, dataset = Sys.getenv("BIGQUERY_DATASET"),
-  append = TRUE, job.name = NULL, increment.field = NULL)
+bqInsertData(table, data, dataset = bqDefaultDataset(), append = TRUE,
+  job.name = NULL, increment.field = NULL)
 }
 \arguments{
 \item{table}{name of the target table}

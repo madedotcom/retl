@@ -9,3 +9,4 @@
 access_token.json
 ^schema/
 ^packrat/lib*/*
+news.md

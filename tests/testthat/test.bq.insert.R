@@ -3,57 +3,170 @@ library(mockery)
 library(data.table)
 
 context("BigQuery insert functions")
-auth_mock = mock(cycle = T)
-insert_upload_job_mock <- mock(cycle = T)
-wait_mock <- mock(cycle = T)
 test_that("Data is inserted correctly without metadata", {
-  with_mock(
-    `bigrquery::insert_upload_job` = insert_upload_job_mock,
-    `bigrquery::wait_for` = wait_mock,
-    `retl::bqAuth` = auth_mock,
-    {
-      res <- bqInsertData("test_table", data.table())
-      expect_called(insert_upload_job_mock, 0)
+  skip_on_travis()
+  res <- bqInsertData("test_table_insert_empty", data.table())
 
-      res <- bqInsertData("test_table", iris)
-      expect_called(insert_upload_job_mock, 1)
-    }
-  )
+  dt.test <- data.table(iris)
+  colnames(dt.test) <- conformHeader(colnames(dt.test), separator = "_")
+  bqInsertData("test_table_insert_iris", dt.test)
 })
 
-insert_upload_job_mock <- mock(cycle = T)
-wait_mock <- mock(cycle = T)
+
 test_that("Data is inserted correctly with metadata", {
-  with_mock(
-    `bigrquery::insert_upload_job` = insert_upload_job_mock,
-    `bigrquery::wait_for` = wait_mock,
-    `retl::bqAuth` = auth_mock,
-    {
-      dt.test <- data.table(iris)
-      res <- bqInsertData(table = "test_table", dt.test, job.name = "test", increment.field = "Sepal.Width")
-      expect_called(insert_upload_job_mock, 2) # calls add up, so only two calls are attributed to this test
-      expect_args(insert_upload_job_mock, 2,
-                  project = "",
-                  dataset = "",
-                  table = "etl_increments",
-                  values = data.table(job = "test",
-                                      increment_value = as.integer(max(iris$Sepal.Width)),
-                                      records = nrow(iris),
-                                      datetime = Sys.time()),
-                  write_disposition = "WRITE_APPEND",
-                  create_disposition = "CREATE_NEVER"
-      )
-    }
+  skip_on_travis()
+  sepal_length <- NULL
+  dt.test <- data.table(iris)
+
+  colnames(dt.test) <- conformHeader(colnames(dt.test), separator = "_")
+  dt.test[, sepal_length := as.integer(sepal_length)]
+
+  Sys.setenv("BIGQUERY_METADATA_DATASET" = "metadata_jenkins")
+
+  bqInsertData(
+    table = "test_insert_with_meta",
+    data = dt.test,
+    job.name = "retl.test",
+    increment.field = "sepal_length"
   )
+  res <- bqExecuteSql("SELECT COUNT(*) cnt FROM test_insert_with_meta")
+  expect_equal(res$cnt, nrow(iris))
 })
 
-insert_upload_job_mock <- mock(cycle = T)
+test_that("table can be created from schema", {
+  skip_on_travis()
+  bqInitiateTable(
+    table = "table_from_schema",
+    schema.file = "test-schema.json"
+  )
+  expect_true(bqTableExists("table_from_schema"))
+})
+
+test_that("partitioned table can be created and data is added", {
+  skip_on_travis()
+  table.name <- "table_daily_from_schema"
+  res <- bqInitiateTable(
+    table = table.name,
+    schema.file = "test-schema.json",
+    partition = TRUE
+  )
+  res <- bqExecuteSql("SELECT _PARTITIONTIME AS value FROM %1$s", table.name)
+  expect_equal(nrow(res), 0L)
+  dt <- data.table(count = c(1))
+  bqInsertPartition(
+    table.name,
+    date = as.Date("2015-01-01"),
+    data = dt
+  )
+  dates <- bqExistingPartitionDates(table.name)
+  expect_equal(dates, "20150101")
+
+  dt <- data.table(count = c(2, 3))
+  bqInsertPartition(
+    table.name,
+    date = as.Date("2015-01-02"),
+    data = dt
+  )
+
+  bqInitiateTable(
+    "table_partion_transformation",
+    schema.file = "test-schema.json",
+    partition = TRUE
+  )
+  Sys.setenv(BIGQUERY_START_DATE = "2014-12-30")
+  Sys.setenv(BIGQUERY_END_DATE = "2015-01-04")
+  bqTransformPartition(
+    table = "table_partion_transformation",
+    file = "partition-transform.sql",
+    table.name # this will will be second parameter in the sql template
+  )
+  res <- bqExecuteSql(
+    "SELECT SUM(count) as result
+    FROM table_partion_transformation")
+  expect_equal(res$result, 6 * 2)
+
+  dt <- data.table(count = c(1, 1, 1))
+  bqInsertPartition(
+    table.name,
+    date = as.Date("2015-01-01"),
+    data = dt
+  )
+
+  res <- bqRefreshPartitionData(
+    table = "table_partion_transformation",
+    file = "partition-transform.sql",
+    table.name,
+    priority = "INTERACTIVE"
+  )
+
+  res <- bqExecuteSql(
+    "SELECT SUM(count) as result
+    FROM table_partion_transformation")
+  expect_equal(res$result, 8 * 2)
+
+})
+
+test_that("shard tables from several datasets can be tranformed in day partitioned tables", {
+  skip_on_travis()
+  Sys.setenv(BIGQUERY_START_DATE = "2015-01-01")
+  Sys.setenv(BIGQUERY_END_DATE = "2015-01-02")
+  datasets <- c(a = "ds_retl_test_1", b = "ds_retl_test_2")
+  lapply(datasets, function(ds) {
+    if (bqDatasetExists(ds)) {
+      bqDeleteTable("shard_20150101", ds)
+      bqDeleteTable("shard_20150102", ds)
+    } else {
+      bqCreateDataset(ds)
+    }
+    bqCreateTable(
+      sql = "SELECT 1 AS value",
+      table = "shard_20150101",
+      dataset = ds
+    )
+    bqCreateTable(
+      sql = "SELECT 2 AS value",
+      table = "shard_20150102",
+      dataset = ds
+    )
+  })
+
+  bqInitiateTable(
+    "partitioned_shards",
+    schema.file = "test-schema.json",
+    partition = TRUE
+  )
+  bqCreatePartitionTable(
+    table = "partitioned_shards",
+    datasets = datasets,
+    sql = "SELECT value AS count FROM %1s.shard_%2$s"
+  )
+  res <- bqExecuteSql("SELECT COUNT(*) as result FROM partitioned_shards")
+  expect_equal(res$result, 4)
+})
+
+bq_perform_upload_mock <- mock(cycle = T)
 wait_for_mock <- mock(cycle = T)
 test_that("Metadata logged only if job.name and increment.field params are provided together", {
   with_mock(
-    `bigrquery::insert_upload_job` = insert_upload_job_mock,
+    `bigrquery::bq_perform_upload` = bq_perform_upload_mock,
     `bigrquery::wait_for` = wait_for_mock,
-    expect_error(bqInsertData(table = "test_table", data.table(iris), job.name = "test"), "increment\\.field.*required"),
-    expect_error(bqInsertData(table = "test_table", data.table(iris), increment.field = "test"), "job\\.name.*required")
+    expect_error(
+      bqInsertData(
+        table = "test_table",
+        dataset = "test",
+        data.table(iris),
+        job.name = "test"
+      ),
+      "increment\\.field.*required"
+    ),
+    expect_error(
+      bqInsertData(
+        table = "test_table",
+        dataset = "test",
+        data.table(iris),
+        increment.field = "test"
+      ),
+      "job\\.name.*required"
+    )
   )
 })

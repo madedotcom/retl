@@ -34,7 +34,12 @@ s3PutFile <- function(dt, path,
 
   write.csv(dt, file = tmp.file, row.names = FALSE, fileEncoding = "UTF-8", na = na.value)
   full.path <- paste0(root, path)
-  put_object(file = tmp.file, object = full.path, bucket = bucket)
+  put_object(
+    file = tmp.file,
+    object = full.path,
+    bucket = bucket,
+    check_region = FALSE
+  )
 }
 
 #' Loads data from AWS S3 into data.table object
@@ -65,13 +70,21 @@ s3GetFile <- function(path, header = T,
                       bucket = Sys.getenv("AWS_S3_BUCKET"),
                       root = Sys.getenv("AWS_S3_ROOT")) {
   full.path <- paste0(root, path)
-  raw_data <- get_object(full.path, bucket)
+  raw_data <- get_object(
+    object = full.path,
+    bucket = bucket,
+    check_region = FALSE
+  )
 
   # In case of error, print error message.
   if (!is.raw(raw_data))
     stop(print(raw_data[1:3]))
 
-  data <- iconv(readBin(raw_data, character()), from = "UTF-8", to = "UTF-8")
+  data <- iconv(
+    readBin(raw_data, character()),
+    from = "UTF-8",
+    to = "UTF-8"
+  )
   dt <- fread(data, header = header, strip.white = F)
   names(dt) <- conformHeader(names(dt))
   invisible(dt)
@@ -97,7 +110,11 @@ s3GetData <- function(path, header = T,
 
   full.path <- paste0(root, path)
   full.path <- gsub("^/", "", full.path)
-  objects <- aws.s3::get_bucket(bucket = bucket, prefix = full.path)
+  objects <- aws.s3::get_bucket(
+    bucket = bucket,
+    prefix = full.path,
+    check_region = FALSE
+  )
   dt.list <- lapply(objects, function(o) {
     s3Get.FUN(o$Key, bucket = bucket, root = "")
   })
@@ -120,7 +137,12 @@ s3PutFile.gz <- function(dt, path,
   close(gz.connection)
 
   full.path <- paste0(root, path)
-  put_object(file = tmp.file, object = full.path, bucket = bucket)
+  put_object(
+    file = tmp.file,
+    object = full.path,
+    bucket = bucket,
+    check_region = FALSE
+  )
 }
 
 
@@ -135,7 +157,12 @@ s3GetFile.gz <- function(path,
   tmp.file <- tempfile(fileext = ".gz")
   on.exit(unlink(tmp.file))
 
-  save_object(full.path, bucket, file = tmp.file)
+  save_object(
+    object = full.path,
+    bucket = bucket,
+    file = tmp.file,
+    check_region = FALSE
+  )
   dt <- fread(paste0('zcat < ', tmp.file))
   names(dt) <- conformHeader(names(dt))
   invisible(dt)
@@ -149,7 +176,12 @@ s3PutFile.rds <- function(dt, path,
                           root = Sys.getenv("AWS_S3_ROOT")) {
 
   full.path <- paste0(root, path)
-  s3saveRDS(dt, bucket = bucket, object = full.path)
+  s3saveRDS(
+    x = dt,
+    bucket = bucket,
+    object = full.path,
+    check_region = FALSE
+  )
 }
 
 #' @export
@@ -160,7 +192,11 @@ s3GetFile.rds <- function(path,
                           root = Sys.getenv("AWS_S3_ROOT")) {
 
   full.path <- paste0(root, path)
-  s3readRDS(bucket = bucket, object = full.path)
+  s3readRDS(
+    bucket = bucket,
+    object = full.path,
+    check_region = FALSE
+  )
 }
 
 #' Gets the path to the object based on the root path setup via
@@ -185,7 +221,12 @@ s3GetFile.zip <- function(path,
   tmp.file <- tempfile(fileext = ".zip")
   on.exit(unlink(tmp.file))
 
-  save_object(full.path, bucket, file = tmp.file)
+  save_object(
+    object = full.path,
+    bucket = bucket,
+    file = tmp.file,
+    check_region = FALSE
+  )
   dt <- fread(unzip(tmp.file), fill = TRUE)
   names(dt) <- conformHeader(names(dt))
   invisible(dt)
@@ -206,7 +247,12 @@ s3PutFile.json.gz <- function(dt, path,
   close(gz.connection)
 
   full.path <- paste0(root, path)
-  put_object(file = tmp.file, object = full.path, bucket = bucket)
+  put_object(
+    file = tmp.file,
+    object = full.path,
+    bucket = bucket,
+    check_region = FALSE
+  )
 }
 
 #' @rdname s3GetFile
@@ -222,7 +268,12 @@ s3GetFile.json.gz <- function(path,
   tmp.file <- tempfile(fileext = ".gz")
   on.exit(unlink(tmp.file))
 
-  save_object(full.path, bucket, file = tmp.file)
+  save_object(
+    object = full.path,
+    bucket = bucket,
+    file = tmp.file,
+    check_region = FALSE
+  )
   dt <- fromJSON(tmp.file)
   dt <- data.table(dt)
   names(dt) <- conformHeader(names(dt))

@@ -7,16 +7,18 @@
 #' @param by fields that represent the keys
 #' @param select fields taht will be appended
 #' @return data set with new fields
-#' TODO @Daniel : add unit tests
 safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by)) {
 
-  if (!is.data.table(data) | !is.data.table(lookup)) {
-    stop("safeLookup does not support data.frames. Convert datasets to data.table")
-  }
+  assert_that(
+    is.data.table(data),
+    is.data.table(lookup),
+    msg = "safeLookup does not support data.frames. Convert datasets to data.table"
+  )
 
-  if (sum(duplicated(lookup, by = by)) != 0) {
-    stop("The 'by' parameter must uniquely link the two data frames.")
-  }
+  assert_that(
+    sum(duplicated(lookup, by = by)) == 0,
+    msg = "The 'by' parameter must uniquely link the two data frames"
+  )
 
   if (nrow(data) == 0) {
     warning("Left side data frame must have non-zero number of records.")
@@ -29,9 +31,8 @@ safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by))
   data[, eval(tempColName) :=  1:.N]
   res <- merge(data, lookup[, mget(c(by, select))], by = by, all.x = T)
   res <- res[order(get(tempColName))]
-  res[, eval(tempColName) := NULL]
   data[, eval(tempColName) := NULL]
-  return(res)
+  res[, eval(tempColName) := NULL]
 }
 
 #' Replace " ", "-" and "_" with a given separator in the header.

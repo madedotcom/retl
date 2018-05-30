@@ -2,7 +2,7 @@
 % Please edit documentation in R/metadata.R
 \name{etlGetIncrement}
 \alias{etlGetIncrement}
-\title{Gets latest increment for the}
+\title{Gets latest increment for the job}
 \usage{
 etlGetIncrement(job)
 }
@@ -13,5 +13,5 @@ etlGetIncrement(job)
 increment value for the last execution of the job
 }
 \description{
-Gets latest increment for the
+Gets latest increment for the job
 }

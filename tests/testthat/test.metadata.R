@@ -2,46 +2,15 @@ library(bigrquery)
 
 context("Test Metadata Functions")
 
-
 test_that("Increment defaults to zero if no records found", {
-
-  with_mock(
-    `bigrquery::query_exec` = function(sql, project, default_dataset, page_size) {
-      res <- data.frame(job = c(), increment_value = c())
-    },
-    `retl::bqAuth` = function() NULL,
-    {
-      res.increment <- etlGetIncrement("test")
-      expect_identical(res.increment, as.integer(0))
-    }
-  )
+  skip_on_travis()
+  res.increment <- etlGetIncrement("test.dummy.name")
+  expect_identical(res.increment, as.integer(0))
 })
 
-
-test_that("Correct increment is fetched from the database", {
-
-  with_mock(
-    `bigrquery::query_exec` = function(sql, project, default_dataset, page_size) {
-      res <- data.frame(job = c("test"), increment_value = c(100))
-    },
-    `retl::bqAuth` = function() NULL,
-    {
-      res.increment <- etlGetIncrement("test")
-      expect_identical(res.increment, 100)
-    }
-  )
-})
-
-test_that("Increment is saved to the database correctly", {
-  with_mock(
-    `bigrquery::insert_upload_job` = function(project, dataset, table, values,
-                                              write_disposition, create_disposition) {
-      return(values)
-    },
-    `bigrquery::wait_for` = function(job) job,
-    `retl::bqAuth` = function() NULL,
-     logged.data <- etlLogExecution("test", as.integer(10), 100),
-     expect_equal(logged.data$increment_value, as.integer(10)),
-     expect_equal(logged.data$job, "test")
-  )
+test_that("Correct increment is saved and fetched from the database", {
+  skip_on_travis()
+  etlLogExecution("test.retl.job", increment.value = 1000L, records = 0L)
+  res.increment <- etlGetIncrement("test.retl.job")
+  expect_identical(res.increment, 1000L)
 })

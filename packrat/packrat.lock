@@ -46,10 +46,14 @@ Version: 0.2.0
 Hash: e8805df54c65ac96d50235c44a82615c
 
 Package: aws.signature
-Source: CRAN
-Version: 0.3.5
-Hash: d1d728e686b673974282dd3389034303
+Source: github
+Version: 0.4.3
+Hash: a6b240c66fd2933883f3777bedf2825a
 Requires: base64enc, digest
+GithubRepo: aws.signature
+GithubUsername: cloudyr
+GithubRef: master
+GithubSha1: eef6bdd3b549826750d475efb049cbddf92ae62f
 
 Package: backports
 Source: CRAN
@@ -63,13 +67,14 @@ Hash: c590d29e555926af053055e23ee79efb
 
 Package: bigrquery
 Source: github
-Version: 0.4.1.9000
-Hash: a20a1fccd3aa1e7b071e705ebc1f47d3
-Requires: DBI, assertthat, httr, jsonlite, progress, readr
+Version: 1.0.0.9000
+Hash: addd91a8047f72af203e1b9e1b01fb8b
+Requires: DBI, Rcpp, assertthat, curl, glue, httr, jsonlite,
+    prettyunits, progress, rapidjsonr, tibble
 GithubRepo: bigrquery
-GithubUsername: byapparov
+GithubUsername: r-dbi
 GithubRef: master
-GithubSha1: 1716d260dac7e6129300cd795b105a009446a432
+GithubSha1: ee2507f32f1164a033512e945fc7eb35e0ef6544
 
 Package: brew
 Source: CRAN
@@ -94,8 +99,8 @@ Hash: 576a9d297a567d6a5ebd164ca5221590
 
 Package: curl
 Source: CRAN
-Version: 3.0
-Hash: fb0029f1c84bf9b510c4f55cda7103f1
+Version: 3.1
+Hash: 877149b42d479b93ab15d5cef46c0f1b
 
 Package: data.table
 Source: CRAN
@@ -117,14 +122,20 @@ Requires: digest, git2r, httr, jsonlite, memoise, rstudioapi, whisker,
 
 Package: digest
 Source: CRAN
-Version: 0.6.12
-Hash: e53fb8c58673df868183697e39a6a4d6
+Version: 0.6.13
+Hash: cfce0bc7ed5ba0cdc47182698fae1d24
 
 Package: dplyr
 Source: CRAN
 Version: 0.5.0
 Hash: cb58b84a82ee7022b3d63d1d99185315
 Requires: BH, DBI, R6, Rcpp, assertthat, lazyeval, magrittr, tibble
+
+Package: evaluate
+Source: CRAN
+Version: 0.10.1
+Hash: 54d95f4ec6d0300100413ed0127d89ae
+Requires: stringr
 
 Package: formatR
 Source: CRAN
@@ -135,6 +146,11 @@ Package: git2r
 Source: CRAN
 Version: 0.18.0
 Hash: 9dfaafbcca68be29b89ef7783dc1dac0
+
+Package: glue
+Source: CRAN
+Version: 1.2.0
+Hash: 381e42baedecc633c0e547a0c7ca9de7
 
 Package: googleAuthR
 Source: CRAN
@@ -279,6 +295,15 @@ Version: 0.1.0
 Hash: 21222a9b3518c52dd90c63017b7668f0
 Requires: data.table, httr, jsonlite
 
+Package: rapidjsonr
+Source: github
+Version: 1.0.0001
+Hash: 608839bc4695ca9d2ea98d159f64c983
+GithubRepo: rapidjsonr
+GithubUsername: SymbolixAU
+GithubRef: master
+GithubSha1: 5de8654f0059ca292da8188df180da0fe89a8905
+
 Package: readr
 Source: CRAN
 Version: 1.1.1
@@ -393,9 +418,14 @@ Hash: 7293235cfcc14cdff1ce7fd1a0212031
 
 Package: xts
 Source: CRAN
-Version: 0.10-0
-Hash: 03131e6ac5458d08143205a198284f18
+Version: 0.10-1
+Hash: 3f666c7bfbb0795ef5ad07332761cee9
 Requires: zoo
+
+Package: yaml
+Source: CRAN
+Version: 2.1.16
+Hash: 784ea5d8302d4a81f166a32a33c10711
 
 Package: zoo
 Source: CRAN

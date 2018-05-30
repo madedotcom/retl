@@ -2,9 +2,15 @@
 % Please edit documentation in R/bigquery.R
 \name{bqDatasetExists}
 \alias{bqDatasetExists}
+\alias{bqCreateDataset}
+\alias{bqDeleteDataset}
 \title{Checks if dataset exists in the project}
 \usage{
-bqDatasetExists(dataset, project = Sys.getenv("BIGQUERY_PROJECT"))
+bqDatasetExists(dataset = bqDefaultDataset(), project = bqDefaultProject())
+
+bqCreateDataset(dataset = bqDefaultDataset(), project = bqDefaultProject())
+
+bqDeleteDataset(dataset = bqDefaultDataset(), project = bqDefaultProject())
 }
 \arguments{
 \item{dataset}{name of the dataset}
@@ -12,7 +18,7 @@ bqDatasetExists(dataset, project = Sys.getenv("BIGQUERY_PROJECT"))
 \item{project}{name of the project}
 }
 \value{
-TRUE if dataset exists
+`bqDatasetExists` TRUE if dataset exists
 }
 \description{
 Checks if dataset exists in the project

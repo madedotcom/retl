@@ -4,7 +4,7 @@
 \alias{bqInsertPartition}
 \title{Inserts data table into a specific partition of a partition table.}
 \usage{
-bqInsertPartition(table, date, data, append)
+bqInsertPartition(table, date, data, append = FALSE)
 }
 \arguments{
 \item{table}{Name of the table}

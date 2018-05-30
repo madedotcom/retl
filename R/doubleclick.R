@@ -15,10 +15,12 @@ library(googleAuthR)
 # https://developers.google.com/doubleclick-search/v2/prereqs#ds3py
 
 # Set options for Google DC API, possibly should be in .onLoad file.
-options(googleAuthR.client_id = Sys.getenv("GOOGLE_CLIENT_ID"),
-        googleAuthR.client_secret = Sys.getenv("GOOGLE_CLIENT_SECRET"),
-        googleAuthR.scopes.selected = c("https://www.googleapis.com/auth/doubleclicksearch"),
-        googleAuthR.httr_oauth_cache = TRUE)
+options(
+  googleAuthR.client_id = Sys.getenv("GOOGLE_CLIENT_ID"),
+  googleAuthR.client_secret = Sys.getenv("GOOGLE_CLIENT_SECRET"),
+  googleAuthR.scopes.selected = c("https://www.googleapis.com/auth/doubleclicksearch"),
+  googleAuthR.httr_oauth_cache = TRUE
+)
 
 
 #' Creates list for the DoubleClick API call from prediction variables
@@ -28,7 +30,7 @@ options(googleAuthR.client_id = Sys.getenv("GOOGLE_CLIENT_ID"),
 #' @param datetime POSIX timestamp in miliseconds
 #' @param custom.metrics name vector of custom metric values
 dcPredictionBody <- function(clickId, conversionId, datetime, custom.metrics) {
-  body = list(
+  list(
     kind = "doubleclicksearch#conversionList",
     conversion = list(
       list(
@@ -68,6 +70,9 @@ metricsToList <- function(metrics) {
 dcWriteCustomMetics <- function(clickId, conversionId, timestamp, metrics) {
   ts <- paste0(as.integer(timestamp) * 1000)
   body <- dcPredictionBody(clickId, conversionId, datetime = ts, metrics)
-  dcWriteConversion <- gar_api_generator("https://www.googleapis.com/doubleclicksearch/v2/conversion", http_header = "POST")
-  res <- dcWriteConversion(the_body = body)
+  dcWriteConversion <- gar_api_generator(
+    baseURI = "https://www.googleapis.com/doubleclicksearch/v2/conversion",
+    http_header = "POST"
+  )
+  dcWriteConversion(the_body = body)
 }
