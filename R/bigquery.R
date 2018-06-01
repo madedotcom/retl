@@ -512,12 +512,15 @@ bqCreatePartitionTable <- function(table, datasets,
 #' @param append specifies if data should be appended or truncated
 #' @param job.name name of the ETL job that will be written to the metadata execution log
 #' @param increment.field specifies field that is used for incremental data loads
+#' @param fields list of fields with names and types (as `bq_fields`)
 #' @return results of execution
 bqInsertData <- function(table,
                          data,
                          dataset = bqDefaultDataset(),
                          append = TRUE,
-                         job.name = NULL, increment.field = NULL) {
+                         job.name = NULL,
+                         increment.field = NULL,
+                         fields = NULL) {
   assert_that(nchar(dataset) > 0, msg = "Set dataset parameter or BIGQUERY_DATASET env var.")
 
   assert_that(!xor(is.null(job.name), is.null(increment.field)),
@@ -538,6 +541,7 @@ bqInsertData <- function(table,
     job <- bigrquery::bq_perform_upload(
       x = tbl,
       values = data,
+      fields = fields,
       write_disposition = write.disposition,
       create_disposition = "CREATE_IF_NEEDED"
     )

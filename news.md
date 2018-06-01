@@ -1,3 +1,7 @@
+# retl 0.1.1.9000
+
+* `bqInsertData()` - added fields parameter to force BigQuery types to the given types
+
 # retl 0.1.1
 
 * Lower level BigQuery API calls are updated to the new functions from bigrquery 1.0.0
