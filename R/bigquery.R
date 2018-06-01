@@ -520,7 +520,7 @@ bqInsertData <- function(table,
                          append = TRUE,
                          job.name = NULL,
                          increment.field = NULL,
-                         fields = NULL) {
+                         fields = as_bq_fields(data)) {
   assert_that(nchar(dataset) > 0, msg = "Set dataset parameter or BIGQUERY_DATASET env var.")
 
   assert_that(!xor(is.null(job.name), is.null(increment.field)),
