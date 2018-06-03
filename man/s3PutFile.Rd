@@ -2,12 +2,16 @@
 % Please edit documentation in R/aws-s3.R
 \name{s3PutFile}
 \alias{s3PutFile}
+\alias{s3PutFile.csv}
 \alias{s3PutFile.gz}
 \alias{s3PutFile.rds}
 \alias{s3PutFile.json.gz}
 \title{Saves data to a file in AWS S3}
 \usage{
 s3PutFile(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
+  root = Sys.getenv("AWS_S3_ROOT"), ...)
+
+s3PutFile.csv(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
   root = Sys.getenv("AWS_S3_ROOT"), na.value = "")
 
 s3PutFile.gz(dt, path, bucket = Sys.getenv("AWS_S3_BUCKET"),
@@ -30,13 +34,15 @@ Defaults to value in \code{AWS_S3_BUCKET} environment variable.}
 \item{root}{project root path that is appended before the path, e.g. "/prod/".
 Defaults to value in \code{AWS_S3_ROOT} environment variable.}
 
+\item{...}{additional parameters that will be passed into extension specific call.}
+
 \item{na.value}{the string to use for missing values in the data.
 Defaults to empty string.}
 }
 \value{
 TRUE if data was saved to S3.
 
-\code{s3PutFile} saves data into csv file in S3
+`s3PutFile.csv` saves data into `.csv` file in S3.
 
 `s3PutFile.gz` saves data into `.gz` (csv archived) file in S3.
 
