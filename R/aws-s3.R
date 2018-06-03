@@ -95,6 +95,7 @@ s3PutFile.csv <- function(dt,
 #'     Defautls to value in `AWS_S3_BUCKET` environment variable.
 #' @param root project root path that is appended before the path in the argument.
 #'     Defaults to value in `AWS_S3_ROOT` environment variable.
+#' @param ... additional arguments that will be passed to extension specific calls.
 #' @return `s3GetFile` gets data from source `.csv` file
 #' @seealso aws.s3 package documentation for access details:
 #'   \url{https://github.com/cloudyr/aws.s3}
