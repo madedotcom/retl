@@ -36,6 +36,8 @@ Defautls to value in \code{AWS_S3_BUCKET} environment variable.}
 \item{root}{project root path that is appended before the path in the argument.
 Defaults to value in \code{AWS_S3_ROOT} environment variable.}
 
+\item{...}{additional arguments that will be passed to extension specific calls.}
+
 \item{header}{flag defines whether file has header}
 }
 \value{
