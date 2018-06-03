@@ -67,9 +67,9 @@ etlAddJob <- function(job, increment.name, increment.type) {
 etlLogExecution <- function(job, increment.value, records = 0) {
   bqAuth()
 
-  etl.increments <- data.table(
+  etl.increments <- data.frame(
     job = job,
-    increment_value = increment.value,
+    increment_value = as.integer(increment.value),
     records = as.integer(records),
     datetime = Sys.time()
   )
@@ -83,26 +83,7 @@ etlLogExecution <- function(job, increment.value, records = 0) {
   job.wait <- bigrquery::bq_perform_upload(
     x = tbl,
     values = etl.increments,
-    bq_fields(
-      list(
-        bq_field(
-          "job",
-          "STRING"
-        ),
-        bq_field(
-          "increment_value",
-          "INTEGER"
-        ),
-        bq_field(
-          "records",
-          "INTEGER"
-        ),
-        bq_field(
-          "datetime",
-          "TIMESTAMP"
-        )
-      )
-    ),
+    fields = as_bq_fields(etl.increments),
     write_disposition = "WRITE_APPEND",
     create_disposition = "CREATE_NEVER"
   )

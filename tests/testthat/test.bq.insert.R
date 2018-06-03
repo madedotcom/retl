@@ -52,7 +52,7 @@ test_that("partitioned table can be created and data is added", {
   )
   res <- bqExecuteSql("SELECT _PARTITIONTIME AS value FROM %1$s", table.name)
   expect_equal(nrow(res), 0L)
-  dt <- data.table(count = c(1))
+  dt <- data.table(count = c(1L))
   bqInsertPartition(
     table.name,
     date = as.Date("2015-01-01"),
@@ -61,7 +61,7 @@ test_that("partitioned table can be created and data is added", {
   dates <- bqExistingPartitionDates(table.name)
   expect_equal(dates, "20150101")
 
-  dt <- data.table(count = c(2, 3))
+  dt <- data.table(count = c(2L, 3L))
   bqInsertPartition(
     table.name,
     date = as.Date("2015-01-02"),
@@ -85,7 +85,7 @@ test_that("partitioned table can be created and data is added", {
     FROM table_partion_transformation")
   expect_equal(res$result, 6 * 2)
 
-  dt <- data.table(count = c(1, 1, 1))
+  dt <- data.table(count = c(1L, 1L, 1L))
   bqInsertPartition(
     table.name,
     date = as.Date("2015-01-01"),
