@@ -51,8 +51,7 @@ test_that("Header transformation works", {
 
 test_that("disaggregate", {
   # Correct number of rows.
-  df <- read.table(
-    text = "
+  dt <- fread("
     sku weight
     CUSISLA03BLU-UK 3
     RUGISIS04BEI-UK 4
@@ -61,9 +60,8 @@ test_that("disaggregate", {
     stringsAsFactors = F
   )
 
-  calculated <- disaggregate(table = df, by = "weight")
-  expected <- read.table(
-    text = "
+  calculated <- disaggregate(dt = dt, by = "weight")
+  expected <- fread("
     sku weight
     CUSISLA03BLU-UK 1
     CUSISLA03BLU-UK 1
@@ -79,8 +77,7 @@ test_that("disaggregate", {
                label = "Each line is split into multiple matching the weight.")
 
   # Data table retains its class.
-  df <- read.table(
-    text = "
+  dt <- fread("
     sku weight
     CUSISLA03BLU-UK 3
     RUGISIS04BEI-UK 4
@@ -88,10 +85,7 @@ test_that("disaggregate", {
     header = T,
     stringsAsFactors = F
   )
-  dt <- data.table(df)
-  calculated <- disaggregate(table = dt, by = "weight")
+  calculated <- disaggregate(dt = dt, by = "weight")
   expect_equal(sum(calculated$weight), sum(dt$weight),
                label = "The total weight matches that of the original.")
-  expect_true(is.data.table(calculated),
-              label = "The data table class is retained.")
 })
