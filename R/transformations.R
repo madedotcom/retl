@@ -42,3 +42,15 @@ safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by))
 conformHeader <- function(names, separator = ".") {
  gsub("[\\.| |_|-]", separator, tolower(names))
 }
+
+#' Splits table rows into multiple by the integer "by". All other fields are duplicated.
+#' @export
+#' @param dt data.table to disaggregate.
+#' @param by integer by which each line is split into units of 1.
+disaggregate <- function(dt, by) {
+  res <- dt[as.integer(rep(row.names(dt), dt[, get(by)])),]
+  res[, eval(by) := 1]
+
+  stopifnot(sum(res[, get(by)]) == sum(dt[, get(by)]))
+  return(res)
+}
