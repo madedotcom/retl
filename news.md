@@ -1,6 +1,7 @@
 # retl 0.1.1.9000
 
 * `bqInsertData()` - added fields parameter to force BigQuery types to the given types
+* `disaggregate()` - new function to split data.table from aggregated to individual lines
 
 # retl 0.1.1
 

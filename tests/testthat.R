@@ -3,7 +3,6 @@ suppressPackageStartupMessages({
   library(devtools)
   library(mockery)
   library(retl)
-  library(data.table)
 })
 
 # .Renviron:
