@@ -49,6 +49,7 @@ conformHeader <- function(names, separator = ".") {
 #' @param by integer by which each line is split into units of 1.
 #' @param keep.row.number boolean whether to keep the original row number as 'rn' in the final table
 disaggregate <- function(dt, by, keep.row.number = FALSE) {
+  rn <- NULL
   if (keep.row.number) dt[, rn := .I]
   res <- dt[as.integer(rep(row.names(dt), dt[, get(by)])),]
   res[, eval(by) := 1]
