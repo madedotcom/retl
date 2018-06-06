@@ -17,18 +17,51 @@
 #'     Defaults to value in `AWS_S3_ROOT` environment variable.
 #' @param na.value the string to use for missing values in the data.
 #'     Defaults to empty string.
+#' @param ... additional parameters that will be passed into extension specific call.
 #' @return TRUE if data was saved to S3.
-#'
-#' `s3PutFile` saves data into csv file in S3
 #'
 #' @seealso aws.s3 package documentation for access details:
 #'   \url{https://github.com/cloudyr/aws.s3}
 #' @import aws.s3
 #' @md
-s3PutFile <- function(dt, path,
+s3PutFile <- function(dt,
+                      path,
                       bucket = Sys.getenv("AWS_S3_BUCKET"),
                       root = Sys.getenv("AWS_S3_ROOT"),
-                      na.value = "") {
+                      ...
+                      ) {
+  args <- c(as.list(environment()), list(...))
+  do.call(
+    what = s3PutFile.factory(path),
+    args = args
+  )
+}
+
+s3PutFile.factory <- function(path) {
+  if (grepl("\\.csv$", path)) {
+    return(s3PutFile.csv)
+  }
+  if (grepl("\\.json.gz$", path)) {
+    return(s3PutFile.json.gz)
+  }
+  if (grepl("(\\.|\\.csv\\.)gz$", path)) {
+    return(s3PutFile.gz)
+  }
+  if (grepl("\\.rds$", path)) {
+    return(s3PutFile.rds)
+  }
+  stop(paste0("Unsupported file extension in the path of the s3PutFile call: ",
+              tools::file_ext(path)))
+}
+
+#' @export
+#' @rdname s3PutFile
+#' @return `s3PutFile.csv` saves data into `.csv` file in S3.
+s3PutFile.csv <- function(dt,
+                          path,
+                          bucket = Sys.getenv("AWS_S3_BUCKET"),
+                          root = Sys.getenv("AWS_S3_ROOT"),
+                          na.value = "") {
   tmp.file <- tempfile(fileext = ".csv")
   on.exit(unlink(tmp.file))
 
@@ -53,6 +86,8 @@ s3PutFile <- function(dt, path,
 #'  * `AWS_DEFAULT_REGION` = "us-east-1"
 #'  * `AWS_SESSION_TOKEN` = "mytoken"
 #'
+#' `s3GetFile` calls extension specific files based on the path of the file.
+#'
 #' @export
 #' @param path is the path to the S3 object
 #' @param header flag defines whether file has header
@@ -60,15 +95,51 @@ s3PutFile <- function(dt, path,
 #'     Defautls to value in `AWS_S3_BUCKET` environment variable.
 #' @param root project root path that is appended before the path in the argument.
 #'     Defaults to value in `AWS_S3_ROOT` environment variable.
+#' @param ... additional arguments that will be passed to extension specific calls.
 #' @return `s3GetFile` gets data from source `.csv` file
 #' @seealso aws.s3 package documentation for access details:
 #'   \url{https://github.com/cloudyr/aws.s3}
 #' @import aws.s3
 #' @importFrom data.table fread
 #' @md
-s3GetFile <- function(path, header = T,
+s3GetFile <- function(path,
                       bucket = Sys.getenv("AWS_S3_BUCKET"),
-                      root = Sys.getenv("AWS_S3_ROOT")) {
+                      root = Sys.getenv("AWS_S3_ROOT"),
+                      ...) {
+  args <- c(as.list(environment()), list(...))
+  do.call(
+    what = s3GetFile.factory(path),
+    args = args
+  )
+}
+
+s3GetFile.factory <- function(path) {
+  if (grepl("\\.csv$", path)) {
+    return(s3GetFile.csv)
+  }
+  if (grepl("\\.json.gz$", path)) {
+    return(s3GetFile.json.gz)
+  }
+  if (grepl("(\\.|\\.csv\\.)gz$", path)) {
+    return(s3GetFile.gz)
+  }
+  if (grepl("\\.zip$", path)) {
+    return(s3GetFile.zip)
+  }
+  if (grepl("\\.rds$", path)) {
+    return(s3GetFile.rds)
+  }
+  stop(paste0("Unsupported file extension in the path of s3GetFile call: ",
+              tools::file_ext(path)))
+}
+
+#' @export
+#' @rdname s3GetFile
+#' @return `s3GetFile.csv` loads data from `.csv` files
+s3GetFile.csv <- function(path,
+                          bucket = Sys.getenv("AWS_S3_BUCKET"),
+                          root = Sys.getenv("AWS_S3_ROOT"),
+                          header = TRUE) {
   full.path <- paste0(root, path)
   raw_data <- get_object(
     object = full.path,
@@ -214,8 +285,8 @@ s3GetObjectPath <- function(relative.path) {
 #' @return `s3GetFile.zip` loads data from `.zip` files
 #' @importFrom utils unzip
 s3GetFile.zip <- function(path,
-                         bucket = Sys.getenv("AWS_S3_BUCKET"),
-                         root = Sys.getenv("AWS_S3_ROOT")) {
+                          bucket = Sys.getenv("AWS_S3_BUCKET"),
+                          root = Sys.getenv("AWS_S3_ROOT")) {
 
   full.path <- paste0(root, path)
   tmp.file <- tempfile(fileext = ".zip")
@@ -261,8 +332,8 @@ s3PutFile.json.gz <- function(dt, path,
 #' @import data.table
 #' @importFrom jsonlite fromJSON
 s3GetFile.json.gz <- function(path,
-                         bucket = Sys.getenv("AWS_S3_BUCKET"),
-                         root = Sys.getenv("AWS_S3_ROOT")) {
+                              bucket = Sys.getenv("AWS_S3_BUCKET"),
+                              root = Sys.getenv("AWS_S3_ROOT")) {
 
   full.path <- paste0(root, path)
   tmp.file <- tempfile(fileext = ".gz")

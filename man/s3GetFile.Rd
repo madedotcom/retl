@@ -2,14 +2,18 @@
 % Please edit documentation in R/aws-s3.R
 \name{s3GetFile}
 \alias{s3GetFile}
+\alias{s3GetFile.csv}
 \alias{s3GetFile.gz}
 \alias{s3GetFile.rds}
 \alias{s3GetFile.zip}
 \alias{s3GetFile.json.gz}
 \title{Loads data from AWS S3 into data.table object}
 \usage{
-s3GetFile(path, header = T, bucket = Sys.getenv("AWS_S3_BUCKET"),
-  root = Sys.getenv("AWS_S3_ROOT"))
+s3GetFile(path, bucket = Sys.getenv("AWS_S3_BUCKET"),
+  root = Sys.getenv("AWS_S3_ROOT"), ...)
+
+s3GetFile.csv(path, bucket = Sys.getenv("AWS_S3_BUCKET"),
+  root = Sys.getenv("AWS_S3_ROOT"), header = TRUE)
 
 s3GetFile.gz(path, bucket = Sys.getenv("AWS_S3_BUCKET"),
   root = Sys.getenv("AWS_S3_ROOT"))
@@ -26,16 +30,20 @@ s3GetFile.json.gz(path, bucket = Sys.getenv("AWS_S3_BUCKET"),
 \arguments{
 \item{path}{is the path to the S3 object}
 
-\item{header}{flag defines whether file has header}
-
 \item{bucket}{name of the S3 bucket.
 Defautls to value in \code{AWS_S3_BUCKET} environment variable.}
 
 \item{root}{project root path that is appended before the path in the argument.
 Defaults to value in \code{AWS_S3_ROOT} environment variable.}
+
+\item{...}{additional arguments that will be passed to extension specific calls.}
+
+\item{header}{flag defines whether file has header}
 }
 \value{
 \code{s3GetFile} gets data from source \code{.csv} file
+
+`s3GetFile.csv` loads data from `.csv` files
 
 `s3GetFile.gz` loads data from `.gz` files
 
@@ -57,6 +65,8 @@ Environment variables required for aws.s3 access:
 \item \code{AWS_DEFAULT_REGION} = "us-east-1"
 \item \code{AWS_SESSION_TOKEN} = "mytoken"
 }
+
+\code{s3GetFile} calls extension specific files based on the path of the file.
 }
 \seealso{
 aws.s3 package documentation for access details:

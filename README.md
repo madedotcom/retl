@@ -89,6 +89,38 @@ To access AWS S3 storage provide following environment variables:
 - `AWS_S3_ROOT` - Root path which will be added to your path. If you full path is "myproject/data/file_a.csv", you can access it as `s3GetFile("data/file_a.csv")` if root variable is set to `myproject/`.
 
 
+### Load and save data
+
+read data from csv file into data.table
+```R
+# s3://{AWS_S3_BUCKET}/{AWS_S3_ROOT}/path/to/myfile.csv
+dt <- s3GetFile("path/to/myfile.csv")
+```
+
+write data from data.table into a csv file
+```R
+# s3://{AWS_S3_BUCKET}/{AWS_S3_ROOT}/path/to/myfile.csv
+dt <- s3PutFile(dt, "path/to/myfile.csv")
+```
+
+`s3GetFile` and `s3PutFile` support the following file extentions:
+
+* **csv** - comma delimited files
+* **rds** - serialised R object
+* **gz** - gzip compressed csv file
+* **json.gz** - compressed json file
+* **zip** - zip commpressed csv file
+
+
+`s3GetData` Allows to load data from many files that start with the same path
+
+```R
+# s3://{AWS_S3_BUCKET}/{AWS_S3_ROOT}/path/to/myfile_1.csv
+# s3://{AWS_S3_BUCKET}/{AWS_S3_ROOT}/path/to/myfile_2.csv 
+# s3://{AWS_S3_BUCKET}/{AWS_S3_ROOT}/path/to/myfile_3.csv
+dt <- s3GetData("path/to/myfile_")
+```
+
 ## Schema for metadata ##
 
 ### etl_jobs ###

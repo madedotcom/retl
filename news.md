@@ -1,5 +1,7 @@
 # retl 0.1.1.9000
 
+* `s3GetFile()`, `s3PutFile()` - functions are changed to read data based on the extention of the file. Fore example you can use it instead of calling `s3GetFile.csv()` if path ends with `.csv`.
+
 * `bqInsertData()` - added fields parameter to force BigQuery types to the given types
 
 # retl 0.1.1
