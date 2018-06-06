@@ -4,12 +4,14 @@
 \alias{disaggregate}
 \title{Splits table rows into multiple by the integer "by". All other fields are duplicated.}
 \usage{
-disaggregate(dt, by)
+disaggregate(dt, by, keep.row.number = FALSE)
 }
 \arguments{
 \item{dt}{data.table to disaggregate.}
 
 \item{by}{integer by which each line is split into units of 1.}
+
+\item{keep.row.number}{boolean whether to keep the original row number in the final table}
 }
 \description{
 Splits table rows into multiple by the integer "by". All other fields are duplicated.

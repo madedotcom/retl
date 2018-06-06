@@ -88,4 +88,17 @@ test_that("disaggregate", {
   calculated <- disaggregate(dt = dt, by = "weight")
   expect_equal(sum(calculated$weight), sum(dt$weight),
                label = "The total weight matches that of the original.")
+
+  # Row numbers are kept correctly.
+  dt <- fread("
+    sku weight
+              CUSISLA03BLU-UK 3
+              RUGISIS04BEI-UK 0
+              TBLBRM001WHI-UK 2",
+              header = T,
+              stringsAsFactors = F
+  )
+  calculated <- disaggregate(dt = dt, by = "weight", keep.row.number = TRUE)
+  expect_equal(all(calculated$rn, as.integer(rep(rownames(dt), dt$weight))),
+               label = "The total weight matches that of the original.")
 })
