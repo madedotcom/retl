@@ -19,6 +19,7 @@ Imports:
     aws.s3,
     bigrquery,
     data.table,
+    stringi,
     stringr,
     httr,
     DBI,
@@ -28,4 +29,5 @@ Imports:
     influxdbr,
     xts,
     jsonlite,
-    assertthat
+    assertthat,
+    RCurl

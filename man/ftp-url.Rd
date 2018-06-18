@@ -16,15 +16,13 @@ ftpListFiles(path, pattern, verbose = FALSE, level = 0)
 \arguments{
 \item{storage}{- defines whether files will be read from FTP or FTPS. Defaults to `ftps`.}
 
-\item{path}{relative or full path to the FTP object}
+\item{path}{relative or full path to the FTP object or folder}
 
 \item{pattern}{regex pattern for file name filter}
 
 \item{verbose}{defines whether FTP curl feedback will be printed}
 
 \item{level}{internal parameter to track subfolder levels}
-
-\item{path}{relative or full path to the FTP folder which will be scanned recursively}
 }
 \description{
 FTP(s) path is created for specified storage and environment variables

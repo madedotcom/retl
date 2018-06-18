@@ -43,7 +43,7 @@ ftpBaseUrl <- function(storage = "ftps") {
 #'
 #' @rdname ftp-url
 #' @export
-#' @param path relative or full path to the FTP object
+#' @param path relative or full path to the FTP object or folder
 ftpFullUrl <- function(path) {
   ifelse(
     grepl("^ftp(s)?:\\/\\/", path),
@@ -62,11 +62,9 @@ ftpFullUrl <- function(path) {
 #' @rdname ftp-url
 #'
 #' @export
-#' @param path relative or full path to the FTP folder which will be scanned recursively
 #' @param pattern regex pattern for file name filter
 #' @param verbose defines whether FTP curl feedback will be printed
 #' @param level internal parameter to track subfolder levels
-#' @importFrom RCurl getURL
 ftpListFiles <- function(path, pattern, verbose = FALSE, level = 0) {
   ftp.url <- ftpFullUrl(path)
   paths <- RCurl::getURL(
