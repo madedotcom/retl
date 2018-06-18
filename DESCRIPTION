@@ -1,7 +1,7 @@
 Package: retl
 Type: Package
 Title: Support for common ETL operations and connections
-Version: 0.1.1.9001
+Version: 0.1.1.9002
 Date: 2016-11-07
 Author: byapparov@gmail.com
 Maintainer: Bulat Yapparov <byapparov@gmail.com>
@@ -19,6 +19,7 @@ Imports:
     aws.s3,
     bigrquery,
     data.table,
+    stringi,
     stringr,
     httr,
     DBI,
@@ -28,4 +29,5 @@ Imports:
     influxdbr,
     xts,
     jsonlite,
-    assertthat
+    assertthat,
+    RCurl
