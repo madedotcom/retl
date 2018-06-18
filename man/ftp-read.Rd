@@ -5,12 +5,12 @@
 \alias{ftpRead}
 \title{Read CSV file from FTP}
 \usage{
-ftpRead(file.url, header = TRUE)
+ftpRead(path, header = TRUE)
 }
 \arguments{
-\item{header}{defines whether file has header.}
-
 \item{path}{to the file including or excluding the storage and domain details}
+
+\item{header}{defines whether file has header.}
 }
 \value{
 data.table

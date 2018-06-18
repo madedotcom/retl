@@ -7,9 +7,11 @@
 #' @param header defines whether file has header.
 #' @return data.table
 #' @name ftp-read
-ftpRead <- function(file.url, header = TRUE) {
-  ftp.url <- ftpFullUrl(file.url)
-  fread(ftp.url, header = header)
+ftpRead <- function(path, header = TRUE) {
+  fread(
+    ftpFullUrl(path),
+    header = header
+  )
 }
 
 
@@ -41,7 +43,7 @@ ftpBaseUrl <- function(storage = "ftps") {
 #'
 #' @rdname ftp-url
 #' @export
-#' @param relative or full path to the FTP object
+#' @param path relative or full path to the FTP object
 ftpFullUrl <- function(path) {
   ifelse(
     grepl("^ftp(s)?:\\/\\/", path),

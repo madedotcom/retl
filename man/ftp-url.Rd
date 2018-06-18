@@ -16,7 +16,7 @@ ftpListFiles(path, pattern, verbose = FALSE, level = 0)
 \arguments{
 \item{storage}{- defines whether files will be read from FTP or FTPS. Defaults to `ftps`.}
 
-\item{path}{relative or full path to the FTP folder which will be scanned recursively}
+\item{path}{relative or full path to the FTP object}
 
 \item{pattern}{regex pattern for file name filter}
 
@@ -24,7 +24,7 @@ ftpListFiles(path, pattern, verbose = FALSE, level = 0)
 
 \item{level}{internal parameter to track subfolder levels}
 
-\item{relative}{or full path to the FTP object}
+\item{path}{relative or full path to the FTP folder which will be scanned recursively}
 }
 \description{
 FTP(s) path is created for specified storage and environment variables
