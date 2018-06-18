@@ -66,6 +66,7 @@ ftpFullUrl <- function(path) {
 #' @param pattern regex pattern for file name filter
 #' @param verbose defines whether FTP curl feedback will be printed
 #' @param level internal parameter to track subfolder levels
+#' @importFrom RCurl getURL
 ftpListFiles <- function(path, pattern, verbose = FALSE, level = 0) {
   ftp.url <- ftpFullUrl(path)
   paths <- RCurl::getURL(
