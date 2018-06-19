@@ -791,7 +791,9 @@ bqSaveSchema <- function(dt, file) {
 #' @export
 bqExtractSchema <- function(dt) {
   if (is.data.frame(dt)) {
-    fields <- as_bq_fields(dt)
+    dt.copy <- copy(head(dt))
+    colnames(dt.copy) <- conformHeader(colnames(dt.copy), "_")
+    fields <- as_bq_fields(dt.copy)
   }
   else if (is.string(dt)) {
     fields <- bqTableSchema(dt)
