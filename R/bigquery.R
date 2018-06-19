@@ -804,6 +804,9 @@ bqExtractSchema <- function(dt) {
 
 as_json <- function(x) UseMethod("as_json")
 
+#' @export
+as_json.NULL <- function(x) NULL
+
 as_json.bq_field <- function(x) {
   res <- list(
     name = jsonlite::unbox(x$name),
