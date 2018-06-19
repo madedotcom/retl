@@ -799,15 +799,10 @@ bqExtractSchema <- function(dt) {
   else if (class(dt) == "bq_fields") {
     fields <- dt
   }
-  jsonlite::toJSON(bqJson(fields), pretty = TRUE)
+  jsonlite::toJSON(bqJsonFields(fields), pretty = TRUE)
 }
 
-bqJson <- function(x) UseMethod("bqJson")
-
-#' @export
-bqJson.NULL <- function(x) NULL
-
-bqJson.bq_field <- function(x) {
+bqJsonField <- function(x) {
   res <- list(
     name = jsonlite::unbox(x$name),
     type = jsonlite::unbox(x$type),
@@ -819,6 +814,6 @@ bqJson.bq_field <- function(x) {
   res
 }
 
-bqJson.bq_fields <- function(x) {
-  lapply(x, bqJson)
+bqJsonFields <- function(x) {
+  lapply(x, bqJsonField)
 }
