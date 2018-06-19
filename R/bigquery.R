@@ -809,7 +809,7 @@ bqJsonField <- function(x) {
     mode = jsonlite::unbox(x$mode)
    )
   if (!is.null(x$fields) & length(x$fields) > 0) {
-    res$fields = bqJson(x$fields)
+    res$fields = bqJsonFields(x$fields)
   }
   res
 }
