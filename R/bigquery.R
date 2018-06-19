@@ -774,3 +774,48 @@ case_right_bracket <- function(high) {
   ifelse(is.infinite(high), ")", "]")
 }
 
+#' Save file inferred from data.table to JSON file
+#'
+#' @export
+#' @rdname bqSchema
+#' @param dt data.table, table name or bq_fields from which schema will be extracted into JSON
+#' @param file path to the schema file
+bqSaveSchema <- function(dt, file) {
+  dt.schema <- bqExtractSchema(dt)
+  write(dt.schema, file)
+}
+
+#' Extract schema as JSON from data.table
+#'
+#' @rdname bqSchema
+#' @export
+bqExtractSchema <- function(dt) {
+  if (is.data.frame(dt)) {
+    fields <- as_bq_fields(dt)
+  }
+  else if (is.string(dt)) {
+    fields <- bqTableSchema(dt)
+  }
+  else if (class(dt) == "bq_fields") {
+    fields <- dt
+  }
+  toJSON(as_json(fields), pretty = TRUE)
+}
+
+as_json <- function(x) UseMethod("as_json")
+
+as_json.bq_field <- function(x) {
+  res <- list(
+    name = unbox(x$name),
+    type = unbox(x$type),
+    mode = unbox(x$mode)
+   )
+  if (!is.null(x$fields) & length(x$fields) > 0) {
+    res$fields = as_json(x$fields)
+  }
+  res
+}
+
+as_json.bq_fields <- function(x) {
+  lapply(x, as_json)
+}
