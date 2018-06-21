@@ -774,3 +774,48 @@ case_right_bracket <- function(high) {
   ifelse(is.infinite(high), ")", "]")
 }
 
+#' Save file inferred from data.table to JSON file
+#'
+#' @export
+#' @rdname bqSchema
+#' @param dt data.table, table name or bq_fields from which schema will be extracted into JSON
+#' @param file path to the schema file
+bqSaveSchema <- function(dt, file) {
+  dt.schema <- bqExtractSchema(dt)
+  write(dt.schema, file)
+}
+
+#' Extract schema as JSON from data.table
+#'
+#' @rdname bqSchema
+#' @export
+bqExtractSchema <- function(dt) {
+  if (is.data.frame(dt)) {
+    dt.copy <- copy(head(dt))
+    colnames(dt.copy) <- conformHeader(colnames(dt.copy), "_")
+    fields <- as_bq_fields(dt.copy)
+  }
+  else if (is.string(dt)) {
+    fields <- bqTableSchema(dt)
+  }
+  else if (class(dt) == "bq_fields") {
+    fields <- dt
+  }
+  jsonlite::toJSON(bqJsonFields(fields), pretty = TRUE)
+}
+
+bqJsonField <- function(x) {
+  res <- list(
+    name = jsonlite::unbox(x$name),
+    type = jsonlite::unbox(x$type),
+    mode = jsonlite::unbox(x$mode)
+   )
+  if (!is.null(x$fields) & length(x$fields) > 0) {
+    res$fields = bqJsonFields(x$fields)
+  }
+  res
+}
+
+bqJsonFields <- function(x) {
+  lapply(x, bqJsonField)
+}
