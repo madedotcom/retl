@@ -206,13 +206,17 @@ bqCreateDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultPro
 #' @rdname bqDataset
 #'
 #' @export
-bqDeleteDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultProject()) {
+#' @param delete.content removes all content from the dataset if is set to TRUE
+bqDeleteDataset <- function(dataset = bqDefaultDataset(),
+                            project = bqDefaultProject(),
+                            delete.contents = FALSE) {
   bqAuth()
   bq_dataset_delete(
     bq_dataset(
       project = project,
       dataset = dataset
-    )
+    ),
+    delete_contents = delete.contents
   )
 }
 
