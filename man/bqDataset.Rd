@@ -10,12 +10,15 @@ bqDatasetExists(dataset = bqDefaultDataset(), project = bqDefaultProject())
 
 bqCreateDataset(dataset = bqDefaultDataset(), project = bqDefaultProject())
 
-bqDeleteDataset(dataset = bqDefaultDataset(), project = bqDefaultProject())
+bqDeleteDataset(dataset = bqDefaultDataset(), project = bqDefaultProject(),
+  delete.contents = FALSE)
 }
 \arguments{
 \item{dataset}{name of the dataset}
 
 \item{project}{name of the project}
+
+\item{delete.content}{removes all content from the dataset}
 }
 \value{
 `bqDatasetExists` TRUE if dataset exists
