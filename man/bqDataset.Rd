@@ -18,7 +18,7 @@ bqDeleteDataset(dataset = bqDefaultDataset(), project = bqDefaultProject(),
 
 \item{project}{name of the project}
 
-\item{delete.content}{removes all content from the dataset if is set to TRUE}
+\item{delete.contents}{removes all content from the dataset if is set to TRUE}
 }
 \value{
 `bqDatasetExists()` - returns TRUE if dataset exists
