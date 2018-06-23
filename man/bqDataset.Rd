@@ -4,7 +4,7 @@
 \alias{bqDatasetExists}
 \alias{bqCreateDataset}
 \alias{bqDeleteDataset}
-\title{Checks if dataset exists in the project}
+\title{Dataset manipulation functions}
 \usage{
 bqDatasetExists(dataset = bqDefaultDataset(), project = bqDefaultProject())
 
@@ -21,8 +21,11 @@ bqDeleteDataset(dataset = bqDefaultDataset(), project = bqDefaultProject(),
 \item{delete.content}{removes all content from the dataset if is set to TRUE}
 }
 \value{
-`bqDatasetExists` TRUE if dataset exists
+`bqDatasetExists()` - returns TRUE if dataset exists
 }
 \description{
-Checks if dataset exists in the project
+Dataset manipulation functions
+}
+\details{
+`bqDeleteDataset()` - You can protect dataset from programmatic deletion by adding `delete:never` label (key:value) to it.
 }

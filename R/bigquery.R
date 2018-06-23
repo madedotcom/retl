@@ -176,14 +176,14 @@ getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m
   return(res)
 }
 
-#' Checks if dataset exists in the project
+#' Dataset manipulation functions
 #'
 #' @rdname bqDataset
 #'
 #' @export
 #' @param dataset name of the dataset
 #' @param project name of the project
-#' @return `bqDatasetExists` TRUE if dataset exists
+#' @return `bqDatasetExists()` - returns TRUE if dataset exists
 bqDatasetExists <- function(dataset = bqDefaultDataset(), project = bqDefaultProject()) {
   bqAuth()
   ds <- bq_dataset(project, dataset)
@@ -191,7 +191,6 @@ bqDatasetExists <- function(dataset = bqDefaultDataset(), project = bqDefaultPro
 }
 
 #' @rdname bqDataset
-#'
 #' @export
 bqCreateDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultProject()) {
   bqAuth()
@@ -204,7 +203,7 @@ bqCreateDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultPro
 }
 
 #' @rdname bqDataset
-#'
+#' @details `bqDeleteDataset()` - You can protect dataset from programmatic deletion by adding `delete:never` label (key:value) to it.
 #' @export
 #' @param delete.content removes all content from the dataset if is set to TRUE
 bqDeleteDataset <- function(dataset = bqDefaultDataset(),
