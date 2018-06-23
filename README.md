@@ -16,6 +16,7 @@ To access BigQuery you will need following environment variables:
 - `BIGQUERY_PROJECT` - name of the project in BigQuery. Default project cannot be changed in the code.
 - `BIGQUERY_DATASET` - name of the default dataset in BigQuery. You can override default dataset in most functions.
 - `BIGQUERY_ACCESS_TOKEN_PATH` - path to the json token file.
+- `BIGQUERY_LEGACY_SQL` - query will be executed with legacy flavour if set to `TRUE`.
 
 BigQuery functions wrap `bigrquery` functions to provide higher level API removing boilerplate instructions of the lower level API.
 
@@ -41,6 +42,8 @@ bqCreateDataset("my_dataset")
 # Drop dataset
 bqDeleteDataset("my_dataset")
 ```
+
+You can protect dataset from programmatic deletion by adding `delete:never` label (key:value) to it.
 
 ### transform partitioned data
 
