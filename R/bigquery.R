@@ -211,6 +211,9 @@ bqDeleteDataset <- function(dataset = bqDefaultDataset(),
                             project = bqDefaultProject(),
                             delete.contents = FALSE) {
   bqAuth()
+
+  assert_that(!bqProtectedDataset(dataset, project))
+
   bq_dataset_delete(
     bq_dataset(
       project = project,
@@ -219,6 +222,31 @@ bqDeleteDataset <- function(dataset = bqDefaultDataset(),
     delete_contents = delete.contents
   )
 }
+
+#' Checks whether dataset has delete:never label pair attached
+#' @noRd
+bqProtectedDataset <- function(dataset, project) {
+  meta <- bq_dataset_meta(
+    bq_dataset(
+      project = project,
+      dataset = dataset
+    ),
+    fields = c("labels")
+  )
+  if (length(meta) > 0) {
+    delete <- meta$labels$delete
+    if (!is.null(delete) && delete == "never") {
+      TRUE
+    }
+    else {
+      FALSE
+    }
+  }
+  else {
+    FALSE
+  }
+}
+
 
 #' Functions to work with BigQuery tables
 #'

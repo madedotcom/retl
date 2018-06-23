@@ -8,6 +8,9 @@
 
 * `bqSaveSchema()`, `bqExtractSchema()` - allow to save schema from a given data set into a JSON file
 
+* `bqDeleteDataset()` - before deletion presense of `delete:never` label key-value pair is checked, 
+    which will protect datasets from programmatic deletion.
+
 # retl 0.1.1
 
 * Lower level BigQuery API calls are updated to the new functions from bigrquery 1.0.0
