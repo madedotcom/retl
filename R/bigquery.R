@@ -205,7 +205,7 @@ bqCreateDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultPro
 #' @rdname bqDataset
 #' @details `bqDeleteDataset()` - You can protect dataset from programmatic deletion by adding `delete:never` label (key:value) to it.
 #' @export
-#' @param delete.content removes all content from the dataset if is set to TRUE
+#' @param delete.contents removes all content from the dataset if is set to TRUE
 bqDeleteDataset <- function(dataset = bqDefaultDataset(),
                             project = bqDefaultProject(),
                             delete.contents = FALSE) {
