@@ -17,7 +17,7 @@
 
 * `bqUseLegacySql()` - allows to check or set flavour of bigquery sql. (#79)
 
-* `s3ListFiles()` - gets metadata of s3 files matching give path into data.table
+* `s3ListFiles()` - gets metadata of s3 files matching give path into data.table (#80)
 
 # retl 0.1.1
 
