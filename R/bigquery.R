@@ -104,11 +104,11 @@ bqBillingProject <- function() {
 #' Family of functions for common operations on projects
 #'
 #' @name bqProject
+#' @param project name of the bigquery project
 NULL
 
 #' Gets list of datasets for a given project
 #' @rdname bqProject
-#' @param project name of the bigquery project
 bqProjectDatasets <- function(project = bqDefaultProject()) {
   bq_project_datasets(
     x = project,

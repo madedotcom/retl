@@ -10,6 +10,9 @@ bqProjectDatasets(project = bqDefaultProject())
 
 bqProjectTables(project = bqDefaultProject())
 }
+\arguments{
+\item{project}{name of the bigquery project}
+}
 \description{
 Family of functions for common operations on projects
 
