@@ -76,9 +76,15 @@ bqPartitionDatesSql <- function(table) {
 
 #' Gest the value from the corresponding environment variable as boolean
 #' Determins which flavour of sql should be used by default.
-#' @noRd
-bqUseLegacySql <- function() {
-  Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
+#' @export
+#' @param x Sets `BIGQUERY_LEGACY_SQL` variable if set. Otherwise function returns value of the variable.
+bqUseLegacySql <- function(x = NULL) {
+  if (is.null(x)) {
+    Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
+  }
+  else {
+    Sys.setenv("BIGQUERY_LEGACY_SQL" = x)
+  }
 }
 
 bqDefaultProject <- function() {
@@ -93,16 +99,76 @@ bqBillingProject <- function() {
   bqDefaultProject()
 }
 
-#' Creates partition in specified table in BigQuery.
-#
-#' @param table name of the new table
-#' @param sql source for the table as string
-#' @param file source for the tabel as file
-#' @param existing.dates Vector of dates that already exist in the target table. If provided, masked tables for these dates will be exlcuded
-#' @param missing.dates Vector of dates that should be created. If provided data for those dates will be added or re-created.
-#' @note sql or file must be provided
-createPartitionTable <- function(table, sql = NULL, file = NULL, existing.dates = NULL, missing.dates = NULL) {
-  .Deprecated("bqCreatePartitionTable")
+#' Functions to work with BigQuery projects
+#'
+#' Family of functions for common operations on projects
+#'
+#' @name bqProject
+NULL
+
+#' Gets list of datasets for a given project
+#' @rdname bqProject
+bqProjectDatasets <- function(project = bqDefaultProject()) {
+  bq_project_datasets(
+    x = project,
+    max_pages = Inf
+  )
+}
+
+#' Gets metadata of all tables of a project into a data.table
+#'
+#' @details
+#' Function queries __TABLES__ table for each dataset in the project
+#'
+#' @rdname bqProject
+bqProjectTables <- function(project = bqDefaultProject()) {
+  datasets <- bqProjectDatasets()
+
+  if (bqUseLegacySql()) {
+    sql = "
+    SELECT
+      project_id,
+      dataset_id,
+      table_id,
+      TIMESTAMP(creation_time / 1000) as creation_time,
+      TIMESTAMP(last_modified_time / 1000) as last_modified_time,
+      row_count,
+      size_bytes,
+      type
+    FROM
+      [%1$s.__TABLES__]"
+  }
+  else {
+    sql = "
+    SELECT
+      project_id,
+      dataset_id,
+      table_id,
+      TIMESTAMP_MILLIS(creation_time) as creation_time,
+      TIMESTAMP_MILLIS(last_modified_time) as last_modified_time,
+      row_count,
+      size_bytes,
+      type
+    FROM `%1$s.__TABLES__`"
+
+  }
+
+  tables <- lapply(datasets, function(d) {
+    bqExecuteQuery(sql, d$dataset)
+  })
+  tables <- rbindlist(tables)
+}
+
+#' Gets list of tables for a given dataset
+#'
+#' @rdname bqDataset
+bqDatasetTables <- function(dataset, project = bqDefaultProject()) {
+  bq_dataset_tables(
+    bq_dataset(
+      project = project,
+      dataset = dataset
+    )
+  )
 }
 
 #' Creates range teable in BigQuery.
