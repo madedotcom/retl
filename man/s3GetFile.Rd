@@ -9,23 +9,18 @@
 \alias{s3GetFile.json.gz}
 \title{Loads data from AWS S3 into data.table object}
 \usage{
-s3GetFile(path, bucket = Sys.getenv("AWS_S3_BUCKET"),
-  root = Sys.getenv("AWS_S3_ROOT"), ...)
+s3GetFile(path, bucket = s3DefaultBucket(), root = s3DefaultRoot(), ...)
 
-s3GetFile.csv(path, bucket = Sys.getenv("AWS_S3_BUCKET"),
-  root = Sys.getenv("AWS_S3_ROOT"), header = TRUE)
+s3GetFile.csv(path, bucket = s3DefaultBucket(), root = s3DefaultRoot(),
+  header = TRUE)
 
-s3GetFile.gz(path, bucket = Sys.getenv("AWS_S3_BUCKET"),
-  root = Sys.getenv("AWS_S3_ROOT"))
+s3GetFile.gz(path, bucket = s3DefaultBucket(), root = s3DefaultRoot())
 
-s3GetFile.rds(path, bucket = Sys.getenv("AWS_S3_BUCKET"),
-  root = Sys.getenv("AWS_S3_ROOT"))
+s3GetFile.rds(path, bucket = s3DefaultBucket(), root = s3DefaultRoot())
 
-s3GetFile.zip(path, bucket = Sys.getenv("AWS_S3_BUCKET"),
-  root = Sys.getenv("AWS_S3_ROOT"))
+s3GetFile.zip(path, bucket = s3DefaultBucket(), root = s3DefaultRoot())
 
-s3GetFile.json.gz(path, bucket = Sys.getenv("AWS_S3_BUCKET"),
-  root = Sys.getenv("AWS_S3_ROOT"))
+s3GetFile.json.gz(path, bucket = s3DefaultBucket(), root = s3DefaultRoot())
 }
 \arguments{
 \item{path}{is the path to the S3 object}
