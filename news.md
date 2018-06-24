@@ -1,4 +1,4 @@
-# retl 0.1.1.9000
+# retl 0.1.2
 
 * `s3GetFile()`, `s3PutFile()` - functions are changed to read data based on the extention of the file. Fore example you can use it instead of calling `s3GetFile.csv()` if path ends with `.csv`.
 
@@ -16,6 +16,8 @@
 * `bqProjectTables()` - extracts metadata for all tables in the project by extracting `__TABLES__` for each dataset. (#79)
 
 * `bqUseLegacySql()` - allows to check or set flavour of bigquery sql. (#79)
+
+* `s3ListFiles()` - gets metadata of s3 files matching give path into data.table (#80)
 
 # retl 0.1.1
 

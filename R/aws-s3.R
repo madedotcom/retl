@@ -26,8 +26,8 @@
 #' @md
 s3PutFile <- function(dt,
                       path,
-                      bucket = Sys.getenv("AWS_S3_BUCKET"),
-                      root = Sys.getenv("AWS_S3_ROOT"),
+                      bucket = s3DefaultBucket(),
+                      root = s3DefaultRoot(),
                       ...
                       ) {
   args <- c(as.list(environment()), list(...))
@@ -35,6 +35,14 @@ s3PutFile <- function(dt,
     what = s3PutFile.factory(path),
     args = args
   )
+}
+
+s3DefaultBucket <- function() {
+  Sys.getenv("AWS_S3_BUCKET")
+}
+
+s3DefaultRoot <- function() {
+  Sys.getenv("AWS_S3_ROOT")
 }
 
 s3PutFile.factory <- function(path) {
@@ -59,8 +67,8 @@ s3PutFile.factory <- function(path) {
 #' @return `s3PutFile.csv` saves data into `.csv` file in S3.
 s3PutFile.csv <- function(dt,
                           path,
-                          bucket = Sys.getenv("AWS_S3_BUCKET"),
-                          root = Sys.getenv("AWS_S3_ROOT"),
+                          bucket = s3DefaultBucket(),
+                          root = s3DefaultRoot(),
                           na.value = "") {
   tmp.file <- tempfile(fileext = ".csv")
   on.exit(unlink(tmp.file))
@@ -103,8 +111,8 @@ s3PutFile.csv <- function(dt,
 #' @importFrom data.table fread
 #' @md
 s3GetFile <- function(path,
-                      bucket = Sys.getenv("AWS_S3_BUCKET"),
-                      root = Sys.getenv("AWS_S3_ROOT"),
+                      bucket = s3DefaultBucket(),
+                      root = s3DefaultRoot(),
                       ...) {
   args <- c(as.list(environment()), list(...))
   do.call(
@@ -137,8 +145,8 @@ s3GetFile.factory <- function(path) {
 #' @rdname s3GetFile
 #' @return `s3GetFile.csv` loads data from `.csv` files
 s3GetFile.csv <- function(path,
-                          bucket = Sys.getenv("AWS_S3_BUCKET"),
-                          root = Sys.getenv("AWS_S3_ROOT"),
+                          bucket = s3DefaultBucket(),
+                          root = s3DefaultRoot(),
                           header = TRUE) {
   full.path <- paste0(root, path)
   raw_data <- get_object(
@@ -174,8 +182,8 @@ s3GetFile.csv <- function(path,
 #' @return data.table with data combined from files. It will be Null data.table if path
 #' did not match any of the files in S3 bucket.
 s3GetData <- function(path, header = T,
-                      bucket = Sys.getenv("AWS_S3_BUCKET"),
-                      root = Sys.getenv("AWS_S3_ROOT"),
+                      bucket = s3DefaultBucket(),
+                      root = s3DefaultRoot(),
                       s3Get.FUN = s3GetFile,
                       fill = T) {
 
@@ -193,12 +201,30 @@ s3GetData <- function(path, header = T,
   invisible(rbindlist(dt.list, use.names = T, fill = fill))
 }
 
+#' Lists files that match given path
+#'
+#' @export
+#' @inheritParams s3GetFile
+#' @return metadata of files in data.table
+s3ListFiles <- function(path,
+                        bucket = s3DefaultBucket(),
+                        root = s3DefaultRoot()) {
+  full.path <- paste0(root, path)
+  full.path <- gsub("^/", "", full.path)
+  objects <- aws.s3::get_bucket(
+    bucket = bucket,
+    prefix = full.path,
+    check_region = FALSE
+  )
+  as.data.table(objects)
+}
+
 #' @export
 #' @rdname s3PutFile
 #' @return `s3PutFile.gz` saves data into `.gz` (csv archived) file in S3.
 s3PutFile.gz <- function(dt, path,
-                         bucket = Sys.getenv("AWS_S3_BUCKET"),
-                         root = Sys.getenv("AWS_S3_ROOT"),
+                         bucket = s3DefaultBucket(),
+                         root = s3DefaultRoot(),
                          na.value = "") {
 
   tmp.file <- tempfile(fileext = ".gz")
@@ -221,8 +247,8 @@ s3PutFile.gz <- function(dt, path,
 #' @rdname s3GetFile
 #' @return `s3GetFile.gz` loads data from `.gz` files
 s3GetFile.gz <- function(path,
-                         bucket = Sys.getenv("AWS_S3_BUCKET"),
-                         root = Sys.getenv("AWS_S3_ROOT")) {
+                         bucket = s3DefaultBucket(),
+                         root = s3DefaultRoot()) {
 
   full.path <- paste0(root, path)
   tmp.file <- tempfile(fileext = ".gz")
@@ -243,8 +269,8 @@ s3GetFile.gz <- function(path,
 #' @rdname s3PutFile
 #' @return `s3PutFile.rds` saves data as `.rds` file in S3
 s3PutFile.rds <- function(dt, path,
-                          bucket = Sys.getenv("AWS_S3_BUCKET"),
-                          root = Sys.getenv("AWS_S3_ROOT")) {
+                          bucket = s3DefaultBucket(),
+                          root = s3DefaultRoot()) {
 
   full.path <- paste0(root, path)
   s3saveRDS(
@@ -259,8 +285,8 @@ s3PutFile.rds <- function(dt, path,
 #' @rdname s3GetFile
 #' @return `s3GetFile.rds` loads data from `.rds` files
 s3GetFile.rds <- function(path,
-                          bucket = Sys.getenv("AWS_S3_BUCKET"),
-                          root = Sys.getenv("AWS_S3_ROOT")) {
+                          bucket = s3DefaultBucket(),
+                          root = s3DefaultRoot()) {
 
   full.path <- paste0(root, path)
   s3readRDS(
@@ -276,7 +302,7 @@ s3GetFile.rds <- function(path,
 #' @export
 #' @param relative.path defines the path to the object post project root path.
 s3GetObjectPath <- function(relative.path) {
-  path <- paste0(Sys.getenv("AWS_S3_ROOT"), relative.path)
+  path <- paste0(s3DefaultRoot(), relative.path)
   return(path)
 }
 
@@ -285,8 +311,8 @@ s3GetObjectPath <- function(relative.path) {
 #' @return `s3GetFile.zip` loads data from `.zip` files
 #' @importFrom utils unzip
 s3GetFile.zip <- function(path,
-                          bucket = Sys.getenv("AWS_S3_BUCKET"),
-                          root = Sys.getenv("AWS_S3_ROOT")) {
+                          bucket = s3DefaultBucket(),
+                          root = s3DefaultRoot()) {
 
   full.path <- paste0(root, path)
   tmp.file <- tempfile(fileext = ".zip")
@@ -308,8 +334,8 @@ s3GetFile.zip <- function(path,
 #' @return `s3PutFile.json.gz` saves data as `.json.gz` (json archived) file in S3
 #' @importFrom jsonlite write_json
 s3PutFile.json.gz <- function(dt, path,
-                         bucket = Sys.getenv("AWS_S3_BUCKET"),
-                         root = Sys.getenv("AWS_S3_ROOT")) {
+                         bucket = s3DefaultBucket(),
+                         root = s3DefaultRoot()) {
 
   tmp.file <- tempfile(fileext = ".gz")
   on.exit(unlink(tmp.file))
@@ -332,8 +358,8 @@ s3PutFile.json.gz <- function(dt, path,
 #' @import data.table
 #' @importFrom jsonlite fromJSON
 s3GetFile.json.gz <- function(path,
-                              bucket = Sys.getenv("AWS_S3_BUCKET"),
-                              root = Sys.getenv("AWS_S3_ROOT")) {
+                              bucket = s3DefaultBucket(),
+                              root = s3DefaultRoot()) {
 
   full.path <- paste0(root, path)
   tmp.file <- tempfile(fileext = ".gz")

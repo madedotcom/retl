@@ -4,8 +4,8 @@
 \alias{s3GetData}
 \title{Loads data from several files in S3 based on the path prefix}
 \usage{
-s3GetData(path, header = T, bucket = Sys.getenv("AWS_S3_BUCKET"),
-  root = Sys.getenv("AWS_S3_ROOT"), s3Get.FUN = s3GetFile, fill = T)
+s3GetData(path, header = T, bucket = s3DefaultBucket(),
+  root = s3DefaultRoot(), s3Get.FUN = s3GetFile, fill = T)
 }
 \arguments{
 \item{path}{is the path to the S3 object}
