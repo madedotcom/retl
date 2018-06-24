@@ -8,6 +8,15 @@
 
 * `bqSaveSchema()`, `bqExtractSchema()` - allow to save schema from a given data set into a JSON file
 
+* `bqDeleteDataset()` - before deletion presense of `delete:never` label key-value pair is checked, 
+    which will protect datasets from programmatic deletion. (#79)
+    
+* `bqProjectDatasets()` - lists datasets in the project. (#79)
+    
+* `bqProjectTables()` - extracts metadata for all tables in the project by extracting `__TABLES__` for each dataset. (#79)
+
+* `bqUseLegacySql()` - allows to check or set flavour of bigquery sql. (#79)
+
 # retl 0.1.1
 
 * Lower level BigQuery API calls are updated to the new functions from bigrquery 1.0.0

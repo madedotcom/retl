@@ -1,8 +1,8 @@
 Package: retl
 Type: Package
 Title: Support for common ETL operations and connections
-Version: 0.1.1.9002
-Date: 2016-11-07
+Version: 0.1.1.9003
+Date: 2018-06-25
 Author: byapparov@gmail.com
 Maintainer: Bulat Yapparov <byapparov@gmail.com>
 Depends:
