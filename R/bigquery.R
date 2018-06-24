@@ -153,8 +153,17 @@ bqProjectTables <- function(project = bqDefaultProject()) {
 
   }
 
-  tables <- lapply(datasets, function(d) {
-    bqExecuteQuery(sql, d$dataset)
+  tables <- lapply(head(datasets), function(d) {
+    dt <- bqExecuteQuery(sql, d$dataset)
+    meta <- bq_dataset_meta(
+      bq_dataset(
+        project = project,
+        dataset = d$dataset
+      ),
+      fields = c("location")
+    )
+    dt$location <- meta$location
+    dt
   })
   tables <- rbindlist(tables)
 }
