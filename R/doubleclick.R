@@ -22,26 +22,43 @@ options(
   googleAuthR.httr_oauth_cache = TRUE
 )
 
+dcListConversions <- function(clickId, conversionId, datetime, custom.metrics) {
+  assert_that(length(clickId) == 1)
+
+  list(
+    clickId = clickId,
+    conversionId = conversionId,
+    conversionTimestamp = as.character(datetime),
+    segmentationType = "FLOODLIGHT",
+    segmentationName = "ML",
+    customMetric = metricsToList(custom.metrics)
+  )
+}
 
 #' Creates list for the DoubleClick API call from prediction variables
 #'
 #' @param clickId gclid for the DoubleClick match for the session
 #' @param conversionId unique identifier for the conversion
 #' @param datetime POSIX timestamp in miliseconds
-#' @param custom.metrics name vector of custom metric values
+#' @param custom.metrics list with named vectors of custom metric values
 dcPredictionBody <- function(clickId, conversionId, datetime, custom.metrics) {
+
+  assert_that(
+    length(clickId) == length(conversionId),
+    length(clickId) == length(datetime),
+    length(clickId) == length(custom.metrics)
+  )
+
+  coversion.list <- mapply(
+    dcListConversions,
+    clickId, conversionId, datetime, custom.metrics,
+    USE.NAMES = FALSE,
+    SIMPLIFY = FALSE
+  )
+
   list(
     kind = "doubleclicksearch#conversionList",
-    conversion = list(
-      list(
-        clickId = clickId,
-        conversionId = conversionId,
-        conversionTimestamp = as.character(datetime),
-        segmentationType = "FLOODLIGHT",
-        segmentationName = "ML",
-        customMetric = metricsToList(custom.metrics)
-      )
-    )
+    conversion = coversion.list
   )
 }
 

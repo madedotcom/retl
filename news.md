@@ -1,3 +1,9 @@
+# retl 0.1.2.9000
+
+* `dcPredictionBody()` - function is vectorised, which means that it can turn multiple transactions
+  into a single body request. This is a breaking change as `custom.metrics` param is now 
+  a list of vectors.
+
 # retl 0.1.2
 
 * `s3GetFile()`, `s3PutFile()` - functions are changed to read data based on the extention of the file. Fore example you can use it instead of calling `s3GetFile.csv()` if path ends with `.csv`.
