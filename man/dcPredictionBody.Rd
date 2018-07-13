@@ -13,7 +13,7 @@ dcPredictionBody(clickId, conversionId, datetime, custom.metrics)
 
 \item{datetime}{POSIX timestamp in miliseconds}
 
-\item{custom.metrics}{name vector of custom metric values}
+\item{custom.metrics}{list with named vectors of custom metric values}
 }
 \description{
 Creates list for the DoubleClick API call from prediction variables

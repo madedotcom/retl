@@ -1,0 +1,47 @@
+{
+ "kind": "doubleclicksearch#conversionList",
+ "conversion": [
+  {
+   "clickId": "CJPmyaSYmdMCFVcW0wodHMAE2w",
+   "conversionId": "23436345D",
+   "conversionTimestamp": "1491819654000",
+   "segmentationType": "FLOODLIGHT",
+   "segmentationName": "ML",
+   "customMetric": [
+    {
+     "name": "Predicted Revenue",
+     "value": 20
+    },
+    {
+     "name": "Predicted CVR",
+     "value": 0.1
+    },
+    {
+     "name": "Predicted AOV",
+     "value": 200
+    }
+   ]
+  },
+  {
+   "clickId": "AJPmyaSYmdMCFVcW0wodHMAE3w",
+   "conversionId": "23436345A",
+   "conversionTimestamp": "1491819654002",
+   "segmentationType": "FLOODLIGHT",
+   "segmentationName": "ML",
+   "customMetric": [
+    {
+     "name": "Predicted Revenue",
+     "value": 10
+    },
+    {
+     "name": "Predicted CVR",
+     "value": 0.8
+    },
+    {
+     "name": "Predicted AOV",
+     "value": 100
+    }
+   ]
+  }
+ ]
+}
