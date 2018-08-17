@@ -580,7 +580,7 @@ bqCreatePartitionTable <- function(table, datasets,
 
   if (missing(sql)) {
     # Build SQL from code in the file.
-    sql <- paste(readLines(file), collapse = "\n")
+    sql <- readLines(file)
   }
 
   if (missing(existing.dates)) {
@@ -600,6 +600,7 @@ bqCreatePartitionTable <- function(table, datasets,
 
       lapply(datasets, function(p) {
         sql.exec <- sprintf(sql, p, d, bqDatasetLabel(datasets, p)) # Replace placeholder in sql template.
+        sql.exec <- paste(sql.exec, collapse = "\n")
         bqCreateTable(
           sql = sql.exec,
           table =  destination.partition
