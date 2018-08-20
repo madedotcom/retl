@@ -784,7 +784,6 @@ bqTransformPartition <- function(table, file, ...) {
     partition <- gsub("-", "", d)
     destination.partition <- paste0(table, "$", partition)
     print(destination.partition)
-    bqDeleteTable(destination.partition)
     sql.exec <- readSql(file, d, ...)
 
     bqCreateTable(
@@ -809,6 +808,7 @@ bqBackfillPartition <- function(table, file, ...) {
     partition <- gsub("-", "", d)
     destination.partition <- paste0(table, "$", partition)
     print(destination.partition)
+    bqDeleteTable(destination.partition)
     sql.exec <- readSql(file, d, ...)
 
     bqCreateTable(
