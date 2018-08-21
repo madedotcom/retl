@@ -763,7 +763,7 @@ bqInsertPartition <- function(table, date, data, append = FALSE) {
 #' @description `bqTransformPartition` creates new partitions for the missing dates
 #' @rdname bqPartition
 #' @export
-#' @param table destination partition table where results of the query will be saved
+#' @param table destination partition table where resutls of the query will be saved
 #' @param file path to the sql file that will be used for the transformation
 #' @param ...  parameters that will be passed via `sprintf` to build dynamic SQL.
 #'    partition date will be always passed first in format `yyyymmdd`
@@ -784,31 +784,6 @@ bqTransformPartition <- function(table, file, ...) {
     partition <- gsub("-", "", d)
     destination.partition <- paste0(table, "$", partition)
     print(destination.partition)
-    sql.exec <- readSql(file, d, ...)
-
-    bqCreateTable(
-      sql.exec,
-      table = destination.partition,
-      write_disposition = "WRITE_TRUNCATE")
-  })
-}
-
-#' @description `bqBackfillPartition` creates new partitions for the missing dates
-#' @rdname bqPartition
-#' @export
-#' @param table destination partition table where results of the query will be saved
-#' @param file path to the sql file that will be used for the transformation
-#' @param ...  parameters that will be passed via `sprintf` to build dynamic SQL.
-#'    partition date will be always passed first in format `yyyymmdd`
-#'    followed by arguments in `...`
-bqBackfillPartition <- function(table, file, ...) {
-  existing.dates <- bqExistingPartitionDates(table)
-
-  lapply(existing.dates, function(d) {
-    partition <- gsub("-", "", d)
-    destination.partition <- paste0(table, "$", partition)
-    print(destination.partition)
-    bqDeleteTable(destination.partition)
     sql.exec <- readSql(file, d, ...)
 
     bqCreateTable(
