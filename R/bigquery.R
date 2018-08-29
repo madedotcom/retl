@@ -572,7 +572,8 @@ bqDatasetLabel <- function(datasets, dataset) {
 bqCreatePartitionTable <- function(table, datasets,
                                    sql = NULL, file = NULL,
                                    existing.dates = NULL,
-                                   missing.dates = NULL) {
+                                   missing.dates = NULL,
+                                   priority = "INTERACTIVE") {
 
   assert_that(xor(is.null(sql), is.null(file)), msg = "Either sql or file must be provided")
 
@@ -603,7 +604,8 @@ bqCreatePartitionTable <- function(table, datasets,
         sql.exec <- paste(sql.exec, collapse = "\n")
         bqCreateTable(
           sql = sql.exec,
-          table =  destination.partition
+          table =  destination.partition,
+          priority = priority
         )
       })
     })
