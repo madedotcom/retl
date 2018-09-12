@@ -569,10 +569,12 @@ bqDatasetLabel <- function(datasets, dataset) {
 #' @param file if sql is not provided it will be read from the file
 #' @param existing.dates dates that should be skipped
 #' @param missing.dates dates calculation for which will be enforced
+#' @param priority priority of job execution. INTERACTIVE or BATCH.
 bqCreatePartitionTable <- function(table, datasets,
                                    sql = NULL, file = NULL,
                                    existing.dates = NULL,
-                                   missing.dates = NULL) {
+                                   missing.dates = NULL,
+                                   priority = "INTERACTIVE") {
 
   assert_that(xor(is.null(sql), is.null(file)), msg = "Either sql or file must be provided")
 
@@ -603,7 +605,8 @@ bqCreatePartitionTable <- function(table, datasets,
         sql.exec <- paste(sql.exec, collapse = "\n")
         bqCreateTable(
           sql = sql.exec,
-          table =  destination.partition
+          table =  destination.partition,
+          priority = priority
         )
       })
     })
