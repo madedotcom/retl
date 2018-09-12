@@ -417,7 +417,9 @@ bqCreateTable <- function(sql,
     use_legacy_sql = bqUseLegacySql(),
     priority = priority
   )
-  bq_job_wait(job)
+  if (priority == "INTERACTIVE") {
+    bq_job_wait(job)
+  }
 }
 
 
