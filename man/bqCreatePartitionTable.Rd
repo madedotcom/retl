@@ -5,7 +5,7 @@
 \title{Creates partition table for a given sql}
 \usage{
 bqCreatePartitionTable(table, datasets, sql = NULL, file = NULL,
-  existing.dates = NULL, missing.dates = NULL)
+  existing.dates = NULL, missing.dates = NULL, priority = "INTERACTIVE")
 }
 \arguments{
 \item{table}{name of the destination table}
@@ -19,6 +19,8 @@ bqCreatePartitionTable(table, datasets, sql = NULL, file = NULL,
 \item{existing.dates}{dates that should be skipped}
 
 \item{missing.dates}{dates calculation for which will be enforced}
+
+\item{priority}{priority of job execution. INTERACTIVE or BATCH.}
 }
 \description{
 Creates partition table for a given sql
