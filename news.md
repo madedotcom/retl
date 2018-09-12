@@ -1,5 +1,7 @@
 # retl 0.1.2.9000
 
+* `bqCreatePartitionTable()` - added priority parameter that allows to execute biquery jobs in BATCH mode.
+
 * `dcPredictionBody()` - function is vectorised, which means that it can turn multiple transactions
   into a single body request. This is a breaking change as `custom.metrics` param is now 
   a list of vectors.
