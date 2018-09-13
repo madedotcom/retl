@@ -1,6 +1,6 @@
 # retl 0.1.2.9000
 
-* `createRangeTable()` this function was fully replaced by `bqCreatePartitionTable()`
+* `createRangeTable()` this function was fully replaced by `bqCreatePartitionTable()` and `bqTransformPartition()` functions.
 
 * `bqCreatePartitionTable()` - added priority parameter that allows to execute biquery jobs in BATCH mode.
 
