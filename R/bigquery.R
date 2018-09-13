@@ -619,7 +619,7 @@ bqCreatePartitionTable <- function(table, datasets,
   if (priority == "BATCH") {
     # Wait for all the jobs that were submitted
     rapply(jobs, function(job) {
-      wait_for(job)
+      jobs <- wait_for(job)
     })
   }
 
