@@ -618,7 +618,7 @@ bqCreatePartitionTable <- function(table, datasets,
   jobs <- unlist(jobs, recursive = F)
   if (priority == "BATCH") {
     # Wait for all the jobs that were submitted
-    rapply(jobs, function(job) {
+    lapply(jobs, function(job) {
       jobs <- bq_job_wait(job)
     })
   }
