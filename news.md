@@ -1,5 +1,7 @@
 # retl 0.1.2.9000
 
+* `bqRefreshPartitionData()`, `bqTransformPartition()` - priority parameter added to the functions.
+
 * `createRangeTable()` this function was fully replaced by `bqCreatePartitionTable()` and `bqTransformPartition()` functions.
 
 * `bqCreatePartitionTable()` - added priority parameter that allows to execute biquery jobs in BATCH mode.
