@@ -20,11 +20,11 @@ bqCreatePartitionTable(table, datasets, sql = NULL, file = NULL,
 
 \item{missing.dates}{dates calculation for which will be enforced}
 
-\item{priority}{priority of job execution. INTERACTIVE or BATCH.}
+\item{priority}{sets priority of job executiont to INTERACTIVE or BATCH}
 }
 \description{
-Parameters that will be passed to SQL
+Parameters that will be passed to SQL for the placeholders:
 
-%1$s - is the name of the BigQuery dataset
-%2$s - is the date (YYYYMMDD) of the partition
+%1$s - the name of the BigQuery dataset
+%2$s - the date (YYYYMMDD) of the partition
 }

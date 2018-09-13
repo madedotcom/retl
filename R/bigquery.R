@@ -360,7 +360,7 @@ readSql <- function(file, ...) {
 #' @param table name of a table to be created
 #' @param dataset name of the destination dataset
 #' @param write_disposition defines whether records will be appended
-#' @param priority defines whether query will have interactive or batch priority
+#' @param priority sets priority of job executiont to INTERACTIVE or BATCH
 #' @return results of the exectuion as returned by bigrquery::query_exec
 bqCreateTable <- function(sql,
                           table,
@@ -538,10 +538,10 @@ bqDatasetLabel <- function(datasets, dataset) {
 #' Creates partition table for a given sql
 #'
 #' @description
-#' Parameters that will be passed to SQL
+#' Parameters that will be passed to SQL for the placeholders:
 #'
-#' %1$s - is the name of the BigQuery dataset
-#' %2$s - is the date (YYYYMMDD) of the partition
+#' %1$s - the name of the BigQuery dataset
+#' %2$s - the date (YYYYMMDD) of the partition
 #'
 #' @export
 #' @param table name of the destination table
@@ -550,7 +550,7 @@ bqDatasetLabel <- function(datasets, dataset) {
 #' @param file if sql is not provided it will be read from the file
 #' @param existing.dates dates that should be skipped
 #' @param missing.dates dates calculation for which will be enforced
-#' @param priority priority of job execution. INTERACTIVE or BATCH.
+#' @param priority sets priority of job executiont to INTERACTIVE or BATCH
 bqCreatePartitionTable <- function(table, datasets,
                                    sql = NULL, file = NULL,
                                    existing.dates = NULL,
@@ -582,7 +582,8 @@ bqCreatePartitionTable <- function(table, datasets,
       bqDeleteTable(destination.partition)
 
       lapply(datasets, function(p) {
-        sql.exec <- sprintf(sql, p, d, bqDatasetLabel(datasets, p)) # Replace placeholder in sql template.
+        # Replace placeholders in sql template.
+        sql.exec <- sprintf(sql, p, d, bqDatasetLabel(datasets, p))
         sql.exec <- paste(sql.exec, collapse = "\n")
         bqCreateTable(
           sql = sql.exec,
@@ -750,9 +751,9 @@ bqInsertPartition <- function(table, date, data, append = FALSE) {
 #' @param table destination partition table where resutls of the query will be saved
 #' @param file path to the sql file that will be used for the transformation
 #' @param ...  parameters that will be passed via `sprintf` to build dynamic SQL.
-#' @param priority defines if jobs will be executed in INTERACTIVE or BATCH mode.
 #'    partition date will be always passed first in format `yyyymmdd`
 #'    followed by arguments in `...`
+#' @param priority sets priority of job executiont to INTERACTIVE or BATCH
 bqTransformPartition <- function(table, file, ..., priority = "INTERACTIVE") {
   existing.dates <- bqExistingPartitionDates(table)
   start.date <- bqStartDate(unset = "2017-01-01")
@@ -785,7 +786,6 @@ bqTransformPartition <- function(table, file, ..., priority = "INTERACTIVE") {
 #' @description `bqRefreshPartitionData` updates existing partitions in the target table
 #'
 #' @rdname bqPartition
-#' @param priority sets priority of the execution, BATCH or INTERACTIVE
 #' @export
 bqRefreshPartitionData <- function(table, file, ..., priority = "BATCH") {
   existing.dates <- bqExistingPartitionDates(table)

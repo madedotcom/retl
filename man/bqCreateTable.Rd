@@ -16,7 +16,7 @@ bqCreateTable(sql, table, dataset = bqDefaultDataset(),
 
 \item{write_disposition}{defines whether records will be appended}
 
-\item{priority}{defines whether query will have interactive or batch priority}
+\item{priority}{sets priority of job executiont to INTERACTIVE or BATCH}
 }
 \value{
 results of the exectuion as returned by bigrquery::query_exec
