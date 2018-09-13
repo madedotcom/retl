@@ -420,6 +420,9 @@ bqCreateTable <- function(sql,
   if (priority == "INTERACTIVE") {
     bq_job_wait(job)
   }
+  else {
+    job
+  }
 }
 
 
@@ -595,7 +598,7 @@ bqCreatePartitionTable <- function(table, datasets,
     missing.dates <- getMissingDates(bqStartDate(), bqEndDate(), existing.dates)
   }
 
-  res <-
+  jobs <-
     lapply(missing.dates, function(d) { # Create partition for every missing date.
       destination.partition <- bqPartitionName(table, d)
       print(paste0("Partition name: ", destination.partition))
@@ -613,7 +616,14 @@ bqCreatePartitionTable <- function(table, datasets,
       })
     })
 
-  invisible(res)
+  if (priority == "BATCH") {
+    # Wait for all the jobs that were submitted
+    rapply(jobs, function(job) {
+      wait_for(job)
+    })
+  }
+
+  invisible(jobs)
 }
 
 #' Inserts data into BigQuery table
