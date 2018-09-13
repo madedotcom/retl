@@ -3,9 +3,9 @@
 \name{bqTransformPartition}
 \alias{bqTransformPartition}
 \alias{bqRefreshPartitionData}
-\title{Functions to transforms partitioned data into a partitioned table}
+\title{Functions to transforms partitioned data form one table to another}
 \usage{
-bqTransformPartition(table, file, ...)
+bqTransformPartition(table, file, ..., priority = "INTERACTIVE")
 
 bqRefreshPartitionData(table, file, ..., priority = "BATCH")
 }
@@ -14,7 +14,9 @@ bqRefreshPartitionData(table, file, ..., priority = "BATCH")
 
 \item{file}{path to the sql file that will be used for the transformation}
 
-\item{...}{parameters that will be passed via `sprintf` to build dynamic SQL.
+\item{...}{parameters that will be passed via `sprintf` to build dynamic SQL.}
+
+\item{priority}{defines if jobs will be executed in INTERACTIVE or BATCH mode.
 partition date will be always passed first in format `yyyymmdd`
 followed by arguments in `...`}
 

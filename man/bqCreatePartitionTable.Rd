@@ -23,5 +23,8 @@ bqCreatePartitionTable(table, datasets, sql = NULL, file = NULL,
 \item{priority}{priority of job execution. INTERACTIVE or BATCH.}
 }
 \description{
-Creates partition table for a given sql
+Parameters that will be passed to SQL
+
+%1$s - is the name of the BigQuery dataset
+%2$s - is the date (YYYYMMDD) of the partition
 }
