@@ -8,7 +8,7 @@ Maintainer: Bulat Yapparov <byapparov@gmail.com>
 Depends:
     RPostgreSQL
 Description: Wrappers for connections with PostgreSQL, S3, BigQuery, InfluxDB.
-License: GPL-2
+License: file LICENSE
 LazyData: TRUE
 Suggests:
     testthat,
