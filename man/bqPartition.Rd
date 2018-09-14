@@ -3,9 +3,9 @@
 \name{bqTransformPartition}
 \alias{bqTransformPartition}
 \alias{bqRefreshPartitionData}
-\title{Functions to transforms partitioned data into a partitioned table}
+\title{Functions to transforms partitioned data form one table to another}
 \usage{
-bqTransformPartition(table, file, ...)
+bqTransformPartition(table, file, ..., priority = "INTERACTIVE")
 
 bqRefreshPartitionData(table, file, ..., priority = "BATCH")
 }
@@ -18,7 +18,7 @@ bqRefreshPartitionData(table, file, ..., priority = "BATCH")
 partition date will be always passed first in format `yyyymmdd`
 followed by arguments in `...`}
 
-\item{priority}{sets priority of the execution, BATCH or INTERACTIVE}
+\item{priority}{sets priority of job executiont to INTERACTIVE or BATCH}
 }
 \description{
 `bqTransformPartition` creates new partitions for the missing dates

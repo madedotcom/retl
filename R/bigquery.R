@@ -181,36 +181,6 @@ bqDatasetTables <- function(dataset, project = bqDefaultProject()) {
   )
 }
 
-#' Creates range teable in BigQuery.
-#'
-#' @param table name of the new table
-#' @param sql source for the table as string
-#' @param file source for the tabel as file
-#' @note sql or file must be provided
-createRangeTable <- function(table, sql = NULL, file = NULL) {
-
-  if (missing(sql)) {
-    # Build SQL from code in the file.
-    sql <- paste(readLines(file), collapse = "\n")
-  }
-
-  start.date <- as.Date("2016-01-08")
-  end.date <- Sys.Date() - 1
-
-  existing.dates <- bqExistingPartitionDates(table)
-  missing.dates <- getMissingDates(start.date, end.date, existing.dates)
-
-  lapply(missing.dates, function(d) {
-    print(d)
-    sql.exec <- sprintf(sql, d)
-    bqCreateTable(
-      sql = sql.exec,
-      table = paste0(table, d),
-      write_disposition = "WRITE_TRUNCATE"
-    )
-  })
-}
-
 #' Gets existing dates from wildcard tables in BigQuery
 #'
 #' @export
@@ -390,7 +360,7 @@ readSql <- function(file, ...) {
 #' @param table name of a table to be created
 #' @param dataset name of the destination dataset
 #' @param write_disposition defines whether records will be appended
-#' @param priority defines whether query will have interactive or batch priority
+#' @param priority sets priority of job executiont to INTERACTIVE or BATCH
 #' @return results of the exectuion as returned by bigrquery::query_exec
 bqCreateTable <- function(sql,
                           table,
@@ -419,6 +389,9 @@ bqCreateTable <- function(sql,
   )
   if (priority == "INTERACTIVE") {
     bq_job_wait(job)
+  }
+  else {
+    job
   }
 }
 
@@ -564,6 +537,12 @@ bqDatasetLabel <- function(datasets, dataset) {
 
 #' Creates partition table for a given sql
 #'
+#' @description
+#' Parameters that will be passed to SQL for the placeholders:
+#'
+#' %1$s - the name of the BigQuery dataset
+#' %2$s - the date (YYYYMMDD) of the partition
+#'
 #' @export
 #' @param table name of the destination table
 #' @param datasets list of Google Analytics properties to populate table for
@@ -571,7 +550,7 @@ bqDatasetLabel <- function(datasets, dataset) {
 #' @param file if sql is not provided it will be read from the file
 #' @param existing.dates dates that should be skipped
 #' @param missing.dates dates calculation for which will be enforced
-#' @param priority priority of job execution. INTERACTIVE or BATCH.
+#' @param priority sets priority of job executiont to INTERACTIVE or BATCH
 bqCreatePartitionTable <- function(table, datasets,
                                    sql = NULL, file = NULL,
                                    existing.dates = NULL,
@@ -595,7 +574,7 @@ bqCreatePartitionTable <- function(table, datasets,
     missing.dates <- getMissingDates(bqStartDate(), bqEndDate(), existing.dates)
   }
 
-  res <-
+  jobs <-
     lapply(missing.dates, function(d) { # Create partition for every missing date.
       destination.partition <- bqPartitionName(table, d)
       print(paste0("Partition name: ", destination.partition))
@@ -603,7 +582,8 @@ bqCreatePartitionTable <- function(table, datasets,
       bqDeleteTable(destination.partition)
 
       lapply(datasets, function(p) {
-        sql.exec <- sprintf(sql, p, d, bqDatasetLabel(datasets, p)) # Replace placeholder in sql template.
+        # Replace placeholders in sql template.
+        sql.exec <- sprintf(sql, p, d, bqDatasetLabel(datasets, p))
         sql.exec <- paste(sql.exec, collapse = "\n")
         bqCreateTable(
           sql = sql.exec,
@@ -612,8 +592,8 @@ bqCreatePartitionTable <- function(table, datasets,
         )
       })
     })
-
-  invisible(res)
+  jobs <- unlist(jobs, recursive = F)
+  bqWait(jobs, priority)
 }
 
 #' Inserts data into BigQuery table
@@ -763,7 +743,7 @@ bqInsertPartition <- function(table, date, data, append = FALSE) {
                append = append)
 }
 
-#' Functions to transforms partitioned data into a partitioned table
+#' Functions to transforms partitioned data form one table to another
 #'
 #' @description `bqTransformPartition` creates new partitions for the missing dates
 #' @rdname bqPartition
@@ -773,7 +753,8 @@ bqInsertPartition <- function(table, date, data, append = FALSE) {
 #' @param ...  parameters that will be passed via `sprintf` to build dynamic SQL.
 #'    partition date will be always passed first in format `yyyymmdd`
 #'    followed by arguments in `...`
-bqTransformPartition <- function(table, file, ...) {
+#' @param priority sets priority of job executiont to INTERACTIVE or BATCH
+bqTransformPartition <- function(table, file, ..., priority = "INTERACTIVE") {
   existing.dates <- bqExistingPartitionDates(table)
   start.date <- bqStartDate(unset = "2017-01-01")
   end.date <- bqEndDate()
@@ -783,9 +764,9 @@ bqTransformPartition <- function(table, file, ...) {
     end.date,
     existing.dates,
     "%Y-%m-%d"
-    )
+  )
 
-  lapply(missing.dates, function(d) {
+  jobs <- lapply(missing.dates, function(d) {
     partition <- gsub("-", "", d)
     destination.partition <- paste0(table, "$", partition)
     print(destination.partition)
@@ -794,18 +775,22 @@ bqTransformPartition <- function(table, file, ...) {
     bqCreateTable(
       sql.exec,
       table = destination.partition,
-      write_disposition = "WRITE_TRUNCATE")
+      write_disposition = "WRITE_TRUNCATE",
+      priority = priority
+    )
   })
+
+  bqWait(jobs, priority)
 }
 
 #' @description `bqRefreshPartitionData` updates existing partitions in the target table
 #'
 #' @rdname bqPartition
-#' @param priority sets priority of the execution, BATCH or INTERACTIVE
 #' @export
 bqRefreshPartitionData <- function(table, file, ..., priority = "BATCH") {
   existing.dates <- bqExistingPartitionDates(table)
-  lapply(existing.dates, function(d) {
+
+  jobs <- lapply(existing.dates, function(d) {
     partition <- gsub("-", "", d)
     destination.partition <- paste0(table, "$", partition)
     sql <- readSql(file, d, ...)
@@ -817,6 +802,19 @@ bqRefreshPartitionData <- function(table, file, ..., priority = "BATCH") {
       priority = priority
     )
   })
+  bqWait(jobs, priority)
+}
+
+#' Waits for jobs provided in the list if priority is BATCH
+#' @noRd
+bqWait <- function(jobs, priority) {
+  if (priority == "BATCH") {
+    # Wait for all the jobs that were submitted
+    lapply(jobs, function(job) {
+      jobs <- bq_job_wait(job)
+    })
+  }
+  invisible(jobs)
 }
 
 bqStartDate <- function(unset = "2016-01-01") {
