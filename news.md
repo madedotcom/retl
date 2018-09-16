@@ -1,6 +1,8 @@
 # retl 0.1.2.9000
 
-* `gdLoadReport()` - function is moved to rGoodData package - https://github.com/byapparov/rGoodData
+* All functions related to metadata logging and dependant on InfluxDb were moved to [rmeta](https://github.com/byapparov/rmeta) package.
+
+* `gdLoadReport()` - function is moved to [rGoodData](https://github.com/byapparov/rGoodData) package.
 
 * `bqRefreshPartitionData()`, `bqTransformPartition()` - priority parameter added to the functions (#86).
 
