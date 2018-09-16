@@ -1,5 +1,7 @@
 # retl 0.1.2.9000
 
+* `gdLoadReport()` - function is moved to rGoodData package - https://github.com/byapparov/rGoodData
+
 * `bqRefreshPartitionData()`, `bqTransformPartition()` - priority parameter added to the functions (#86).
 
 * `createRangeTable()` this function was fully replaced by `bqCreatePartitionTable()` and `bqTransformPartition()` functions (#86).

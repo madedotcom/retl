@@ -22,7 +22,6 @@ Imports:
     stringr,
     httr,
     DBI,
-    rGoodData,
     googleAuthR,
     googlesheets,
     influxdbr,
