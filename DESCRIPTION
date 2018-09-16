@@ -24,7 +24,6 @@ Imports:
     DBI,
     googleAuthR,
     googlesheets,
-    influxdbr,
     xts,
     jsonlite,
     assertthat
