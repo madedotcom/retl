@@ -516,18 +516,6 @@ bqExecuteSql <- function(sql, ...) {
   data.table(bigrquery::bq_table_download(tb))
 }
 
-#' Gets the shop code from the GA properties vector.
-#
-#' @param ga.properties named vector of Google Analytics properties.
-#' Names are ISO2 codes of the country.
-#' @param  property number of a property in Google Analytics.
-#' @return gets site code for a given propertiy code
-gaGetShop <- function(ga.properties, property) {
-  .Deprecated(msg = "GA related logic should be moved to another package")
-  shops <- names(ga.properties)
-  names(shops) <- ga.properties
-  return(shops[as.character(property)])
-}
 
 bqDatasetLabel <- function(datasets, dataset) {
   labels <- names(datasets)
