@@ -6,6 +6,13 @@
 \usage{
 gsTablePath(x, format, compression)
 }
+\arguments{
+\item{x}{bq_table object}
+
+\item{format}{format of the file}
+
+\item{compression}{compression applied to the filed}
+}
 \description{
 makes relative path to a file to mirror table path
 }

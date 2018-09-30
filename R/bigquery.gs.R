@@ -71,6 +71,8 @@ bqImportData <- function(table,
 }
 
 #' makes full path to the gs file from relative part
+#'
+#' @param path relative path to the gs object
 gsPathUri <- function(path) {
   paste0(
     "gs://",
@@ -81,6 +83,8 @@ gsPathUri <- function(path) {
 }
 
 #' makes relative path to a file to mirror table path
+#'
+#' @inherit gsUri
 gsTablePath <- function(x, format, compression) {
   extension <- extensionFromFormat(format, compression)
   paste0(

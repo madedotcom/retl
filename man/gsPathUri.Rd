@@ -6,6 +6,9 @@
 \usage{
 gsPathUri(path)
 }
+\arguments{
+\item{path}{relative path to the gs object}
+}
 \description{
 makes full path to the gs file from relative part
 }
