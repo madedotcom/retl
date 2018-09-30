@@ -2,6 +2,8 @@
 
 * `bqExtractTable()` - allows to save table to GS file, you only need to specify table name and format, everything else will be mapped automatically.
 
+* `gaGetShop()` - is removed from the package. map of datasets should be created externaly.
+
 * `bqInsertData()` - lost `job.name` and `increment.field` parameters as all etl logging fucntions moved to `rmeta`.
 
 * All functions related to metadata logging and dependant on InfluxDb were moved to [rmeta](https://github.com/byapparov/rmeta) package.
