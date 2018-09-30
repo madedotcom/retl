@@ -711,8 +711,8 @@ bqExtractTable <- function(table,
 
   gs_uri = paste0(
     "gs://",
-    Sys.getenv("STORAGE_BUCKET"), "/",
-    Sys.getenv("STORAGE_ROOT"), "/",
+    s3DefaultBucket(), "/",
+    s3DefaultRoot(), "/",
     x$dataset , "/",
     x$table, ".", extension
   )
