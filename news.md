@@ -1,8 +1,10 @@
 # retl 0.1.3
 
-* `getExistingPartitionDates()` - replaced by `bqExistingPartitionDates()`.
+* `bqImportData()` - allows to import GS file into BigQuery table. By default imports mirror file from `table-name.csv.gz`. Format and compression params control file extension. 
 
 * `bqExtractTable()` - allows to save table to GS file, you only need to specify table name and format, everything else will be mapped automatically.
+
+* `getExistingPartitionDates()` - replaced by `bqExistingPartitionDates()`.
 
 * `gaGetShop()` - is removed from the package. map of datasets should be created externaly.
 

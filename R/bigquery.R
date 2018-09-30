@@ -681,7 +681,7 @@ bqCopyTable <- function(from, to, override = TRUE) {
 #'
 #' @param table name of the table to extract
 #' @param dataset name of the dataset
-#' @param destination_format The exported file format. Possible values
+#' @param format The exported file format. Possible values
 #'   include "CSV", "NEWLINE_DELIMITED_JSON" and "AVRO". Tables with nested or
 #'   repeated fields cannot be exported as CSV.
 #' @param compression The compression type to use for exported files. Possible
@@ -691,10 +691,8 @@ bqCopyTable <- function(from, to, override = TRUE) {
 #' @return object of `bq_job`
 bqExtractTable <- function(table,
                            dataset = bqDefaultDataset(),
-                           destination_format = "CSV",
+                           format = "CSV",
                            compression = "GZIP") {
-
-  extension <- extensionFromFormat(destination_format, compression)
 
   x <- bq_table(
     project = bqDefaultProject(),
@@ -702,18 +700,63 @@ bqExtractTable <- function(table,
     table = table
   )
 
-  gs_uri = paste0(
-    "gs://",
-    s3DefaultBucket(), "/",
-    s3DefaultRoot(), "/",
-    x$dataset , "/",
-    x$table, ".", extension
-  )
-
   bigrquery::bq_table_save(
     x,
-    destination_uris = gs_uri,
+    destination_uris = gsUri(x, format, compression),
+    destination_format = format,
     compression = compression
+  )
+}
+
+
+#' Imports data from gs to BigQuery table
+#'
+#' @export
+#'
+#' @inherit bqExtractTable
+#' @param append defines whether data can be appended to the table with data
+#' @param nskip number of rows to skip on importing the file
+bqImportData <- function(table,
+                        dataset = bqDefaultDataset(),
+                        append = TRUE,
+                        format = "CSV",
+                        compression = "GZIP",
+                        nskip = 1) {
+
+  write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
+  x <- bq_table(
+    project = bqDefaultProject(),
+    dataset = dataset,
+    table = table
+  )
+
+  bigrquery::bq_table_load(
+    x,
+    source_uris = gsUri(x, format, compression),
+    source_format = format,
+    write_disposition = write.disposition,
+    nskip = 1,
+    fields = bqTableSchema(table)
+  )
+
+}
+
+
+#' Gets gs uri to mirror table by name
+#'
+#' @param x bq_table object
+#' @param format format of the file
+#' @param compression compression applied to the filed
+gsUri <- function(x, format, compression) {
+
+  extension <- extensionFromFormat(format, compression)
+
+  paste0(
+    "gs://",
+    s3DefaultBucket(), "/",
+    gsub("/", "", s3DefaultRoot()), "/",
+    x$dataset , "/",
+    x$table, ".", extension
   )
 }
 
