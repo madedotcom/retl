@@ -17,7 +17,7 @@ test_that("table is created from schema file", {
     list(name = "first_name",
          type = "STRING")
   )
-  expected.partition = TRUE
+  expected.partition <- TRUE
 })
 
 test_that("correct schema is generated for a given dataset", {

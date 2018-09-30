@@ -16,5 +16,9 @@ test_that("Correct sql is executed", {
 test_that("Correct sql statement is read", {
   res <- readSql("sample_query.sql", 500)
   expected <- "SELECT 500 AS value"
-  expect_equal(res, expected, label = "Correct query is read with parameter applied")
+  expect_equal(
+    res,
+    expected,
+    label = "Correct query is read with parameter applied"
+  )
 })

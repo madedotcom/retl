@@ -85,7 +85,8 @@ test_that("partitioned table can be created and data is added", {
 
 })
 
-test_that("shard tables from several datasets can be tranformed in day partitioned tables", {
+test_that("shard tables from several datasets can
+          be tranformed in day partitioned tables", {
   skip_on_travis()
   Sys.setenv(BIGQUERY_START_DATE = "2015-01-01")
   Sys.setenv(BIGQUERY_END_DATE = "2015-01-02")

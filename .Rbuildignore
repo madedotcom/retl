@@ -11,3 +11,4 @@ access_token.json
 ^packrat/lib*/*
 news.md
 CODE_OF_CONDUCT.md
+tests/testthat/.httr-oaut

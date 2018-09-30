@@ -1,8 +1,6 @@
 #' @import DBI
 #' @import RPostgreSQL
 
-library(RPostgreSQL)
-
 #' Creates db connection based on the environment variables
 #' @export
 dbGetConnection <- function() {
@@ -22,12 +20,9 @@ dbGetConnection <- function() {
 #'
 #' @export
 #' @param file path to the sql file
-#' @param ... any parameters that will be used to fill in placeholders with sprintf
+#' @param ... any parameters that will be used
+#'     to fill in placeholders with sprintf
 dbExecuteQueryFile <- function(file, ...) {
-  # Executes SQL query from the given file and returns the result as a data.frame.
-  #
-  # Args:
-  #   sql.file: file name of the query.
   query <- paste0(readLines(file), collapse = "\n")
   return(dbExecuteQuery(query, ...))
 }

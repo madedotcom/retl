@@ -8,12 +8,6 @@
 # BIGQUERY_DATASET - name of the default dataset in BigQuery.
 # BIGQUERY_ACCESS_TOKEN_PATH - path to the json token file.
 
-library(bigrquery)
-library(stringr)
-library(jsonlite)
-library(assertthat)
-
-
 #' Wrapper for the set_service_token that uses BIGQUERY_ACCESS_TOKEN_PATH env var
 #'  as default value for the secret token location.
 bqAuth <- function() {
@@ -62,8 +56,9 @@ bqPartitionDatesSql <- function(table) {
     paste0("SELECT partition_id from [", table, "$__PARTITIONS_SUMMARY__];")
   } else {
     paste0("SELECT
-           FORMAT_DATE('%Y%m%d', DATE(_PARTITIONTIME)) as partition_id from `", table, "`
-           GROUP BY 1;")
+              FORMAT_DATE('%Y%m%d', DATE(_PARTITIONTIME)) as partition_id
+            FROM `", table, "`
+            GROUP BY 1;")
   }
 }
 
@@ -122,7 +117,7 @@ bqProjectTables <- function(project = bqDefaultProject(),
                             datasets = bqProjectDatasets()) {
 
   if (bqUseLegacySql()) {
-    sql = "
+    sql <- "
     SELECT
       project_id,
       dataset_id,
@@ -136,7 +131,7 @@ bqProjectTables <- function(project = bqDefaultProject(),
       [%1$s.__TABLES__]"
   }
   else {
-    sql = "
+    sql <- "
     SELECT
       project_id,
       dataset_id,
@@ -168,7 +163,8 @@ bqProjectTables <- function(project = bqDefaultProject(),
 #' Gets list of tables for a given dataset
 #' @export
 #' @rdname bqDataset
-bqDatasetTables <- function(dataset = bqDefaultDataset(), project = bqDefaultProject()) {
+bqDatasetTables <- function(dataset = bqDefaultDataset(),
+                            project = bqDefaultProject()) {
   bq_dataset_tables(
     bq_dataset(
       project = project,
@@ -203,7 +199,10 @@ getExistingDates <- function(dataset, table.prefix) {
 #' @param existing.dates vector of existing dates that should be excluded
 #' @param format format for the date, see ?as.character
 #' @return vector of dates from the period that don't exist in the give vector
-getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m%d") {
+getMissingDates <- function(start.date,
+                            end.date,
+                            existing.dates,
+                            format = "%Y%m%d") {
   # Gets list of dates for which date range table is missing.
   days <- rep(1, end.date - start.date + 1)
   days.sequence <- seq_along(days)
@@ -226,7 +225,8 @@ getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m
 #' @param dataset name of the dataset
 #' @param project name of the project
 #' @return `bqDatasetExists()` - returns TRUE if dataset exists
-bqDatasetExists <- function(dataset = bqDefaultDataset(), project = bqDefaultProject()) {
+bqDatasetExists <- function(dataset = bqDefaultDataset(),
+                            project = bqDefaultProject()) {
   bqAuth()
   ds <- bq_dataset(project, dataset)
   bq_dataset_exists(ds)
@@ -234,7 +234,8 @@ bqDatasetExists <- function(dataset = bqDefaultDataset(), project = bqDefaultPro
 
 #' @rdname bqDataset
 #' @export
-bqCreateDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultProject()) {
+bqCreateDataset <- function(dataset = bqDefaultDataset(),
+                            project = bqDefaultProject()) {
   bqAuth()
   bq_dataset_create(
     bq_dataset(
@@ -319,7 +320,10 @@ bqTableExists <- function(table, dataset = bqDefaultDataset()) {
 #' @export
 #' @return `bqDeleteTable` TRUE if table was deleted
 bqDeleteTable <- function(table, dataset = bqDefaultDataset()) {
-  assert_that(nchar(dataset) > 0, msg = "Set dataset parameter or BIGQUERY_DATASET env var.")
+  assert_that(
+    nchar(dataset) > 0,
+    msg = "Set dataset parameter or BIGQUERY_DATASET env var."
+  )
 
   bqAuth()
   bt <- bq_table(
@@ -535,13 +539,18 @@ bqDatasetLabel <- function(datasets, dataset) {
 #' @param existing.dates dates that should be skipped
 #' @param missing.dates dates calculation for which will be enforced
 #' @param priority sets priority of job execution to INTERACTIVE or BATCH
-bqCreatePartitionTable <- function(table, datasets,
-                                   sql = NULL, file = NULL,
+bqCreatePartitionTable <- function(table,
+                                   datasets,
+                                   sql = NULL,
+                                   file = NULL,
                                    existing.dates = NULL,
                                    missing.dates = NULL,
                                    priority = "INTERACTIVE") {
 
-  assert_that(xor(is.null(sql), is.null(file)), msg = "Either sql or file must be provided")
+  assert_that(
+    xor(is.null(sql), is.null(file)),
+    msg = "Either sql or file must be provided"
+  )
 
   bqAuth()
 
@@ -555,11 +564,16 @@ bqCreatePartitionTable <- function(table, datasets,
   }
 
   if (missing(missing.dates)) {
-    missing.dates <- getMissingDates(bqStartDate(), bqEndDate(), existing.dates)
+    missing.dates <- getMissingDates(
+      bqStartDate(),
+      bqEndDate(),
+      existing.dates
+    )
   }
 
   jobs <-
-    lapply(missing.dates, function(d) { # Create partition for every missing date.
+    lapply(missing.dates, function(d) {
+      # Create partition for every missing date.
       destination.partition <- bqPartitionName(table, d)
       print(paste0("Partition name: ", destination.partition))
 
@@ -594,7 +608,10 @@ bqInsertData <- function(table,
                          dataset = bqDefaultDataset(),
                          append = TRUE,
                          fields = as_bq_fields(data)) {
-  assert_that(nchar(dataset) > 0, msg = "Set dataset parameter or BIGQUERY_DATASET env var.")
+  assert_that(
+    nchar(dataset) > 0,
+    msg = "Set dataset parameter or BIGQUERY_DATASET env var."
+  )
 
   write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
   rows <- nrow(data)
@@ -895,7 +912,7 @@ bqJsonField <- function(x) {
     mode = jsonlite::unbox(x$mode)
    )
   if (!is.null(x$fields) & length(x$fields) > 0) {
-    res$fields = bqJsonFields(x$fields)
+    res$fields <- bqJsonFields(x$fields)
   }
   res
 }

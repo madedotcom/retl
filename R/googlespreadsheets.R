@@ -1,10 +1,6 @@
 #' @import googleAuthR
 #' @import googlesheets
 
-library(googleAuthR)
-library(googlesheets)
-library(data.table)
-
 gs_env <- new.env(parent = emptyenv())
 
 #' Authentication for google sheets. Requires access_token.json path as env. var.

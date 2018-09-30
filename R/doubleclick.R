@@ -1,8 +1,5 @@
 #' @import googleAuthR
 
-library(jsonlite)
-library(googleAuthR)
-
 # Authentication requires following environment variables:
 # GOOGLE_CLIENT_ID ?
 # GOOGLE_CLIENT_SECRET ?
@@ -22,7 +19,10 @@ options(
   googleAuthR.httr_oauth_cache = TRUE
 )
 
-dcListConversions <- function(clickId, conversionId, datetime, custom.metrics) {
+dcListConversions <- function(clickId,
+                              conversionId,
+                              datetime,
+                              custom.metrics) {
   assert_that(length(clickId) == 1)
 
   list(
@@ -71,7 +71,7 @@ metricsToList <- function(metrics) {
        name = name,
        value = value
      )
-    }, metrics, name = names(metrics), SIMPLIFY = F)
+    }, metrics, name = names(metrics), SIMPLIFY = FALSE)
   res <- unname(res)
 }
 
