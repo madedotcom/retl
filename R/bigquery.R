@@ -187,7 +187,7 @@ getExistingDates <- function(dataset, table.prefix) {
     10000
   )
   matches <- tables[grepl(table.prefix, tables)]
-  res <- str_extract(matches,"\\d{8}")
+  res <- str_extract(matches, "\\d{8}")
   return(res)
 }
 

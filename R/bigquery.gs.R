@@ -88,7 +88,7 @@ gsPathUri <- function(path) {
 gsTablePath <- function(x, format, compression) {
   extension <- extensionFromFormat(format, compression)
   paste0(
-    x$dataset , "/",
+    x$dataset, "/",
     x$table, ".", extension
   )
 }

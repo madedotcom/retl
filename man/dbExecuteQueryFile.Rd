@@ -9,7 +9,8 @@ dbExecuteQueryFile(file, ...)
 \arguments{
 \item{file}{path to the sql file}
 
-\item{...}{any parameters that will be used to fill in placeholders with sprintf}
+\item{...}{any parameters that will be used
+to fill in placeholders with sprintf}
 }
 \description{
 Executes statement in the SQL file
