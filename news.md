@@ -1,5 +1,7 @@
 # retl 0.1.3
 
+* `getExistingPartitionDates()` - replaced by `bqExistingPartitionDates()`.
+
 * `bqExtractTable()` - allows to save table to GS file, you only need to specify table name and format, everything else will be mapped automatically.
 
 * `gaGetShop()` - is removed from the package. map of datasets should be created externaly.

@@ -2,12 +2,9 @@
 % Please edit documentation in R/bigquery.R
 \name{bqExistingPartitionDates}
 \alias{bqExistingPartitionDates}
-\alias{getExistingPartitionDates}
 \title{Gets existing dates for date partitioned table in BigQuery}
 \usage{
 bqExistingPartitionDates(table)
-
-getExistingPartitionDates(table)
 }
 \arguments{
 \item{table}{name of a table}

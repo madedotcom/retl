@@ -55,13 +55,6 @@ bqExistingPartitionDates <- function(table) {
   }
 }
 
-#' @rdname bqExistingPartitionDates
-#' @export
-getExistingPartitionDates <- function(table) {
-  .Deprecated("bqExistingPartitionDates")
-  bqExistingPartitionDates(table)
-}
-
 #' Generates sql for extraction of existing partition date
 #' @noRd
 bqPartitionDatesSql <- function(table) {
