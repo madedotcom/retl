@@ -728,6 +728,7 @@ bqExtractTable <- function(table,
 
 #' Converts possible BigQuery extract formats to file extensions
 #' @param format format of the file
+#' @param compression level of compression to apply to the output
 #' @return corresponding file extension
 extensionFromFormat <- function(format, compression = "NONE") {
   if (format == "CSV") {

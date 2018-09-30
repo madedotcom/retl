@@ -1,4 +1,6 @@
-# retl 0.1.2.9000
+# retl 0.1.3
+
+* `bqExtractTable()` - allows to save table to GS file, you only need to specify table name and format, everything else will be mapped automatically.
 
 * All functions related to metadata logging and dependant on InfluxDb were moved to [rmeta](https://github.com/byapparov/rmeta) package.
 

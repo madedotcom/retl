@@ -4,12 +4,17 @@
 \alias{bqExtractTable}
 \title{Exports BigQuery table into Google Cloud Storage file}
 \usage{
-bqExtractTable(table, dataset = bqDefaultDataset(), compression = "GZIP")
+bqExtractTable(table, dataset = bqDefaultDataset(),
+  destination_format = "CSV", compression = "GZIP")
 }
 \arguments{
 \item{table}{name of the table to extract}
 
 \item{dataset}{name of the dataset}
+
+\item{destination_format}{The exported file format. Possible values
+include "CSV", "NEWLINE_DELIMITED_JSON" and "AVRO". Tables with nested or
+repeated fields cannot be exported as CSV.}
 
 \item{compression}{The compression type to use for exported files. Possible
 values include "GZIP", "DEFLATE", "SNAPPY", and "NONE". "DEFLATE" and
