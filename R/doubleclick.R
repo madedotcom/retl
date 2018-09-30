@@ -39,7 +39,7 @@ dcListConversions <- function(clickId, conversionId, datetime, custom.metrics) {
 #'
 #' @param clickId gclid for the DoubleClick match for the session
 #' @param conversionId unique identifier for the conversion
-#' @param datetime POSIX timestamp in miliseconds
+#' @param datetime POSIX timestamp in milliseconds
 #' @param custom.metrics list with named vectors of custom metric values
 dcPredictionBody <- function(clickId, conversionId, datetime, custom.metrics) {
 

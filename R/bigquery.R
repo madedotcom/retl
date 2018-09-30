@@ -811,7 +811,7 @@ getInString <- function(x) {
 #'
 #' @export
 #' @param field field name to be used for the binning
-#' @param limits vector of seperator values
+#' @param limits vector of separator values
 #' @param alias resulting field name for the case
 #' @return case clause to be included in a SQL statement
 bqVectorToCase <- function(field, limits, alias = field) {

@@ -10,7 +10,7 @@ bqVectorToCase(field, limits, alias = field)
 \arguments{
 \item{field}{field name to be used for the binning}
 
-\item{limits}{vector of seperator values}
+\item{limits}{vector of separator values}
 
 \item{alias}{resulting field name for the case}
 }

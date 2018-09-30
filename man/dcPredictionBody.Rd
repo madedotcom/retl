@@ -11,7 +11,7 @@ dcPredictionBody(clickId, conversionId, datetime, custom.metrics)
 
 \item{conversionId}{unique identifier for the conversion}
 
-\item{datetime}{POSIX timestamp in miliseconds}
+\item{datetime}{POSIX timestamp in milliseconds}
 
 \item{custom.metrics}{list with named vectors of custom metric values}
 }
