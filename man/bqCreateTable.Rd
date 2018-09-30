@@ -19,7 +19,7 @@ bqCreateTable(sql, table, dataset = bqDefaultDataset(),
 \item{priority}{sets priority of job executiont to INTERACTIVE or BATCH}
 }
 \value{
-results of the exectuion as returned by bigrquery::query_exec
+results of the execution as returned by bigrquery::query_exec
 }
 \description{
 Creates table using given sql

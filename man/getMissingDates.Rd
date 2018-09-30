@@ -11,7 +11,7 @@ getMissingDates(start.date, end.date, existing.dates, format = "\%Y\%m\%d")
 
 \item{end.date}{end of the period}
 
-\item{existing.dates}{vector of existing dates that should be exlcuded}
+\item{existing.dates}{vector of existing dates that should be excluded}
 
 \item{format}{format for the date, see ?as.character}
 }

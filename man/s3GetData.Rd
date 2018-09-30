@@ -13,7 +13,7 @@ s3GetData(path, header = T, bucket = s3DefaultBucket(),
 \item{header}{flag defines whether file has header}
 
 \item{bucket}{name of the S3 bucket.
-Defautls to value in \code{AWS_S3_BUCKET} environment variable.}
+Defaults to value in \code{AWS_S3_BUCKET} environment variable.}
 
 \item{root}{project root path that is appended before the path in the argument.
 Defaults to value in \code{AWS_S3_ROOT} environment variable.}

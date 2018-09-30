@@ -1,5 +1,5 @@
 
-#' Logs model performans data.frame to BigQuery table
+#' Logs model performance data.frame to BigQuery table
 #'
 #' @export
 #' @param data data with metrics of the model

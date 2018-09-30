@@ -100,7 +100,7 @@ s3PutFile.csv <- function(dt,
 #' @param path is the path to the S3 object
 #' @param header flag defines whether file has header
 #' @param bucket name of the S3 bucket.
-#'     Defautls to value in `AWS_S3_BUCKET` environment variable.
+#'     Defaults to value in `AWS_S3_BUCKET` environment variable.
 #' @param root project root path that is appended before the path in the argument.
 #'     Defaults to value in `AWS_S3_ROOT` environment variable.
 #' @param ... additional arguments that will be passed to extension specific calls.

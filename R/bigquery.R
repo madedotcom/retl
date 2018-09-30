@@ -67,8 +67,8 @@ bqPartitionDatesSql <- function(table) {
   }
 }
 
-#' Gest the value from the corresponding environment variable as boolean
-#' Determins which flavour of sql should be used by default.
+#' Gets the value from the corresponding environment variable as boolean
+#' Determines which flavour of sql should be used by default.
 #' @export
 #' @param x Sets `BIGQUERY_LEGACY_SQL` variable if set. Otherwise function returns value of the variable.
 bqUseLegacySql <- function(x = NULL) {
@@ -200,7 +200,7 @@ getExistingDates <- function(dataset, table.prefix) {
 #' @export
 #' @param start.date begining of the period
 #' @param end.date end of the period
-#' @param existing.dates vector of existing dates that should be exlcuded
+#' @param existing.dates vector of existing dates that should be excluded
 #' @param format format for the date, see ?as.character
 #' @return vector of dates from the period that don't exist in the give vector
 getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m%d") {
@@ -330,12 +330,12 @@ bqDeleteTable <- function(table, dataset = bqDefaultDataset()) {
   bq_table_delete(bt)
 }
 
-#' Creates SQL statment from the source file
+#' Creates SQL statement from the source file
 #'
 #' @export
-#' @param file file with sql statment template
+#' @param file file with sql statement template
 #' @param ... any parameters that will be used to fill in placeholders in the template with sprintf
-#' @return SQL statment as a string
+#' @return SQL statement as a string
 readSql <- function(file, ...) {
   sql <-  paste(readLines(file), collapse = "\n")
 
@@ -357,7 +357,7 @@ readSql <- function(file, ...) {
 #' @param dataset name of the destination dataset
 #' @param write_disposition defines whether records will be appended
 #' @param priority sets priority of job executiont to INTERACTIVE or BATCH
-#' @return results of the exectuion as returned by bigrquery::query_exec
+#' @return results of the execution as returned by bigrquery::query_exec
 bqCreateTable <- function(sql,
                           table,
                           dataset = bqDefaultDataset(),
@@ -469,7 +469,7 @@ bqGetData <- function(sql = NULL, file = NULL, ...) {
 #' @rdname bqQuery
 #'
 #' @export
-#' @param file file with sql statment
+#' @param file file with sql statement
 bqExecuteFile <- function(file, ...) {
   # Function to load data from BigQuery using file with SQL.
 
@@ -490,7 +490,7 @@ bqExecuteQuery <- function(query, ...) {
 #' @rdname bqQuery
 #'
 #' @export
-#' @param sql string with sql statment
+#' @param sql string with sql statement
 bqExecuteSql <- function(sql, ...) {
   if (length(list(...)) > 0) { # template requires parameters.
     sql <- sprintf(sql, ...)
@@ -534,7 +534,7 @@ bqDatasetLabel <- function(datasets, dataset) {
 #' @param file if sql is not provided it will be read from the file
 #' @param existing.dates dates that should be skipped
 #' @param missing.dates dates calculation for which will be enforced
-#' @param priority sets priority of job executiont to INTERACTIVE or BATCH
+#' @param priority sets priority of job execution to INTERACTIVE or BATCH
 bqCreatePartitionTable <- function(table, datasets,
                                    sql = NULL, file = NULL,
                                    existing.dates = NULL,
@@ -650,9 +650,9 @@ bqGetColumnNames <- function(table) {
 #'
 #' @export
 #' @param from name of the source table
-#' @param to name of the desitnation table
+#' @param to name of the destination table
 #' @param override defines if command will override existing table if it is not empty.
-#' @return TRUE if the table has been succesfully copied
+#' @return TRUE if the table has been successfully copied
 bqCopyTable <- function(from, to, override = TRUE) {
   bqAuth()
 

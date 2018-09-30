@@ -5,7 +5,7 @@
 #' @param data data.table to which fields will be appended
 #' @param lookup data.table from which fields will be appended
 #' @param by fields that represent the keys
-#' @param select fields taht will be appended
+#' @param select fields that will be appended
 #' @return data set with new fields
 safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by)) {
 
@@ -38,7 +38,7 @@ safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by))
 #' Replace " ", "-" and "_" with a given separator in the header.
 #' @export
 #' @param names column names to correct.
-#' @param separator char to use between words in colnumn names.
+#' @param separator char to use between words in column names.
 conformHeader <- function(names, separator = ".") {
  gsub("[\\.| |_|-]", separator, tolower(names))
 }

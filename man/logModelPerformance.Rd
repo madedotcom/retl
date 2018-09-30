@@ -2,7 +2,7 @@
 % Please edit documentation in R/model-tracking.R
 \name{logModelPerformance}
 \alias{logModelPerformance}
-\title{Logs model performans data.frame to BigQuery table}
+\title{Logs model performance data.frame to BigQuery table}
 \usage{
 logModelPerformance(data)
 }
@@ -10,5 +10,5 @@ logModelPerformance(data)
 \item{data}{data with metrics of the model}
 }
 \description{
-Logs model performans data.frame to BigQuery table
+Logs model performance data.frame to BigQuery table
 }

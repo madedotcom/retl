@@ -9,7 +9,7 @@ conformHeader(names, separator = ".")
 \arguments{
 \item{names}{column names to correct.}
 
-\item{separator}{char to use between words in colnumn names.}
+\item{separator}{char to use between words in column names.}
 }
 \description{
 Replace " ", "-" and "_" with a given separator in the header.
