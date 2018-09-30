@@ -2,6 +2,8 @@
 
 * `bqExtractTable()` - allows to save table to GS file, you only need to specify table name and format, everything else will be mapped automatically.
 
+* `bqInsertData()` - lost `job.name` and `increment.field` parameters as all etl logging fucntions moved to `rmeta`.
+
 * All functions related to metadata logging and dependant on InfluxDb were moved to [rmeta](https://github.com/byapparov/rmeta) package.
 
 * `gdLoadReport()` - function is moved to [rGoodData](https://github.com/byapparov/rGoodData) package.
