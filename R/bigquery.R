@@ -111,12 +111,15 @@ bqProjectDatasets <- function(project = bqDefaultProject()) {
 
 #' Gets metadata of all tables of a project into a data.table
 #'
+#' @export
+#'
 #' @details
 #' Function queries __TABLES__ table for each dataset in the project
 #'
 #' @rdname bqProject
-bqProjectTables <- function(project = bqDefaultProject()) {
-  datasets <- bqProjectDatasets()
+#' @param datasets list of dataset object to filter results
+bqProjectTables <- function(project = bqDefaultProject(),
+                            datasets = bqProjectDatasets()) {
 
   if (bqUseLegacySql()) {
     sql = "
@@ -147,7 +150,7 @@ bqProjectTables <- function(project = bqDefaultProject()) {
 
   }
 
-  tables <- lapply(head(datasets), function(d) {
+  tables <- lapply(datasets, function(d) {
     dt <- bqExecuteQuery(sql, d$dataset)
     meta <- bq_dataset_meta(
       bq_dataset(
@@ -163,9 +166,9 @@ bqProjectTables <- function(project = bqDefaultProject()) {
 }
 
 #' Gets list of tables for a given dataset
-#'
+#' @export
 #' @rdname bqDataset
-bqDatasetTables <- function(dataset, project = bqDefaultProject()) {
+bqDatasetTables <- function(dataset = bqDefaultDataset(), project = bqDefaultProject()) {
   bq_dataset_tables(
     bq_dataset(
       project = project,

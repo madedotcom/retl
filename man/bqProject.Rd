@@ -8,10 +8,13 @@
 \usage{
 bqProjectDatasets(project = bqDefaultProject())
 
-bqProjectTables(project = bqDefaultProject())
+bqProjectTables(project = bqDefaultProject(),
+  datasets = bqProjectDatasets())
 }
 \arguments{
 \item{project}{name of the bigquery project}
+
+\item{datasets}{list of dataset object to filter results}
 }
 \description{
 Family of functions for common operations on projects
