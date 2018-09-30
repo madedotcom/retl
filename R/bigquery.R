@@ -356,7 +356,7 @@ readSql <- function(file, ...) {
 #' @param table name of a table to be created
 #' @param dataset name of the destination dataset
 #' @param write_disposition defines whether records will be appended
-#' @param priority sets priority of job executiont to INTERACTIVE or BATCH
+#' @param priority sets priority of job execution to INTERACTIVE or BATCH
 #' @return results of the execution as returned by bigrquery::query_exec
 bqCreateTable <- function(sql,
                           table,
@@ -721,12 +721,12 @@ bqInsertPartition <- function(table, date, data, append = FALSE) {
 #' @description `bqTransformPartition` creates new partitions for the missing dates
 #' @rdname bqPartition
 #' @export
-#' @param table destination partition table where resutls of the query will be saved
+#' @param table destination partition table where results of the query will be saved
 #' @param file path to the sql file that will be used for the transformation
 #' @param ...  parameters that will be passed via `sprintf` to build dynamic SQL.
 #'    partition date will be always passed first in format `yyyymmdd`
 #'    followed by arguments in `...`
-#' @param priority sets priority of job executiont to INTERACTIVE or BATCH
+#' @param priority sets priority of job execution to INTERACTIVE or BATCH
 bqTransformPartition <- function(table, file, ..., priority = "INTERACTIVE") {
   existing.dates <- bqExistingPartitionDates(table)
   start.date <- bqStartDate(unset = "2017-01-01")

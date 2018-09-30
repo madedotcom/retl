@@ -2,7 +2,7 @@
 % Please edit documentation in R/postgresql.R
 \name{dbExecuteQuery}
 \alias{dbExecuteQuery}
-\title{Executes SQL query agains the database}
+\title{Executes SQL query against the database}
 \usage{
 dbExecuteQuery(sql, ...)
 }
@@ -12,5 +12,5 @@ dbExecuteQuery(sql, ...)
 \item{...}{any parameters that will be used to fill in placeholders with sprintf}
 }
 \description{
-Executes SQL query agains the database
+Executes SQL query against the database
 }

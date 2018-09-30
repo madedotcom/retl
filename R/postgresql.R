@@ -32,7 +32,7 @@ dbExecuteQueryFile <- function(file, ...) {
   return(dbExecuteQuery(query, ...))
 }
 
-#' Executes SQL query agains the database
+#' Executes SQL query against the database
 #'
 #' @export
 #' @param sql string with sql query
