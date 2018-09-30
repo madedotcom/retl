@@ -591,8 +591,6 @@ bqCreatePartitionTable <- function(table, datasets,
 #' @param data data to be inserted
 #' @param dataset name of the destination dataset
 #' @param append specifies if data should be appended or truncated
-#' @param job.name name of the ETL job that will be written to the metadata execution log
-#' @param increment.field specifies field that is used for incremental data loads
 #' @param fields list of fields with names and types (as `bq_fields`)
 #' @return results of execution
 bqInsertData <- function(table,

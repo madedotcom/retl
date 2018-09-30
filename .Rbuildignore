@@ -10,3 +10,4 @@ access_token.json
 ^schema/
 ^packrat/lib*/*
 news.md
+CODE_OF_CONDUCT.md

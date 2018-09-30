@@ -17,10 +17,6 @@ bqInsertData(table, data, dataset = bqDefaultDataset(), append = TRUE,
 \item{append}{specifies if data should be appended or truncated}
 
 \item{fields}{list of fields with names and types (as `bq_fields`)}
-
-\item{job.name}{name of the ETL job that will be written to the metadata execution log}
-
-\item{increment.field}{specifies field that is used for incremental data loads}
 }
 \value{
 results of execution
