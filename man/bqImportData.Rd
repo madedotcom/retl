@@ -4,13 +4,15 @@
 \alias{bqImportData}
 \title{Imports data from gs to BigQuery table}
 \usage{
-bqImportData(table, dataset = bqDefaultDataset(), append = TRUE,
-  format = "CSV", compression = "GZIP", nskip = 1)
+bqImportData(table, dataset = bqDefaultDataset(), path = "",
+  append = TRUE, format = "CSV", compression = "GZIP", nskip = 1)
 }
 \arguments{
 \item{table}{name of the table to extract}
 
 \item{dataset}{name of the dataset}
+
+\item{path}{path to the file in gs, defaults to {default-bucket}/{default-dataset}/table-name.csv.gz.}
 
 \item{append}{defines whether data can be appended to the table with data}
 

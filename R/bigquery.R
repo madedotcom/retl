@@ -719,8 +719,10 @@ bqExtractTable <- function(table,
 #' @inherit bqExtractTable
 #' @param append defines whether data can be appended to the table with data
 #' @param nskip number of rows to skip on importing the file
+#' @param path path to the file in gs, defaults to {default-bucket}/{default-dataset}/table-name.csv.gz.
 bqImportData <- function(table,
                         dataset = bqDefaultDataset(),
+                        path = "",
                         append = TRUE,
                         format = "CSV",
                         compression = "GZIP",
@@ -733,9 +735,13 @@ bqImportData <- function(table,
     table = table
   )
 
+  if (path == "") {
+    path <- gsTablePath(x, format, compression)
+  }
+
   bigrquery::bq_table_load(
     x,
-    source_uris = gsUri(x, format, compression),
+    source_uris = gsPathUri(path),
     source_format = format,
     write_disposition = write.disposition,
     nskip = 1,
@@ -744,6 +750,24 @@ bqImportData <- function(table,
 
 }
 
+#' makes full path to the gs file from relative part
+gsPathUri <- function(path) {
+  paste0(
+    "gs://",
+    s3DefaultBucket(), "/",
+    gsub("/", "", s3DefaultRoot()), "/",
+    path
+  )
+}
+
+#' makes relative path to a file to mirror table path
+gsTablePath <- function(x, format, compression) {
+  extension <- extensionFromFormat(format, compression)
+  paste0(
+    x$dataset , "/",
+    x$table, ".", extension
+  )
+}
 
 #' Gets gs uri to mirror table by name
 #'
@@ -751,15 +775,8 @@ bqImportData <- function(table,
 #' @param format format of the file
 #' @param compression compression applied to the filed
 gsUri <- function(x, format, compression) {
-
-  extension <- extensionFromFormat(format, compression)
-
-  paste0(
-    "gs://",
-    s3DefaultBucket(), "/",
-    gsub("/", "", s3DefaultRoot()), "/",
-    x$dataset , "/",
-    x$table, ".", extension
+  gsPathUri(
+    gsTablePath(x, format, compression)
   )
 }
 
