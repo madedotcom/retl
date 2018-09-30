@@ -8,7 +8,7 @@ library(RPostgreSQL)
 dbGetConnection <- function() {
   # Creates connection to ERP db using environment variables.
   drv <- dbDriver(Sys.getenv("ERP_DB"))
-  conn <- dbConnect(
+  dbConnect(
     drv,
     dbname = Sys.getenv("ERP_DB_NAME"),
     host = Sys.getenv("ERP_DB_HOST"),
