@@ -27,3 +27,9 @@ test_that("correct schema is generated for a given dataset", {
   expect_equal(res$type, c("FLOAT", "FLOAT"))
   expect_equal(res$mode, c("NULLABLE", "NULLABLE"))
 })
+
+test_that("Correct extension is assigned to a given file format", {
+  res <- extensionFromFormat("CSV", "GZIP")
+  expect <- "csv.gz"
+  expect_equal(res, expect)
+})

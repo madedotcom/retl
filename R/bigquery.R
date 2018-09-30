@@ -599,13 +599,8 @@ bqInsertData <- function(table,
                          data,
                          dataset = bqDefaultDataset(),
                          append = TRUE,
-                         job.name = NULL,
-                         increment.field = NULL,
                          fields = as_bq_fields(data)) {
   assert_that(nchar(dataset) > 0, msg = "Set dataset parameter or BIGQUERY_DATASET env var.")
-
-  assert_that(!xor(is.null(job.name), is.null(increment.field)),
-              msg = "increment.field and job.name arguments are both required if one is provided.")
 
   write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
   rows <- nrow(data)
@@ -629,11 +624,6 @@ bqInsertData <- function(table,
 
     res <- bq_job_wait(job)
 
-    if (!is.null(job.name)) {
-      # Log metadata of the execution with number of rows and increment value
-      increment.value <- as.integer(max(data[, get(increment.field)]))
-      etlLogExecution(job.name, increment.value, rows)
-    }
     return(res)
   } else {
     return(NULL)
@@ -692,6 +682,76 @@ bqCopyTable <- function(from, to, override = TRUE) {
   )
 
   return(bqTableExists(to))
+}
+
+#' Exports BigQuery table into Google Cloud Storage file
+#'
+#' @export
+#'
+#' @param table name of the table to extract
+#' @param dataset name of the dataset
+#' @param destination_format The exported file format. Possible values
+#'   include "CSV", "NEWLINE_DELIMITED_JSON" and "AVRO". Tables with nested or
+#'   repeated fields cannot be exported as CSV.
+#' @param compression The compression type to use for exported files. Possible
+#'   values include "GZIP", "DEFLATE", "SNAPPY", and "NONE". "DEFLATE" and
+#'   "SNAPPY" are only supported for Avro.
+#' @seealso ?bigrquery::bq_table_save
+#' @return object of `bq_job`
+bqExtractTable <- function(table,
+                           dataset = bqDefaultDataset(),
+                           destination_format = "CSV",
+                           compression = "GZIP") {
+
+  extension <- extensionFromFormat(destination_format, compression)
+
+  x <- bq_table(
+    project = bqDefaultProject(),
+    dataset = dataset,
+    table = table
+  )
+
+  gs_uri = paste0(
+    "gs://",
+    Sys.getenv("STORAGE_BUCKET"), "/",
+    Sys.getenv("STORAGE_ROOT"), "/",
+    x$dataset , "/",
+    x$table, ".", extension
+  )
+
+  bigrquery::bq_table_save(
+    x,
+    destination_uris = gs_uri,
+    compression = compression
+  )
+}
+
+#' Converts possible BigQuery extract formats to file extensions
+#' @param format format of the file
+#' @return corresponding file extension
+extensionFromFormat <- function(format, compression = "NONE") {
+  if (format == "CSV") {
+    if (compression == "GZIP") {
+      "csv.gz"
+    }
+    else {
+      "csv"
+    }
+  }
+  else if (format == "NEWLINE_DELIMITED_JSON") {
+    if (compression == "GZIP") {
+      "jzon.gzip"
+    }
+    else {
+      "json"
+    }
+  }
+  else if (format == "AVRO") {
+    "avro"
+  }
+  else {
+    stop("Format is unsupported by BigQuery extract: ", format)
+  }
 }
 
 #' Creates partition name by combining table and partition date.
