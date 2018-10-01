@@ -123,5 +123,3 @@ test_that("shard tables from several datasets can
   res <- bqExecuteSql("SELECT COUNT(*) as result FROM partitioned_shards")
   expect_equal(res$result, 4)
 })
-
-
