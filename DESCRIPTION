@@ -26,4 +26,4 @@ Imports:
     googlesheets (>= 2.2.0),
     xts,
     jsonlite (>= 1.5),
-    assertthat (>= 2.0.0)
+    assertthat (>= 0.2.0)
