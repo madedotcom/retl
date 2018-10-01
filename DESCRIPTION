@@ -11,19 +11,19 @@ Description: Wrappers for connections with PostgreSQL, S3, BigQuery, InfluxDB.
 License: file LICENSE
 LazyData: TRUE
 Suggests:
-    testthat,
+    testthat (>= 2.0.0),
     devtools,
     mockery
 RoxygenNote: 6.0.1
 Imports:
-    aws.s3,
-    bigrquery,
-    data.table,
-    stringr,
+    aws.s3 (>= 0.3.20),
+    bigrquery (>= 1.0.0.0),
+    data.table (>= 1.10.0),
+    stringr (>= 1.2.0),
     httr,
     DBI,
     googleAuthR,
-    googlesheets,
+    googlesheets (>= 2.2.0),
     xts,
-    jsonlite,
-    assertthat
+    jsonlite (>= 1.5),
+    assertthat (>= 2.0.0)
