@@ -60,7 +60,7 @@ bqImportData <- function(table,
   }
 
   if (bqTableExists(table, dataset)) {
-    table.schema <- bqTableSchema(table, dataset)
+    table.schema <- bq_table_fields(x)
   } else {
     table.schema <- NULL
   }
