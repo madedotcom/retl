@@ -59,13 +59,19 @@ bqImportData <- function(table,
     path <- gsTablePath(x, format, compression)
   }
 
+  if (bqTableExists(table, dataset)) {
+    table.schema <- bqTableSchema(table, dataset)
+  } else {
+    table.schema <- NULL
+  }
+
   bigrquery::bq_table_load(
     x,
     source_uris = gsPathUri(path),
     source_format = format,
     write_disposition = write.disposition,
     nskip = 1,
-    fields = bqTableSchema(table)
+    fields = table.schema
   )
 
 }
