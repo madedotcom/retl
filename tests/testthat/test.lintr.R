@@ -7,7 +7,6 @@ if (requireNamespace("lintr", quietly = TRUE)) {
         lintr::commas_linter,
         lintr::line_length_linter,
         lintr::no_tab_linter,
-        lintr::absolute_path_linter,
         lintr::assignment_linter,
         lintr::closed_curly_linter
       )
