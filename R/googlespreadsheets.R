@@ -1,5 +1,6 @@
 #' @import googleAuthR
 #' @import googlesheets
+NULL
 
 gs_env <- new.env(parent = emptyenv())
 

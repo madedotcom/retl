@@ -4,10 +4,10 @@
 #' @import assertthat
 NULL
 
-
 #' Wrapper for the set_service_token that uses BIGQUERY_ACCESS_TOKEN_PATH env var
 #'  as default value for the secret token location.
 #'
+#' @description
 #' Required environment variables to use BigQuery helper functions:
 #'   `BIGQUERY_PROJECT`` - name of the project in BigQuery.
 #'   `BIGQUERY_DATASET`` - name of the default dataset in BigQuery.

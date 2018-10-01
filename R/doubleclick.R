@@ -1,4 +1,6 @@
 #' @import googleAuthR
+#' @import assertthat
+NULL
 NULL
 
 # Authentication requires following environment variables:
