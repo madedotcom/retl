@@ -12,4 +12,3 @@ test_that("Check that datasets can be checked", {
     res <- bqDatasetExists("x", project = "test-dummy-project-name")
     expect_true(!res, label = "x dataset does not exist")
 })
-

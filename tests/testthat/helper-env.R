@@ -7,5 +7,3 @@ if (bqTokenFileValid()) {
     bqCreateDataset()
   }
 }
-
-

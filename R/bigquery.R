@@ -2,14 +2,16 @@
 #' @import bigrquery
 #' @import stringr
 #' @import assertthat
+NULL
 
-# Required environment variables to use BigQuery helper functions:
-# BIGQUERY_PROJECT - name of the project in BigQuery.
-# BIGQUERY_DATASET - name of the default dataset in BigQuery.
-# BIGQUERY_ACCESS_TOKEN_PATH - path to the json token file.
 
 #' Wrapper for the set_service_token that uses BIGQUERY_ACCESS_TOKEN_PATH env var
 #'  as default value for the secret token location.
+#'
+#' Required environment variables to use BigQuery helper functions:
+#'   `BIGQUERY_PROJECT`` - name of the project in BigQuery.
+#'   `BIGQUERY_DATASET`` - name of the default dataset in BigQuery.
+#'   `BIGQUERY_ACCESS_TOKEN_PATH` - path to the json token file.
 bqAuth <- function() {
   if (!bigrquery::has_access_cred()) {
     bigrquery::set_service_token(bqTokenFile())
@@ -343,7 +345,8 @@ bqDeleteTable <- function(table, dataset = bqDefaultDataset()) {
 readSql <- function(file, ...) {
   sql <-  paste(readLines(file), collapse = "\n")
 
-  if (length(list(...)) > 0) { # template requires parameters.
+  if (length(list(...)) > 0) {
+    # template requires parameters.
     sql <- sprintf(sql, ...)
   } else {
     # template does not have parameteres.
@@ -461,7 +464,8 @@ NULL
 bqGetData <- function(sql = NULL, file = NULL, ...) {
   # Wrapper function to load data from BigQuery.
 
-  if (!missing(file)) { # Gets sql from file.
+  if (!missing(file)) {
+    # Gets sql from file.
     return(bqExecuteFile(file, ...))
   }
   else {
@@ -496,7 +500,8 @@ bqExecuteQuery <- function(query, ...) {
 #' @export
 #' @param sql string with sql statement
 bqExecuteSql <- function(sql, ...) {
-  if (length(list(...)) > 0) { # template requires parameters.
+  if (length(list(...)) > 0) {
+    # template requires parameters.
     sql <- sprintf(sql, ...)
   } else {
     # template does not have parameteres.
@@ -703,7 +708,7 @@ bqCopyTable <- function(from, to, override = TRUE) {
 #' @param date Partition date
 #' @return Full partition table name
 bqPartitionName <- function(table, date) {
-  partition.time <- gsub("-","", date)
+  partition.time <- gsub("-", "", date)
   res <- paste0(table, "$", partition.time)
   return(res)
 }

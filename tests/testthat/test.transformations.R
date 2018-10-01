@@ -34,7 +34,7 @@ test_that("Safe lookup works", {
       ref = c(1L, 2L, 3L),
       value = c("a", "b", NA_character_)
     )
-    res <- expect_error(safeLookup(dt, dt.lookup, by = "ref"), 'data.frame')
+    res <- expect_error(safeLookup(dt, dt.lookup, by = "ref"), "data.frame")
 
     # can join by two columns
     dt <- data.table(

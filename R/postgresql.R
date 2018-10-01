@@ -1,5 +1,6 @@
 #' @import DBI
 #' @import RPostgreSQL
+NULL
 
 #' Creates db connection based on the environment variables
 #' @export

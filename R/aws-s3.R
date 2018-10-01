@@ -281,7 +281,7 @@ s3GetFile.gz <- function(path,
     file = tmp.file,
     check_region = FALSE
   )
-  dt <- fread(paste0('zcat < ', tmp.file))
+  dt <- fread(paste0("zcat < ", tmp.file))
   names(dt) <- conformHeader(names(dt))
   invisible(dt)
 }

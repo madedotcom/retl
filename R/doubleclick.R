@@ -1,4 +1,5 @@
 #' @import googleAuthR
+NULL
 
 # Authentication requires following environment variables:
 # GOOGLE_CLIENT_ID ?
@@ -71,7 +72,7 @@ metricsToList <- function(metrics) {
        name = name,
        value = value
      )
-    }, metrics, name = names(metrics), SIMPLIFY = FALSE)
+  }, metrics, name = names(metrics), SIMPLIFY = FALSE)
   res <- unname(res)
 }
 
