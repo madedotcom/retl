@@ -5,14 +5,17 @@
 #' @param data data.table to which fields will be appended
 #' @param lookup data.table from which fields will be appended
 #' @param by fields that represent the keys
-#' @param select fields taht will be appended
+#' @param select fields that will be appended
 #' @return data set with new fields
-safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by)) {
+safeLookup <- function(data,
+                       lookup,
+                       by,
+                       select = setdiff(colnames(lookup), by)) {
 
   assert_that(
     is.data.table(data),
     is.data.table(lookup),
-    msg = "safeLookup does not support data.frames. Convert datasets to data.table"
+    msg = "safeLookup does not support data.frames, convert to data.table"
   )
 
   assert_that(
@@ -26,10 +29,13 @@ safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by))
     return(data)
   }
 
-  tempColName <- paste0(rep(0, max(sapply(colnames(data), nchar)) + 1), collapse = "")
+  tempColName <- paste0(
+    rep(0, max(sapply(colnames(data), nchar)) + 1),
+    collapse = ""
+  )
 
   data[, eval(tempColName) :=  1:.N]
-  res <- merge(data, lookup[, mget(c(by, select))], by = by, all.x = T)
+  res <- merge(data, lookup[, mget(c(by, select))], by = by, all.x = TRUE)
   res <- res[order(get(tempColName))]
   data[, eval(tempColName) := NULL]
   res[, eval(tempColName) := NULL]
@@ -38,7 +44,7 @@ safeLookup <- function(data, lookup, by, select = setdiff(colnames(lookup), by))
 #' Replace " ", "-" and "_" with a given separator in the header.
 #' @export
 #' @param names column names to correct.
-#' @param separator char to use between words in colnumn names.
+#' @param separator char to use between words in column names.
 conformHeader <- function(names, separator = ".") {
  gsub("[\\.| |_|-]", separator, tolower(names))
 }

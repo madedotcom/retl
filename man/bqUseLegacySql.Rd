@@ -2,8 +2,8 @@
 % Please edit documentation in R/bigquery.R
 \name{bqUseLegacySql}
 \alias{bqUseLegacySql}
-\title{Gest the value from the corresponding environment variable as boolean
-Determins which flavour of sql should be used by default.}
+\title{Gets the value from the corresponding environment variable as boolean
+Determines which flavour of sql should be used by default.}
 \usage{
 bqUseLegacySql(x = NULL)
 }
@@ -11,6 +11,6 @@ bqUseLegacySql(x = NULL)
 \item{x}{Sets `BIGQUERY_LEGACY_SQL` variable if set. Otherwise function returns value of the variable.}
 }
 \description{
-Gest the value from the corresponding environment variable as boolean
-Determins which flavour of sql should be used by default.
+Gets the value from the corresponding environment variable as boolean
+Determines which flavour of sql should be used by default.
 }

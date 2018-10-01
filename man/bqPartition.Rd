@@ -10,7 +10,7 @@ bqTransformPartition(table, file, ..., priority = "INTERACTIVE")
 bqRefreshPartitionData(table, file, ..., priority = "BATCH")
 }
 \arguments{
-\item{table}{destination partition table where resutls of the query will be saved}
+\item{table}{destination partition table where results of the query will be saved}
 
 \item{file}{path to the sql file that will be used for the transformation}
 
@@ -18,7 +18,7 @@ bqRefreshPartitionData(table, file, ..., priority = "BATCH")
 partition date will be always passed first in format `yyyymmdd`
 followed by arguments in `...`}
 
-\item{priority}{sets priority of job executiont to INTERACTIVE or BATCH}
+\item{priority}{sets priority of job execution to INTERACTIVE or BATCH}
 }
 \description{
 `bqTransformPartition` creates new partitions for the missing dates

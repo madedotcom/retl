@@ -1,7 +1,7 @@
 #' @import googleAuthR
-
-library(jsonlite)
-library(googleAuthR)
+#' @import assertthat
+#' @importFrom assertthat assert_that
+NULL
 
 # Authentication requires following environment variables:
 # GOOGLE_CLIENT_ID ?
@@ -22,7 +22,10 @@ options(
   googleAuthR.httr_oauth_cache = TRUE
 )
 
-dcListConversions <- function(clickId, conversionId, datetime, custom.metrics) {
+dcListConversions <- function(clickId,
+                              conversionId,
+                              datetime,
+                              custom.metrics) {
   assert_that(length(clickId) == 1)
 
   list(
@@ -39,7 +42,7 @@ dcListConversions <- function(clickId, conversionId, datetime, custom.metrics) {
 #'
 #' @param clickId gclid for the DoubleClick match for the session
 #' @param conversionId unique identifier for the conversion
-#' @param datetime POSIX timestamp in miliseconds
+#' @param datetime POSIX timestamp in milliseconds
 #' @param custom.metrics list with named vectors of custom metric values
 dcPredictionBody <- function(clickId, conversionId, datetime, custom.metrics) {
 
@@ -71,7 +74,7 @@ metricsToList <- function(metrics) {
        name = name,
        value = value
      )
-    }, metrics, name = names(metrics), SIMPLIFY = F)
+  }, metrics, name = names(metrics), SIMPLIFY = FALSE)
   res <- unname(res)
 }
 

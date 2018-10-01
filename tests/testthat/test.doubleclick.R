@@ -38,7 +38,11 @@ test_that("DoubleClick call List to body works", {
 })
 
 test_that("Metrics vector to list conversion works", {
-  custom.metrics <- c("Predicted Revenue" = 20, "Predicted CVR" = 0.1, "Predicted AOV" = 200)
+  custom.metrics <- c(
+    "Predicted Revenue" = 20,
+    "Predicted CVR" = 0.1,
+    "Predicted AOV" = 200
+  )
   res <- metricsToList(custom.metrics)
   expected.list <- list(
     list(

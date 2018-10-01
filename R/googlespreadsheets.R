@@ -1,9 +1,6 @@
 #' @import googleAuthR
 #' @import googlesheets
-
-library(googleAuthR)
-library(googlesheets)
-library(data.table)
+NULL
 
 gs_env <- new.env(parent = emptyenv())
 

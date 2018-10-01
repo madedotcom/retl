@@ -1,14 +1,13 @@
 #' @import DBI
 #' @import RPostgreSQL
-
-library(RPostgreSQL)
+NULL
 
 #' Creates db connection based on the environment variables
 #' @export
 dbGetConnection <- function() {
   # Creates connection to ERP db using environment variables.
   drv <- dbDriver(Sys.getenv("ERP_DB"))
-  conn <- dbConnect(
+  dbConnect(
     drv,
     dbname = Sys.getenv("ERP_DB_NAME"),
     host = Sys.getenv("ERP_DB_HOST"),
@@ -22,17 +21,14 @@ dbGetConnection <- function() {
 #'
 #' @export
 #' @param file path to the sql file
-#' @param ... any parameters that will be used to fill in placeholders with sprintf
+#' @param ... any parameters that will be used
+#'     to fill in placeholders with sprintf
 dbExecuteQueryFile <- function(file, ...) {
-  # Executes SQL query from the given file and returns the result as a data.frame.
-  #
-  # Args:
-  #   sql.file: file name of the query.
   query <- paste0(readLines(file), collapse = "\n")
   return(dbExecuteQuery(query, ...))
 }
 
-#' Executes SQL query agains the database
+#' Executes SQL query against the database
 #'
 #' @export
 #' @param sql string with sql query

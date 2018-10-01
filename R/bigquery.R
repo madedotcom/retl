@@ -2,20 +2,16 @@
 #' @import bigrquery
 #' @import stringr
 #' @import assertthat
-
-# Required environment variables to use BigQuery helper functions:
-# BIGQUERY_PROJECT - name of the project in BigQuery.
-# BIGQUERY_DATASET - name of the default dataset in BigQuery.
-# BIGQUERY_ACCESS_TOKEN_PATH - path to the json token file.
-
-library(bigrquery)
-library(stringr)
-library(jsonlite)
-library(assertthat)
-
+NULL
 
 #' Wrapper for the set_service_token that uses BIGQUERY_ACCESS_TOKEN_PATH env var
 #'  as default value for the secret token location.
+#'
+#' @description
+#' Required environment variables to use BigQuery helper functions:
+#'   `BIGQUERY_PROJECT`` - name of the project in BigQuery.
+#'   `BIGQUERY_DATASET`` - name of the default dataset in BigQuery.
+#'   `BIGQUERY_ACCESS_TOKEN_PATH` - path to the json token file.
 bqAuth <- function() {
   if (!bigrquery::has_access_cred()) {
     bigrquery::set_service_token(bqTokenFile())
@@ -55,13 +51,6 @@ bqExistingPartitionDates <- function(table) {
   }
 }
 
-#' @rdname bqExistingPartitionDates
-#' @export
-getExistingPartitionDates <- function(table) {
-  .Deprecated("bqExistingPartitionDates")
-  bqExistingPartitionDates(table)
-}
-
 #' Generates sql for extraction of existing partition date
 #' @noRd
 bqPartitionDatesSql <- function(table) {
@@ -69,13 +58,14 @@ bqPartitionDatesSql <- function(table) {
     paste0("SELECT partition_id from [", table, "$__PARTITIONS_SUMMARY__];")
   } else {
     paste0("SELECT
-           FORMAT_DATE('%Y%m%d', DATE(_PARTITIONTIME)) as partition_id from `", table, "`
-           GROUP BY 1;")
+              FORMAT_DATE('%Y%m%d', DATE(_PARTITIONTIME)) as partition_id
+            FROM `", table, "`
+            GROUP BY 1;")
   }
 }
 
-#' Gest the value from the corresponding environment variable as boolean
-#' Determins which flavour of sql should be used by default.
+#' Gets the value from the corresponding environment variable as boolean
+#' Determines which flavour of sql should be used by default.
 #' @export
 #' @param x Sets `BIGQUERY_LEGACY_SQL` variable if set. Otherwise function returns value of the variable.
 bqUseLegacySql <- function(x = NULL) {
@@ -118,15 +108,18 @@ bqProjectDatasets <- function(project = bqDefaultProject()) {
 
 #' Gets metadata of all tables of a project into a data.table
 #'
+#' @export
+#'
 #' @details
 #' Function queries __TABLES__ table for each dataset in the project
 #'
 #' @rdname bqProject
-bqProjectTables <- function(project = bqDefaultProject()) {
-  datasets <- bqProjectDatasets()
+#' @param datasets list of dataset object to filter results
+bqProjectTables <- function(project = bqDefaultProject(),
+                            datasets = bqProjectDatasets()) {
 
   if (bqUseLegacySql()) {
-    sql = "
+    sql <- "
     SELECT
       project_id,
       dataset_id,
@@ -140,7 +133,7 @@ bqProjectTables <- function(project = bqDefaultProject()) {
       [%1$s.__TABLES__]"
   }
   else {
-    sql = "
+    sql <- "
     SELECT
       project_id,
       dataset_id,
@@ -154,7 +147,7 @@ bqProjectTables <- function(project = bqDefaultProject()) {
 
   }
 
-  tables <- lapply(head(datasets), function(d) {
+  tables <- lapply(datasets, function(d) {
     dt <- bqExecuteQuery(sql, d$dataset)
     meta <- bq_dataset_meta(
       bq_dataset(
@@ -170,9 +163,10 @@ bqProjectTables <- function(project = bqDefaultProject()) {
 }
 
 #' Gets list of tables for a given dataset
-#'
+#' @export
 #' @rdname bqDataset
-bqDatasetTables <- function(dataset, project = bqDefaultProject()) {
+bqDatasetTables <- function(dataset = bqDefaultDataset(),
+                            project = bqDefaultProject()) {
   bq_dataset_tables(
     bq_dataset(
       project = project,
@@ -195,7 +189,7 @@ getExistingDates <- function(dataset, table.prefix) {
     10000
   )
   matches <- tables[grepl(table.prefix, tables)]
-  res <- str_extract(matches,"\\d{8}")
+  res <- str_extract(matches, "\\d{8}")
   return(res)
 }
 
@@ -204,10 +198,13 @@ getExistingDates <- function(dataset, table.prefix) {
 #' @export
 #' @param start.date begining of the period
 #' @param end.date end of the period
-#' @param existing.dates vector of existing dates that should be exlcuded
+#' @param existing.dates vector of existing dates that should be excluded
 #' @param format format for the date, see ?as.character
 #' @return vector of dates from the period that don't exist in the give vector
-getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m%d") {
+getMissingDates <- function(start.date,
+                            end.date,
+                            existing.dates,
+                            format = "%Y%m%d") {
   # Gets list of dates for which date range table is missing.
   days <- rep(1, end.date - start.date + 1)
   days.sequence <- seq_along(days)
@@ -230,7 +227,8 @@ getMissingDates <- function(start.date, end.date, existing.dates, format = "%Y%m
 #' @param dataset name of the dataset
 #' @param project name of the project
 #' @return `bqDatasetExists()` - returns TRUE if dataset exists
-bqDatasetExists <- function(dataset = bqDefaultDataset(), project = bqDefaultProject()) {
+bqDatasetExists <- function(dataset = bqDefaultDataset(),
+                            project = bqDefaultProject()) {
   bqAuth()
   ds <- bq_dataset(project, dataset)
   bq_dataset_exists(ds)
@@ -238,7 +236,8 @@ bqDatasetExists <- function(dataset = bqDefaultDataset(), project = bqDefaultPro
 
 #' @rdname bqDataset
 #' @export
-bqCreateDataset <- function(dataset = bqDefaultDataset(), project = bqDefaultProject()) {
+bqCreateDataset <- function(dataset = bqDefaultDataset(),
+                            project = bqDefaultProject()) {
   bqAuth()
   bq_dataset_create(
     bq_dataset(
@@ -323,7 +322,10 @@ bqTableExists <- function(table, dataset = bqDefaultDataset()) {
 #' @export
 #' @return `bqDeleteTable` TRUE if table was deleted
 bqDeleteTable <- function(table, dataset = bqDefaultDataset()) {
-  assert_that(nchar(dataset) > 0, msg = "Set dataset parameter or BIGQUERY_DATASET env var.")
+  assert_that(
+    nchar(dataset) > 0,
+    msg = "Set dataset parameter or BIGQUERY_DATASET env var."
+  )
 
   bqAuth()
   bt <- bq_table(
@@ -334,16 +336,17 @@ bqDeleteTable <- function(table, dataset = bqDefaultDataset()) {
   bq_table_delete(bt)
 }
 
-#' Creates SQL statment from the source file
+#' Creates SQL statement from the source file
 #'
 #' @export
-#' @param file file with sql statment template
+#' @param file file with sql statement template
 #' @param ... any parameters that will be used to fill in placeholders in the template with sprintf
-#' @return SQL statment as a string
+#' @return SQL statement as a string
 readSql <- function(file, ...) {
   sql <-  paste(readLines(file), collapse = "\n")
 
-  if (length(list(...)) > 0) { # template requires parameters.
+  if (length(list(...)) > 0) {
+    # template requires parameters.
     sql <- sprintf(sql, ...)
   } else {
     # template does not have parameteres.
@@ -360,8 +363,8 @@ readSql <- function(file, ...) {
 #' @param table name of a table to be created
 #' @param dataset name of the destination dataset
 #' @param write_disposition defines whether records will be appended
-#' @param priority sets priority of job executiont to INTERACTIVE or BATCH
-#' @return results of the exectuion as returned by bigrquery::query_exec
+#' @param priority sets priority of job execution to INTERACTIVE or BATCH
+#' @return results of the execution as returned by bigrquery::query_exec
 bqCreateTable <- function(sql,
                           table,
                           dataset = bqDefaultDataset(),
@@ -461,7 +464,8 @@ NULL
 bqGetData <- function(sql = NULL, file = NULL, ...) {
   # Wrapper function to load data from BigQuery.
 
-  if (!missing(file)) { # Gets sql from file.
+  if (!missing(file)) {
+    # Gets sql from file.
     return(bqExecuteFile(file, ...))
   }
   else {
@@ -473,7 +477,7 @@ bqGetData <- function(sql = NULL, file = NULL, ...) {
 #' @rdname bqQuery
 #'
 #' @export
-#' @param file file with sql statment
+#' @param file file with sql statement
 bqExecuteFile <- function(file, ...) {
   # Function to load data from BigQuery using file with SQL.
 
@@ -494,9 +498,10 @@ bqExecuteQuery <- function(query, ...) {
 #' @rdname bqQuery
 #'
 #' @export
-#' @param sql string with sql statment
+#' @param sql string with sql statement
 bqExecuteSql <- function(sql, ...) {
-  if (length(list(...)) > 0) { # template requires parameters.
+  if (length(list(...)) > 0) {
+    # template requires parameters.
     sql <- sprintf(sql, ...)
   } else {
     # template does not have parameteres.
@@ -516,18 +521,6 @@ bqExecuteSql <- function(sql, ...) {
   data.table(bigrquery::bq_table_download(tb))
 }
 
-#' Gets the shop code from the GA properties vector.
-#
-#' @param ga.properties named vector of Google Analytics properties.
-#' Names are ISO2 codes of the country.
-#' @param  property number of a property in Google Analytics.
-#' @return gets site code for a given propertiy code
-gaGetShop <- function(ga.properties, property) {
-  .Deprecated(msg = "GA related logic should be moved to another package")
-  shops <- names(ga.properties)
-  names(shops) <- ga.properties
-  return(shops[as.character(property)])
-}
 
 bqDatasetLabel <- function(datasets, dataset) {
   labels <- names(datasets)
@@ -550,14 +543,19 @@ bqDatasetLabel <- function(datasets, dataset) {
 #' @param file if sql is not provided it will be read from the file
 #' @param existing.dates dates that should be skipped
 #' @param missing.dates dates calculation for which will be enforced
-#' @param priority sets priority of job executiont to INTERACTIVE or BATCH
-bqCreatePartitionTable <- function(table, datasets,
-                                   sql = NULL, file = NULL,
+#' @param priority sets priority of job execution to INTERACTIVE or BATCH
+bqCreatePartitionTable <- function(table,
+                                   datasets,
+                                   sql = NULL,
+                                   file = NULL,
                                    existing.dates = NULL,
                                    missing.dates = NULL,
                                    priority = "INTERACTIVE") {
 
-  assert_that(xor(is.null(sql), is.null(file)), msg = "Either sql or file must be provided")
+  assert_that(
+    xor(is.null(sql), is.null(file)),
+    msg = "Either sql or file must be provided"
+  )
 
   bqAuth()
 
@@ -571,11 +569,16 @@ bqCreatePartitionTable <- function(table, datasets,
   }
 
   if (missing(missing.dates)) {
-    missing.dates <- getMissingDates(bqStartDate(), bqEndDate(), existing.dates)
+    missing.dates <- getMissingDates(
+      bqStartDate(),
+      bqEndDate(),
+      existing.dates
+    )
   }
 
   jobs <-
-    lapply(missing.dates, function(d) { # Create partition for every missing date.
+    lapply(missing.dates, function(d) {
+      # Create partition for every missing date.
       destination.partition <- bqPartitionName(table, d)
       print(paste0("Partition name: ", destination.partition))
 
@@ -603,21 +606,17 @@ bqCreatePartitionTable <- function(table, datasets,
 #' @param data data to be inserted
 #' @param dataset name of the destination dataset
 #' @param append specifies if data should be appended or truncated
-#' @param job.name name of the ETL job that will be written to the metadata execution log
-#' @param increment.field specifies field that is used for incremental data loads
 #' @param fields list of fields with names and types (as `bq_fields`)
 #' @return results of execution
 bqInsertData <- function(table,
                          data,
                          dataset = bqDefaultDataset(),
                          append = TRUE,
-                         job.name = NULL,
-                         increment.field = NULL,
                          fields = as_bq_fields(data)) {
-  assert_that(nchar(dataset) > 0, msg = "Set dataset parameter or BIGQUERY_DATASET env var.")
-
-  assert_that(!xor(is.null(job.name), is.null(increment.field)),
-              msg = "increment.field and job.name arguments are both required if one is provided.")
+  assert_that(
+    nchar(dataset) > 0,
+    msg = "Set dataset parameter or BIGQUERY_DATASET env var."
+  )
 
   write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
   rows <- nrow(data)
@@ -641,11 +640,6 @@ bqInsertData <- function(table,
 
     res <- bq_job_wait(job)
 
-    if (!is.null(job.name)) {
-      # Log metadata of the execution with number of rows and increment value
-      increment.value <- as.integer(max(data[, get(increment.field)]))
-      etlLogExecution(job.name, increment.value, rows)
-    }
     return(res)
   } else {
     return(NULL)
@@ -678,9 +672,9 @@ bqGetColumnNames <- function(table) {
 #'
 #' @export
 #' @param from name of the source table
-#' @param to name of the desitnation table
+#' @param to name of the destination table
 #' @param override defines if command will override existing table if it is not empty.
-#' @return TRUE if the table has been succesfully copied
+#' @return TRUE if the table has been successfully copied
 bqCopyTable <- function(from, to, override = TRUE) {
   bqAuth()
 
@@ -706,6 +700,7 @@ bqCopyTable <- function(from, to, override = TRUE) {
   return(bqTableExists(to))
 }
 
+
 #' Creates partition name by combining table and partition date.
 #'
 #' @export
@@ -713,7 +708,7 @@ bqCopyTable <- function(from, to, override = TRUE) {
 #' @param date Partition date
 #' @return Full partition table name
 bqPartitionName <- function(table, date) {
-  partition.time <- gsub("-","", date)
+  partition.time <- gsub("-", "", date)
   res <- paste0(table, "$", partition.time)
   return(res)
 }
@@ -748,12 +743,12 @@ bqInsertPartition <- function(table, date, data, append = FALSE) {
 #' @description `bqTransformPartition` creates new partitions for the missing dates
 #' @rdname bqPartition
 #' @export
-#' @param table destination partition table where resutls of the query will be saved
+#' @param table destination partition table where results of the query will be saved
 #' @param file path to the sql file that will be used for the transformation
 #' @param ...  parameters that will be passed via `sprintf` to build dynamic SQL.
 #'    partition date will be always passed first in format `yyyymmdd`
 #'    followed by arguments in `...`
-#' @param priority sets priority of job executiont to INTERACTIVE or BATCH
+#' @param priority sets priority of job execution to INTERACTIVE or BATCH
 bqTransformPartition <- function(table, file, ..., priority = "INTERACTIVE") {
   existing.dates <- bqExistingPartitionDates(table)
   start.date <- bqStartDate(unset = "2017-01-01")
@@ -810,8 +805,8 @@ bqRefreshPartitionData <- function(table, file, ..., priority = "BATCH") {
 bqWait <- function(jobs, priority) {
   if (priority == "BATCH") {
     # Wait for all the jobs that were submitted
-    lapply(jobs, function(job) {
-      jobs <- bq_job_wait(job)
+    jobs <- lapply(jobs, function(job) {
+       bq_job_wait(job)
     })
   }
   invisible(jobs)
@@ -838,7 +833,7 @@ getInString <- function(x) {
 #'
 #' @export
 #' @param field field name to be used for the binning
-#' @param limits vector of seperator values
+#' @param limits vector of separator values
 #' @param alias resulting field name for the case
 #' @return case clause to be included in a SQL statement
 bqVectorToCase <- function(field, limits, alias = field) {
@@ -922,7 +917,7 @@ bqJsonField <- function(x) {
     mode = jsonlite::unbox(x$mode)
    )
   if (!is.null(x$fields) & length(x$fields) > 0) {
-    res$fields = bqJsonFields(x$fields)
+    res$fields <- bqJsonFields(x$fields)
   }
   res
 }

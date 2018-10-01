@@ -9,12 +9,12 @@ bqCopyTable(from, to, override = TRUE)
 \arguments{
 \item{from}{name of the source table}
 
-\item{to}{name of the desitnation table}
+\item{to}{name of the destination table}
 
 \item{override}{defines if command will override existing table if it is not empty.}
 }
 \value{
-TRUE if the table has been succesfully copied
+TRUE if the table has been successfully copied
 }
 \description{
 Copies table in BigQuery

@@ -2,18 +2,18 @@
 % Please edit documentation in R/bigquery.R
 \name{readSql}
 \alias{readSql}
-\title{Creates SQL statment from the source file}
+\title{Creates SQL statement from the source file}
 \usage{
 readSql(file, ...)
 }
 \arguments{
-\item{file}{file with sql statment template}
+\item{file}{file with sql statement template}
 
 \item{...}{any parameters that will be used to fill in placeholders in the template with sprintf}
 }
 \value{
-SQL statment as a string
+SQL statement as a string
 }
 \description{
-Creates SQL statment from the source file
+Creates SQL statement from the source file
 }

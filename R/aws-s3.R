@@ -73,7 +73,14 @@ s3PutFile.csv <- function(dt,
   tmp.file <- tempfile(fileext = ".csv")
   on.exit(unlink(tmp.file))
 
-  write.csv(dt, file = tmp.file, row.names = FALSE, fileEncoding = "UTF-8", na = na.value)
+  write.csv(
+    dt,
+    file = tmp.file,
+    row.names = FALSE,
+    fileEncoding = "UTF-8",
+    na = na.value
+  )
+
   full.path <- paste0(root, path)
   put_object(
     file = tmp.file,
@@ -100,7 +107,7 @@ s3PutFile.csv <- function(dt,
 #' @param path is the path to the S3 object
 #' @param header flag defines whether file has header
 #' @param bucket name of the S3 bucket.
-#'     Defautls to value in `AWS_S3_BUCKET` environment variable.
+#'     Defaults to value in `AWS_S3_BUCKET` environment variable.
 #' @param root project root path that is appended before the path in the argument.
 #'     Defaults to value in `AWS_S3_ROOT` environment variable.
 #' @param ... additional arguments that will be passed to extension specific calls.
@@ -181,11 +188,11 @@ s3GetFile.csv <- function(path,
 #' @param fill see data.table::rbindList
 #' @return data.table with data combined from files. It will be Null data.table if path
 #' did not match any of the files in S3 bucket.
-s3GetData <- function(path, header = T,
+s3GetData <- function(path, header = TRUE,
                       bucket = s3DefaultBucket(),
                       root = s3DefaultRoot(),
                       s3Get.FUN = s3GetFile,
-                      fill = T) {
+                      fill = TRUE) {
 
   full.path <- paste0(root, path)
   full.path <- gsub("^/", "", full.path)
@@ -198,7 +205,13 @@ s3GetData <- function(path, header = T,
     s3Get.FUN(o$Key, bucket = bucket, root = "")
   })
 
-  invisible(rbindlist(dt.list, use.names = T, fill = fill))
+  invisible(
+    rbindlist(
+      dt.list,
+      use.names = TRUE,
+      fill = fill
+    )
+  )
 }
 
 #' Lists files that match given path
@@ -230,7 +243,15 @@ s3PutFile.gz <- function(dt, path,
   tmp.file <- tempfile(fileext = ".gz")
   on.exit(unlink(tmp.file))
   gz.connection <- gzfile(tmp.file, "w")
-  write.csv(dt, file = gz.connection, row.names = FALSE, fileEncoding = "UTF-8", na = na.value)
+
+  write.csv(
+    dt,
+    file = gz.connection,
+    row.names = FALSE,
+    fileEncoding = "UTF-8",
+    na = na.value
+  )
+
   close(gz.connection)
 
   full.path <- paste0(root, path)
@@ -260,7 +281,7 @@ s3GetFile.gz <- function(path,
     file = tmp.file,
     check_region = FALSE
   )
-  dt <- fread(paste0('zcat < ', tmp.file))
+  dt <- fread(paste0("zcat < ", tmp.file))
   names(dt) <- conformHeader(names(dt))
   invisible(dt)
 }

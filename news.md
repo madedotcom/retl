@@ -1,4 +1,14 @@
-# retl 0.1.2.9000
+# retl 0.1.3
+
+* `bqImportData()` - allows to import GS file into BigQuery table. By default imports mirror file from `table-name.csv.gz`. Format and compression params control file extension. 
+
+* `bqExtractTable()` - allows to save table to GS file, you only need to specify table name and format, everything else will be mapped automatically.
+
+* `getExistingPartitionDates()` - replaced by `bqExistingPartitionDates()`.
+
+* `gaGetShop()` - is removed from the package. map of datasets should be created externaly.
+
+* `bqInsertData()` - lost `job.name` and `increment.field` parameters as all etl logging fucntions moved to `rmeta`.
 
 * All functions related to metadata logging and dependant on InfluxDb were moved to [rmeta](https://github.com/byapparov/rmeta) package.
 

@@ -17,9 +17,9 @@ bqExecuteQuery(query, ...)
 bqExecuteSql(sql, ...)
 }
 \arguments{
-\item{sql}{string with sql statment}
+\item{sql}{string with sql statement}
 
-\item{file}{file with sql statment}
+\item{file}{file with sql statement}
 
 \item{...}{any parameters that will be used to fill in placeholders with sprintf}
 

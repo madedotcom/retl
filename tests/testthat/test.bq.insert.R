@@ -12,27 +12,6 @@ test_that("Data is inserted correctly without metadata", {
   bqInsertData("test_table_insert_iris", dt.test)
 })
 
-
-test_that("Data is inserted correctly with metadata", {
-  skip_on_travis()
-  sepal_length <- NULL
-  dt.test <- data.table(iris)
-
-  colnames(dt.test) <- conformHeader(colnames(dt.test), separator = "_")
-  dt.test[, sepal_length := as.integer(sepal_length)]
-
-  Sys.setenv("BIGQUERY_METADATA_DATASET" = "metadata_jenkins")
-
-  bqInsertData(
-    table = "test_insert_with_meta",
-    data = dt.test,
-    job.name = "retl.test",
-    increment.field = "sepal_length"
-  )
-  res <- bqExecuteSql("SELECT COUNT(*) cnt FROM test_insert_with_meta")
-  expect_equal(res$cnt, nrow(iris))
-})
-
 test_that("table can be created from schema", {
   skip_on_travis()
   bqInitiateTable(
@@ -106,7 +85,8 @@ test_that("partitioned table can be created and data is added", {
 
 })
 
-test_that("shard tables from several datasets can be tranformed in day partitioned tables", {
+test_that("shard tables from several datasets can
+          be tranformed in day partitioned tables", {
   skip_on_travis()
   Sys.setenv(BIGQUERY_START_DATE = "2015-01-01")
   Sys.setenv(BIGQUERY_END_DATE = "2015-01-02")
@@ -142,31 +122,4 @@ test_that("shard tables from several datasets can be tranformed in day partition
   )
   res <- bqExecuteSql("SELECT COUNT(*) as result FROM partitioned_shards")
   expect_equal(res$result, 4)
-})
-
-bq_perform_upload_mock <- mock(cycle = T)
-wait_for_mock <- mock(cycle = T)
-test_that("Metadata logged only if job.name and increment.field params are provided together", {
-  with_mock(
-    `bigrquery::bq_perform_upload` = bq_perform_upload_mock,
-    `bigrquery::wait_for` = wait_for_mock,
-    expect_error(
-      bqInsertData(
-        table = "test_table",
-        dataset = "test",
-        data.table(iris),
-        job.name = "test"
-      ),
-      "increment\\.field.*required"
-    ),
-    expect_error(
-      bqInsertData(
-        table = "test_table",
-        dataset = "test",
-        data.table(iris),
-        increment.field = "test"
-      ),
-      "job\\.name.*required"
-    )
-  )
 })

@@ -13,7 +13,7 @@ safeLookup(data, lookup, by, select = setdiff(colnames(lookup), by))
 
 \item{by}{fields that represent the keys}
 
-\item{select}{fields taht will be appended}
+\item{select}{fields that will be appended}
 }
 \value{
 data set with new fields

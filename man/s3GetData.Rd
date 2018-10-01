@@ -4,8 +4,8 @@
 \alias{s3GetData}
 \title{Loads data from several files in S3 based on the path prefix}
 \usage{
-s3GetData(path, header = T, bucket = s3DefaultBucket(),
-  root = s3DefaultRoot(), s3Get.FUN = s3GetFile, fill = T)
+s3GetData(path, header = TRUE, bucket = s3DefaultBucket(),
+  root = s3DefaultRoot(), s3Get.FUN = s3GetFile, fill = TRUE)
 }
 \arguments{
 \item{path}{is the path to the S3 object}
@@ -13,7 +13,7 @@ s3GetData(path, header = T, bucket = s3DefaultBucket(),
 \item{header}{flag defines whether file has header}
 
 \item{bucket}{name of the S3 bucket.
-Defautls to value in \code{AWS_S3_BUCKET} environment variable.}
+Defaults to value in \code{AWS_S3_BUCKET} environment variable.}
 
 \item{root}{project root path that is appended before the path in the argument.
 Defaults to value in \code{AWS_S3_ROOT} environment variable.}

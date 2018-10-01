@@ -7,7 +7,7 @@
 \alias{bqDeleteDataset}
 \title{Gets list of tables for a given dataset}
 \usage{
-bqDatasetTables(dataset, project = bqDefaultProject())
+bqDatasetTables(dataset = bqDefaultDataset(), project = bqDefaultProject())
 
 bqDatasetExists(dataset = bqDefaultDataset(), project = bqDefaultProject())
 
