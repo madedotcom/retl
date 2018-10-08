@@ -488,8 +488,7 @@ bqExecuteFile <- function(file, ...) {
   # Function to load data from BigQuery using file with SQL.
 
   sql <-  paste(readLines(file), collapse = "\n")
-  res <- bqExecuteSql(sql, ...)
-  return(data.table(res))
+  bqExecuteSql(sql, ...)
 }
 
 #' @rdname bqQuery
