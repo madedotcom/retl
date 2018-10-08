@@ -1,4 +1,16 @@
-# retl 0.1.3
+# RETL Package Updates
+ 
+## 0.1.4
+
+* `bqCreateTable()` 
+  - you can switch between SQL dialects. Parameters are not available yet.
+  - `write_disposition` argument was renamed to `write.disposition`.
+* `bqExecuteQuery()`, `bqExecuteSql()`, `bqExecuteFile()` - (#93, @byapparov)
+  - Resulting column names in data.table conformed to have words separated by dot: `my.field.name`;
+  - `use.legacy.sql` argument is available to switch between SQL dialects in BigQuery.
+  - named arguments to these functions will be turned to query params if standard dialect is used.
+
+## 0.1.3
 
 * `bqImportData()` - allows to import GS file into BigQuery table. By default imports mirror file from `table-name.csv.gz`. Format and compression params control file extension. 
 
@@ -24,7 +36,7 @@
   into a single body request. This is a breaking change as `custom.metrics` param is now 
   a list of vectors.
 
-# retl 0.1.2
+## 0.1.2
 
 * `s3GetFile()`, `s3PutFile()` - functions are changed to read data based on the extention of the file. Fore example you can use it instead of calling `s3GetFile.csv()` if path ends with `.csv`.
 
@@ -45,7 +57,7 @@
 
 * `s3ListFiles()` - gets metadata of s3 files matching give path into data.table (#80)
 
-# retl 0.1.1
+## 0.1.1
 
 * Lower level BigQuery API calls are updated to the new functions from bigrquery 1.0.0
 
@@ -55,7 +67,7 @@
 
 * `bqTableSchema()` loads table schema `bq_fields` object
 
-# retl 0.1.0
+## 0.1.0
 
 * `influxLog()`, `influxConnection()` changed the API of the influx wrapper functions to default values. (#64, @byapparov)
 

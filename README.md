@@ -22,12 +22,37 @@ BigQuery functions wrap `bigrquery` functions to provide higher level API removi
 
 ### query data
 
+You can parameterise your SQL using positional matching (`sprintf`) if you don't name arguments in the call to `bqExecuteQuery()`:
+
 ```R
 # Running query to get the sie of group A
 dt <- bqExecuteQuery("SELECT COUNT(*) as size FROM my_table WHERE group = `%1$s`", "A")
 
 # You can also save template of the query in a file and get results like this
 dt <-  bqExecuteFile("group-size.sql", "A")
+```
+
+You can use [parameters](https://cloud.google.com/bigquery/docs/parameterized-queries) in the query template with standard SQL. You have to give matching names to arguments in `bqExecuteQuery()` call:
+
+```R
+# Running query to get the sie of group A
+dt <- bqExecuteQuery(
+  sql = "SELECT COUNT(*) as size FROM my_table WHERE group = @group", 
+  group = "A",
+  use.legacy.sql = FALSE
+)
+```
+
+In the example above `group` argument will be matched with `@group` paramter and BigQuery will execute 
+the following query:
+
+```SQL
+SELECT 
+  COUNT(*) as size 
+FROM 
+  my_table
+WHERE 
+  group = 'A' -- parameter is replaced by matching argument in the call
 ```
 
 ### dataset
@@ -125,24 +150,6 @@ dt <- s3GetData("path/to/myfile_")
 ```
 
 ## Schema for metadata ##
-
-### etl_jobs ###
-
-Field Name | Type | Description
------------|------|------------
-__job__ | STRING | Key for the job. Example: `crm.tranfer.cutomers`.
-__increment_name__ | STRING | Name of the field that is used as incrment key.
-__increment_type__ |STRING | Type of the field that is used as incrment key. Acceptable values: `INTEGER`, `DATE`.
-
-
-### etl_increments ###
-
-Field Name | Type | Description
------------|------|------------
-__job__ | STRING | Foreign key to the `etl_jobs` table.
-__increment_value__ | STRING | maximum value in of the incrment key in the processed dataset.
-__records__ |INTEGER | Number of records processed by the etl job.
-__datetime__ | TIMESTAMP | Time when job was executed.
 
 ### model_performance ###
 

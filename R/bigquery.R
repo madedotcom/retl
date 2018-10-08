@@ -362,14 +362,16 @@ readSql <- function(file, ...) {
 #' @param sql SQL statement to use a source for a new table
 #' @param table name of a table to be created
 #' @param dataset name of the destination dataset
-#' @param write_disposition defines whether records will be appended
+#' @param write.disposition defines whether records will be appended
 #' @param priority sets priority of job execution to INTERACTIVE or BATCH
+#' @param use.legacy.sql allows to switch between BigQuery SQL dialects
 #' @return results of the execution as returned by bigrquery::query_exec
 bqCreateTable <- function(sql,
                           table,
                           dataset = bqDefaultDataset(),
-                          write_disposition = "WRITE_APPEND",
-                          priority = "INTERACTIVE") {
+                          write.disposition = "WRITE_APPEND",
+                          priority = "INTERACTIVE",
+                          use.legacy.sql = bqUseLegacySql()) {
   bqAuth()
   tbl <- bq_table(
     project = bqDefaultProject(),
@@ -386,8 +388,8 @@ bqCreateTable <- function(sql,
     destination_table = tbl,
     default_dataset = ds,
     create_disposition = "CREATE_IF_NEEDED",
-    write_disposition = write_disposition,
-    use_legacy_sql = bqUseLegacySql(),
+    write_disposition = write.disposition,
+    use_legacy_sql = use.legacy.sql,
     priority = priority
   )
   if (priority == "INTERACTIVE") {
@@ -499,7 +501,20 @@ bqExecuteQuery <- function(query, ...) {
 #'
 #' @export
 #' @param sql string with sql statement
-bqExecuteSql <- function(sql, ...) {
+#' @param use.legacy.sql switches SQL dialect.
+#'   Defaults to value set in `BIGQUERY_LEGACY_SQL` env.
+bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
+  # Extract named arguments and turn them into query params
+  args <- c(as.list(environment()), list(...))
+  args.reserved <- c("sql", "use.legacy.sql")
+
+  params <- named_arguments(args, args.reserved)
+
+  assert_that(
+    !use.legacy.sql & !(length(params) > 0L & noname_items_count(args) > 0L),
+    msg = "Don't mix named and anonymous parameters in the call."
+  )
+
   if (length(list(...)) > 0) {
     # template requires parameters.
     sql <- sprintf(sql, ...)
@@ -507,6 +522,16 @@ bqExecuteSql <- function(sql, ...) {
     # template does not have parameteres.
     sql <- sql
   }
+
+
+  if (!use.legacy.sql & length(params) > 0) {
+    cat("parameters applied to the template: \n")
+    print(jsonlite::toJSON(params, auto_unbox = TRUE))
+  } else {
+    params = NULL
+  }
+
+
   bqAuth()
   ds <- bigrquery::bq_dataset(
     project = bqDefaultProject(),
@@ -516,9 +541,28 @@ bqExecuteSql <- function(sql, ...) {
     x = ds,
     query = sql,
     billing = bqBillingProject(),
-    use_legacy_sql = bqUseLegacySql()
+    use_legacy_sql = use.legacy.sql,
+    parameters = params
   )
-  data.table(bigrquery::bq_table_download(tb))
+  dt <- data.table(bigrquery::bq_table_download(tb))
+  colnames(dt) <- conformHeader(colnames(dt))
+  dt
+}
+
+#' Returns subset of arguments where name is set excluding reserved names
+#'
+#' @noRd
+named_arguments <- function(args, reserved) {
+  args.names <- names(args)
+  args.names <- args.names[nchar(args.names) > 0 & !(args.names %in% reserved)]
+  args[args.names]
+}
+
+#' Counts number of items in the list that don't have names
+#'
+#' @noRd
+noname_items_count <- function(x) {
+  sum(nchar(names(x)) == 0)
 }
 
 
@@ -612,11 +656,17 @@ bqInsertData <- function(table,
                          data,
                          dataset = bqDefaultDataset(),
                          append = TRUE,
-                         fields = as_bq_fields(data)) {
+                         fields = NULL) {
+
   assert_that(
     nchar(dataset) > 0,
     msg = "Set dataset parameter or BIGQUERY_DATASET env var."
   )
+
+  if (missing(fields)) {
+    colnames(data) <- conformHeader(colnames(data), '_')
+    fields <- as_bq_fields(data)
+  }
 
   write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
   rows <- nrow(data)
@@ -690,11 +740,11 @@ bqCopyTable <- function(from, to, override = TRUE) {
     table_id = to
   )
 
-  write_disposition <- ifelse(override, "WRITE_TRUNCATE", "WRITE_EMPTY")
+  write.disposition <- ifelse(override, "WRITE_TRUNCATE", "WRITE_EMPTY")
   bq_table_copy(
     x = src,
     dest = dest,
-    write_disposition = write_disposition
+    write_disposition = write.disposition
   )
 
   return(bqTableExists(to))
@@ -770,7 +820,7 @@ bqTransformPartition <- function(table, file, ..., priority = "INTERACTIVE") {
     bqCreateTable(
       sql.exec,
       table = destination.partition,
-      write_disposition = "WRITE_TRUNCATE",
+      write.disposition = "WRITE_TRUNCATE",
       priority = priority
     )
   })
@@ -793,7 +843,7 @@ bqRefreshPartitionData <- function(table, file, ..., priority = "BATCH") {
     bqCreateTable(
       sql = sql,
       table = destination.partition,
-      write_disposition = "WRITE_TRUNCATE",
+      write.disposition = "WRITE_TRUNCATE",
       priority = priority
     )
   })

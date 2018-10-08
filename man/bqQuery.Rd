@@ -14,7 +14,7 @@ bqExecuteFile(file, ...)
 
 bqExecuteQuery(query, ...)
 
-bqExecuteSql(sql, ...)
+bqExecuteSql(sql, ..., use.legacy.sql = bqUseLegacySql())
 }
 \arguments{
 \item{sql}{string with sql statement}
@@ -24,6 +24,9 @@ bqExecuteSql(sql, ...)
 \item{...}{any parameters that will be used to fill in placeholders with sprintf}
 
 \item{query}{template of the sql statement}
+
+\item{use.legacy.sql}{switches SQL dialect.
+Defaults to value set in `BIGQUERY_LEGACY_SQL` env.}
 }
 \value{
 results of execution as data.table
