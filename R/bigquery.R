@@ -499,7 +499,7 @@ bqExecuteQuery <- function(query, ...) {
 #'
 #' @export
 #' @param sql string with sql statement
-bqExecuteSql <- function(sql, ...) {
+bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
   if (length(list(...)) > 0) {
     # template requires parameters.
     sql <- sprintf(sql, ...)
@@ -507,6 +507,20 @@ bqExecuteSql <- function(sql, ...) {
     # template does not have parameteres.
     sql <- sql
   }
+  args <- c(as.list(environment()), list(...))
+
+  args.names <- names(args)
+  param.names <- args.names[nchar(args.names) > 0] # keep arguments wit
+  param.names <- setdiff(param.names, c("sql", "use.legacy.sql")) # exclude sql from parameters
+  if (length(param.names) > 0 & !use.legacy.sql) {
+    params = args[param.names]
+    cat("parameters applied to the template: \n")
+    print(jsonlite::toJSON(params, auto_unbox = TRUE))
+  } else {
+    params = NULL
+  }
+
+
   bqAuth()
   ds <- bigrquery::bq_dataset(
     project = bqDefaultProject(),
@@ -516,9 +530,12 @@ bqExecuteSql <- function(sql, ...) {
     x = ds,
     query = sql,
     billing = bqBillingProject(),
-    use_legacy_sql = bqUseLegacySql()
+    use_legacy_sql = use.legacy.sql,
+    parameters = params
   )
-  data.table(bigrquery::bq_table_download(tb))
+  dt <- data.table(bigrquery::bq_table_download(tb))
+  colnames(dt) <- conformHeader(colnames(dt))
+  dt
 }
 
 
@@ -612,11 +629,17 @@ bqInsertData <- function(table,
                          data,
                          dataset = bqDefaultDataset(),
                          append = TRUE,
-                         fields = as_bq_fields(data)) {
+                         fields = NULL) {
+
   assert_that(
     nchar(dataset) > 0,
     msg = "Set dataset parameter or BIGQUERY_DATASET env var."
   )
+
+  if (missing(fields)) {
+    colnames(data) <- conformHeader(colnames(data), '_')
+    fields <- as_bq_fields(data)
+  }
 
   write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
   rows <- nrow(data)
