@@ -30,6 +30,30 @@ dt <- bqExecuteQuery("SELECT COUNT(*) as size FROM my_table WHERE group = `%1$s`
 dt <-  bqExecuteFile("group-size.sql", "A")
 ```
 
+You can use [parameters](https://cloud.google.com/bigquery/docs/parameterized-queries) in the query template with standard SQL. You have to give matching names to arguments in `bqExecuteQuery()` call:
+
+# Running query to get the sie of group A
+
+```R
+dt <- bqExecuteQuery(
+  sql = "SELECT COUNT(*) as size FROM my_table WHERE group = @group", 
+  group = "A",
+  use.legacy.sql = FALSE
+)
+```
+
+In example above `group` argument will be matched with `@group` paramter and BigQuery will execute 
+the this query:
+
+```SQL
+SELECT 
+  COUNT(*) as size 
+FROM 
+  my_table
+WHERE 
+  group = 'A'
+```
+
 ### dataset
 
 ```R
@@ -125,24 +149,6 @@ dt <- s3GetData("path/to/myfile_")
 ```
 
 ## Schema for metadata ##
-
-### etl_jobs ###
-
-Field Name | Type | Description
------------|------|------------
-__job__ | STRING | Key for the job. Example: `crm.tranfer.cutomers`.
-__increment_name__ | STRING | Name of the field that is used as incrment key.
-__increment_type__ |STRING | Type of the field that is used as incrment key. Acceptable values: `INTEGER`, `DATE`.
-
-
-### etl_increments ###
-
-Field Name | Type | Description
------------|------|------------
-__job__ | STRING | Foreign key to the `etl_jobs` table.
-__increment_value__ | STRING | maximum value in of the incrment key in the processed dataset.
-__records__ |INTEGER | Number of records processed by the etl job.
-__datetime__ | TIMESTAMP | Time when job was executed.
 
 ### model_performance ###
 
