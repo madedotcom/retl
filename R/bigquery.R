@@ -507,8 +507,9 @@ bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
     # template does not have parameteres.
     sql <- sql
   }
-  args <- c(as.list(environment()), list(...))
 
+  # Extract named arguments and turn them into query params
+  args <- c(as.list(environment()), list(...))
   args.names <- names(args)
   param.names <- args.names[nchar(args.names) > 0] # keep arguments wit
   param.names <- setdiff(param.names, c("sql", "use.legacy.sql")) # exclude sql from parameters
