@@ -2,7 +2,7 @@
  
 ## retl 0.1.4
 
-* `bqExecuteQuery()`, `bqExecuteSql()`, `bqExecuteFile()` 
+* `bqExecuteQuery()`, `bqExecuteSql()`, `bqExecuteFile()` - (#93, @byapparov)
   - Resulting column names in data.table conformed to have words separated by dot: `my.field.name`;
   - `use.legacy.sql` argument is available to switch between SQL dialects in BigQuery.
   - named arguments to these functions will be turned to query params if standard dialect is used.
