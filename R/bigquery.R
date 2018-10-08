@@ -502,6 +502,17 @@ bqExecuteQuery <- function(query, ...) {
 #' @param use.legacy.sql switches SQL dialect.
 #'   Defaults to value set in `BIGQUERY_LEGACY_SQL` env.
 bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
+  # Extract named arguments and turn them into query params
+  args <- c(as.list(environment()), list(...))
+  args.reserved <- c("sql", "use.legacy.sql")
+
+  params <- named_arguments(args, args.reserved)
+
+  assert_that(
+    !use.legacy.sql & !(length(params) > 0L & noname_arguments_count(args) > 0L),
+    msg = "Don't mix named and anonymous parameters in the call."
+  )
+
   if (length(list(...)) > 0) {
     # template requires parameters.
     sql <- sprintf(sql, ...)
@@ -510,13 +521,8 @@ bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
     sql <- sql
   }
 
-  # Extract named arguments and turn them into query params
-  args <- c(as.list(environment()), list(...))
-  args.names <- names(args)
-  param.names <- args.names[nchar(args.names) > 0] # keep arguments wit
-  param.names <- setdiff(param.names, c("sql", "use.legacy.sql")) # exclude sql from parameters
-  if (length(param.names) > 0 & !use.legacy.sql) {
-    params = args[param.names]
+
+  if (!use.legacy.sql & length(params) > 0) {
     cat("parameters applied to the template: \n")
     print(jsonlite::toJSON(params, auto_unbox = TRUE))
   } else {
@@ -539,6 +545,21 @@ bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
   dt <- data.table(bigrquery::bq_table_download(tb))
   colnames(dt) <- conformHeader(colnames(dt))
   dt
+}
+
+#' Returns subset of arguments where name is set excluding reserved names
+#'
+#' @noRd
+named_arguments <- function(args, reserved) {
+  args.names <- names(args)
+  args.names <- args.names[nchar(args.names) > 0 & !(args.names %in% reserved)]
+  args[args.names]
+}
+
+noname_arguments_count <- function(args) {
+  args.names <- names(args)
+  args.names <- args.names[nchar(args.names) == 0]
+  length(args.names)
 }
 
 
