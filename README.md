@@ -32,9 +32,8 @@ dt <-  bqExecuteFile("group-size.sql", "A")
 
 You can use [parameters](https://cloud.google.com/bigquery/docs/parameterized-queries) in the query template with standard SQL. You have to give matching names to arguments in `bqExecuteQuery()` call:
 
-# Running query to get the sie of group A
-
 ```R
+# Running query to get the sie of group A
 dt <- bqExecuteQuery(
   sql = "SELECT COUNT(*) as size FROM my_table WHERE group = @group", 
   group = "A",
@@ -42,8 +41,8 @@ dt <- bqExecuteQuery(
 )
 ```
 
-In example above `group` argument will be matched with `@group` paramter and BigQuery will execute 
-the this query:
+In example above `group` argument will be matched with the `@group` paramter and BigQuery will execute 
+the following query:
 
 ```SQL
 SELECT 
