@@ -41,7 +41,7 @@ dt <- bqExecuteQuery(
 )
 ```
 
-In example above `group` argument will be matched with the `@group` paramter and BigQuery will execute 
+In the example above `group` argument will be matched with `@group` paramter and BigQuery will execute 
 the following query:
 
 ```SQL
@@ -50,7 +50,7 @@ SELECT
 FROM 
   my_table
 WHERE 
-  group = 'A'
+  group = 'A' -- parameter is replaced by matching argument in the call
 ```
 
 ### dataset
