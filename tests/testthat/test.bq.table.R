@@ -33,3 +33,8 @@ test_that("Correct extension is assigned to a given file format", {
   expect <- "csv.gz"
   expect_equal(res, expect)
 })
+
+test_that("Table can be copied", {
+  bqCopyTable("test_table", "test_table_copy")
+  expect_true(bqTableExists("test_table_copy"))
+})

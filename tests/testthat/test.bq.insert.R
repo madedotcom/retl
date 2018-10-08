@@ -8,8 +8,21 @@ test_that("Data is inserted correctly without metadata", {
   res <- bqInsertData("test_table_insert_empty", data.table())
 
   dt.test <- data.table(iris)
-  colnames(dt.test) <- conformHeader(colnames(dt.test), separator = "_")
   bqInsertData("test_table_insert_iris", dt.test)
+
+  # get data back
+  iris.bq <- bqExecuteQuery("SELECT * FROM test_table_insert_iris")
+
+  expect_equal(nrow(iris.bq), nrow(dt.test))
+  # data from bigquery matches the data we sent, up to:
+  # - column names
+  # - types
+  # - order
+  colnames(dt.test) <- tolower(colnames(dt.test))
+  iris.bq[, species := as.factor(species)]
+  expect_equal(
+    iris.bq[order(sepal.length, sepal.width, petal.length, petal.width)],
+    dt.test[order(sepal.length, sepal.width, petal.length, petal.width)])
 })
 
 test_that("table can be created from schema", {

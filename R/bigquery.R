@@ -175,23 +175,6 @@ bqDatasetTables <- function(dataset = bqDefaultDataset(),
   )
 }
 
-#' Gets existing dates from wildcard tables in BigQuery
-#'
-#' @export
-#' @param dataset name of a dataset
-#' @param table.prefix name of the table before the wildcard
-#' @return string vector of dates
-getExistingDates <- function(dataset, table.prefix) {
-  bqAuth()
-  tables <- list_tables(
-    project = bqDefaultProject(),
-    dataset,
-    10000
-  )
-  matches <- tables[grepl(table.prefix, tables)]
-  res <- str_extract(matches, "\\d{8}")
-  return(res)
-}
 
 #' Gets dates that are missing from the date range for a give list of existing dates
 #'
@@ -457,29 +440,9 @@ bqTableSchema <- function(table, dataset = bqDefaultDataset()) {
 #' Functions that execute query against BigQuery database
 #'
 #' Execute templated query given as string or file.
-#' Placeholders in template are replaced with values provided in ellipsis parameter with sprintf.
+#' Placeholders in template are replaced with values provided in ellipsis parameter with sprintf
 #'
-#' @param ... any parameters that will be used to fill in placeholders with sprintf
-#' @return results of execution as data.table
 #' @name bqQuery
-NULL
-
-#' @rdname bqQuery
-#'
-#' @export
-bqGetData <- function(sql = NULL, file = NULL, ...) {
-  # Wrapper function to load data from BigQuery.
-
-  if (!missing(file)) {
-    # Gets sql from file.
-    return(bqExecuteFile(file, ...))
-  }
-  else {
-    return(bqExecuteSql(sql, ...))
-  }
-}
-
-
 #' @rdname bqQuery
 #'
 #' @export
@@ -503,7 +466,8 @@ bqExecuteQuery <- function(query, ...) {
 #' @rdname bqQuery
 #'
 #' @export
-#' @param sql string with sql statement
+#' @param sql string with sql statement or query template
+#' @param ... any parameters that will be used to replace placeholders in the query template
 #' @param use.legacy.sql switches SQL dialect.
 #'   Defaults to value set in `BIGQUERY_LEGACY_SQL` env.
 bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
@@ -701,27 +665,6 @@ bqInsertData <- function(table,
   }
 }
 
-#' Gets list of the column names for a given table
-#'
-#' @export
-#' @param table name of the table
-#' @return columns of a table
-bqGetColumnNames <- function(table) {
-  bqAuth()
-
-  info <- get_table(project = bqDefaultProject(),
-                    dataset = bqDefaultDataset(),
-                    table)
-
-  # Unlist all the schema data and keep only the name fields
-  # remove the naming and then return the vector with only
-  # the names
-  fields <- unlist(info$schema$fields)
-  fields <- fields[names(fields) == "name"]
-  names(fields) <- NULL
-
-  return(fields)
-}
 
 #' Copies table in BigQuery
 #'
