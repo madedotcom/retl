@@ -416,7 +416,7 @@ bqInitiateTable <- function(table,
                             dataset = bqDefaultDataset()) {
   bqAuth()
 
-  if (!bqTableExists(table)) {
+  if (!bqTableExists(table, dataset)) {
     tbl <- bigrquery::bq_table(
       project = bqDefaultProject(),
       dataset = dataset,
@@ -434,6 +434,9 @@ bqInitiateTable <- function(table,
         fields = read_json(schema.file)
       )
     }
+  }
+  else {
+    warning(paste0("Table already exists: [", dataset, ".", table, "]"))
   }
 }
 
