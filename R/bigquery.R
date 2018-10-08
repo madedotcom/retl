@@ -44,7 +44,7 @@ bqExistingPartitionDates <- function(table) {
   sql <- bqPartitionDatesSql(table)
   res <- bqExecuteSql(sql)
   if (nrow(res) > 0) {
-    return(res$partition_id)
+    return(res$partition.id)
   }
   else {
     return(character())
@@ -175,23 +175,6 @@ bqDatasetTables <- function(dataset = bqDefaultDataset(),
   )
 }
 
-#' Gets existing dates from wildcard tables in BigQuery
-#'
-#' @export
-#' @param dataset name of a dataset
-#' @param table.prefix name of the table before the wildcard
-#' @return string vector of dates
-getExistingDates <- function(dataset, table.prefix) {
-  bqAuth()
-  tables <- list_tables(
-    project = bqDefaultProject(),
-    dataset,
-    10000
-  )
-  matches <- tables[grepl(table.prefix, tables)]
-  res <- str_extract(matches, "\\d{8}")
-  return(res)
-}
 
 #' Gets dates that are missing from the date range for a give list of existing dates
 #'
@@ -416,12 +399,13 @@ bqInitiateTable <- function(table,
                             dataset = bqDefaultDataset()) {
   bqAuth()
 
-  if (!bqTableExists(table, dataset)) {
+  if (!bqTableExists(table = table, dataset = dataset)) {
     tbl <- bigrquery::bq_table(
       project = bqDefaultProject(),
       dataset = dataset,
       table = table
     )
+
     if (partition) {
       bigrquery::bq_table_create(
         tbl,
@@ -456,29 +440,9 @@ bqTableSchema <- function(table, dataset = bqDefaultDataset()) {
 #' Functions that execute query against BigQuery database
 #'
 #' Execute templated query given as string or file.
-#' Placeholders in template are replaced with values provided in ellipsis parameter with sprintf.
+#' Placeholders in template are replaced with values provided in ellipsis parameter with sprintf
 #'
-#' @param ... any parameters that will be used to fill in placeholders with sprintf
-#' @return results of execution as data.table
 #' @name bqQuery
-NULL
-
-#' @rdname bqQuery
-#'
-#' @export
-bqGetData <- function(sql = NULL, file = NULL, ...) {
-  # Wrapper function to load data from BigQuery.
-
-  if (!missing(file)) {
-    # Gets sql from file.
-    return(bqExecuteFile(file, ...))
-  }
-  else {
-    return(bqExecuteSql(sql, ...))
-  }
-}
-
-
 #' @rdname bqQuery
 #'
 #' @export
@@ -487,8 +451,7 @@ bqExecuteFile <- function(file, ...) {
   # Function to load data from BigQuery using file with SQL.
 
   sql <-  paste(readLines(file), collapse = "\n")
-  res <- bqExecuteSql(sql, ...)
-  return(data.table(res))
+  bqExecuteSql(sql, ...)
 }
 
 #' @rdname bqQuery
@@ -503,7 +466,8 @@ bqExecuteQuery <- function(query, ...) {
 #' @rdname bqQuery
 #'
 #' @export
-#' @param sql string with sql statement
+#' @param sql string with sql statement or query template
+#' @param ... any parameters that will be used to replace placeholders in the query template
 #' @param use.legacy.sql switches SQL dialect.
 #'   Defaults to value set in `BIGQUERY_LEGACY_SQL` env.
 bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
@@ -668,7 +632,7 @@ bqInsertData <- function(table,
     msg = "Set dataset parameter or BIGQUERY_DATASET env var."
   )
 
-  if (missing(fields)) {
+  if (missing(fields) & ncol(data) > 0) {
     colnames(data) <- conformHeader(colnames(data), '_')
     fields <- as_bq_fields(data)
   }
@@ -701,27 +665,6 @@ bqInsertData <- function(table,
   }
 }
 
-#' Gets list of the column names for a given table
-#'
-#' @export
-#' @param table name of the table
-#' @return columns of a table
-bqGetColumnNames <- function(table) {
-  bqAuth()
-
-  info <- get_table(project = bqDefaultProject(),
-                    dataset = bqDefaultDataset(),
-                    table)
-
-  # Unlist all the schema data and keep only the name fields
-  # remove the naming and then return the vector with only
-  # the names
-  fields <- unlist(info$schema$fields)
-  fields <- fields[names(fields) == "name"]
-  names(fields) <- NULL
-
-  return(fields)
-}
 
 #' Copies table in BigQuery
 #'
@@ -788,9 +731,11 @@ bqDeletePartition <- function(table, date) {
 bqInsertPartition <- function(table, date, data, append = FALSE) {
   target.partition <- bqPartitionName(table, date)
 
-  bqInsertData(table = target.partition,
-               data = data,
-               append = append)
+  bqInsertData(
+    table = target.partition,
+    data = data,
+    append = append
+  )
 }
 
 #' Functions to transforms partitioned data form one table to another

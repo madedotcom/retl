@@ -9,6 +9,12 @@
   - Resulting column names in data.table conformed to have words separated by dot: `my.field.name`;
   - `use.legacy.sql` argument is available to switch between SQL dialects in BigQuery.
   - named arguments to these functions will be turned to query params if standard dialect is used.
+  
+* `getExistingDates()` - depricated and removed in favour of `bqExistingPartitionDates()`;
+
+* `bqGetData()` - depricated in favour of `bqExecuteQuery()` and `bqExecuteFile()`;
+
+* `bqGetColumnNames()` - depricated, could not find it to be used. lower level calls are depricated also.
 
 ## 0.1.3
 

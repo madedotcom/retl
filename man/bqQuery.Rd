@@ -2,14 +2,11 @@
 % Please edit documentation in R/bigquery.R
 \name{bqQuery}
 \alias{bqQuery}
-\alias{bqGetData}
 \alias{bqExecuteFile}
 \alias{bqExecuteQuery}
 \alias{bqExecuteSql}
 \title{Functions that execute query against BigQuery database}
 \usage{
-bqGetData(sql = NULL, file = NULL, ...)
-
 bqExecuteFile(file, ...)
 
 bqExecuteQuery(query, ...)
@@ -17,21 +14,18 @@ bqExecuteQuery(query, ...)
 bqExecuteSql(sql, ..., use.legacy.sql = bqUseLegacySql())
 }
 \arguments{
-\item{sql}{string with sql statement}
-
 \item{file}{file with sql statement}
 
-\item{...}{any parameters that will be used to fill in placeholders with sprintf}
+\item{...}{any parameters that will be used to replace placeholders in the query template}
 
 \item{query}{template of the sql statement}
+
+\item{sql}{string with sql statement or query template}
 
 \item{use.legacy.sql}{switches SQL dialect.
 Defaults to value set in `BIGQUERY_LEGACY_SQL` env.}
 }
-\value{
-results of execution as data.table
-}
 \description{
 Execute templated query given as string or file.
-Placeholders in template are replaced with values provided in ellipsis parameter with sprintf.
+Placeholders in template are replaced with values provided in ellipsis parameter with sprintf
 }
