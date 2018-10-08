@@ -22,6 +22,8 @@ BigQuery functions wrap `bigrquery` functions to provide higher level API removi
 
 ### query data
 
+You can parameterise your SQL using positional matching (`sprintf`) if you don't name arguments in the call to `bqExecuteQuery()`:
+
 ```R
 # Running query to get the sie of group A
 dt <- bqExecuteQuery("SELECT COUNT(*) as size FROM my_table WHERE group = `%1$s`", "A")
