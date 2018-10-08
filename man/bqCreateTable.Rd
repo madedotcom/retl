@@ -5,7 +5,8 @@
 \title{Creates table using given sql}
 \usage{
 bqCreateTable(sql, table, dataset = bqDefaultDataset(),
-  write_disposition = "WRITE_APPEND", priority = "INTERACTIVE")
+  write.disposition = "WRITE_APPEND", priority = "INTERACTIVE",
+  use.legacy.sql = bqUseLegacySql())
 }
 \arguments{
 \item{sql}{SQL statement to use a source for a new table}
@@ -14,9 +15,11 @@ bqCreateTable(sql, table, dataset = bqDefaultDataset(),
 
 \item{dataset}{name of the destination dataset}
 
-\item{write_disposition}{defines whether records will be appended}
+\item{write.disposition}{defines whether records will be appended}
 
 \item{priority}{sets priority of job execution to INTERACTIVE or BATCH}
+
+\item{use.legacy.sql}{allows to switch between BigQuery SQL dialects}
 }
 \value{
 results of the execution as returned by bigrquery::query_exec

@@ -362,14 +362,16 @@ readSql <- function(file, ...) {
 #' @param sql SQL statement to use a source for a new table
 #' @param table name of a table to be created
 #' @param dataset name of the destination dataset
-#' @param write_disposition defines whether records will be appended
+#' @param write.disposition defines whether records will be appended
 #' @param priority sets priority of job execution to INTERACTIVE or BATCH
+#' @param use.legacy.sql allows to switch between BigQuery SQL dialects
 #' @return results of the execution as returned by bigrquery::query_exec
 bqCreateTable <- function(sql,
                           table,
                           dataset = bqDefaultDataset(),
-                          write_disposition = "WRITE_APPEND",
-                          priority = "INTERACTIVE") {
+                          write.disposition = "WRITE_APPEND",
+                          priority = "INTERACTIVE",
+                          use.legacy.sql = bqUseLegacySql()) {
   bqAuth()
   tbl <- bq_table(
     project = bqDefaultProject(),
@@ -386,8 +388,8 @@ bqCreateTable <- function(sql,
     destination_table = tbl,
     default_dataset = ds,
     create_disposition = "CREATE_IF_NEEDED",
-    write_disposition = write_disposition,
-    use_legacy_sql = bqUseLegacySql(),
+    write_disposition = write.disposition,
+    use_legacy_sql = use.legacy.sql,
     priority = priority
   )
   if (priority == "INTERACTIVE") {
@@ -738,11 +740,11 @@ bqCopyTable <- function(from, to, override = TRUE) {
     table_id = to
   )
 
-  write_disposition <- ifelse(override, "WRITE_TRUNCATE", "WRITE_EMPTY")
+  write.disposition <- ifelse(override, "WRITE_TRUNCATE", "WRITE_EMPTY")
   bq_table_copy(
     x = src,
     dest = dest,
-    write_disposition = write_disposition
+    write_disposition = write.disposition
   )
 
   return(bqTableExists(to))
@@ -818,7 +820,7 @@ bqTransformPartition <- function(table, file, ..., priority = "INTERACTIVE") {
     bqCreateTable(
       sql.exec,
       table = destination.partition,
-      write_disposition = "WRITE_TRUNCATE",
+      write.disposition = "WRITE_TRUNCATE",
       priority = priority
     )
   })
@@ -841,7 +843,7 @@ bqRefreshPartitionData <- function(table, file, ..., priority = "BATCH") {
     bqCreateTable(
       sql = sql,
       table = destination.partition,
-      write_disposition = "WRITE_TRUNCATE",
+      write.disposition = "WRITE_TRUNCATE",
       priority = priority
     )
   })

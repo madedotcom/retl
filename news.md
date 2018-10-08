@@ -2,6 +2,9 @@
  
 ## 0.1.4
 
+* `bqCreateTable()` 
+  - you can switch between SQL dialects. Parameters are not available yet.
+  - `write_disposition` argument was renamed to `write.disposition`.
 * `bqExecuteQuery()`, `bqExecuteSql()`, `bqExecuteFile()` - (#93, @byapparov)
   - Resulting column names in data.table conformed to have words separated by dot: `my.field.name`;
   - `use.legacy.sql` argument is available to switch between SQL dialects in BigQuery.
