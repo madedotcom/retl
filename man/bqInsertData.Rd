@@ -5,7 +5,7 @@
 \title{Inserts data into BigQuery table}
 \usage{
 bqInsertData(table, data, dataset = bqDefaultDataset(), append = TRUE,
-  fields = as_bq_fields(data))
+  fields = NULL)
 }
 \arguments{
 \item{table}{name of the target table}

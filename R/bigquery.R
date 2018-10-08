@@ -499,6 +499,8 @@ bqExecuteQuery <- function(query, ...) {
 #'
 #' @export
 #' @param sql string with sql statement
+#' @param use.legacy.sql switches SQL dialect.
+#'   Defaults to value set in `BIGQUERY_LEGACY_SQL` env.
 bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
   if (length(list(...)) > 0) {
     # template requires parameters.
