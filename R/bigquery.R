@@ -510,10 +510,12 @@ bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
 
   params <- named_arguments(args, args.reserved)
 
-  assert_that(
-    !use.legacy.sql & !(length(params) > 0L & noname_items_count(args) > 0L),
-    msg = "Don't mix named and anonymous parameters in the call."
-  )
+  if (!use.legacy.sql) {
+    assert_that(
+      !(length(params) > 0L & noname_items_count(args) > 0L),
+      msg = "Don't mix named and anonymous parameters in the call."
+    )
+  }
 
   if (length(list(...)) > 0) {
     # template requires parameters.
