@@ -44,7 +44,7 @@ bqExistingPartitionDates <- function(table) {
   sql <- bqPartitionDatesSql(table)
   res <- bqExecuteSql(sql)
   if (nrow(res) > 0) {
-    return(res$partition_id)
+    return(res$partition.id)
   }
   else {
     return(character())
@@ -416,12 +416,13 @@ bqInitiateTable <- function(table,
                             dataset = bqDefaultDataset()) {
   bqAuth()
 
-  if (!bqTableExists(table, dataset)) {
+  if (!bqTableExists(table = table, dataset = dataset)) {
     tbl <- bigrquery::bq_table(
       project = bqDefaultProject(),
       dataset = dataset,
       table = table
     )
+
     if (partition) {
       bigrquery::bq_table_create(
         tbl,
@@ -668,7 +669,7 @@ bqInsertData <- function(table,
     msg = "Set dataset parameter or BIGQUERY_DATASET env var."
   )
 
-  if (missing(fields)) {
+  if (missing(fields) & ncol(data) > 0) {
     colnames(data) <- conformHeader(colnames(data), '_')
     fields <- as_bq_fields(data)
   }
@@ -788,9 +789,11 @@ bqDeletePartition <- function(table, date) {
 bqInsertPartition <- function(table, date, data, append = FALSE) {
   target.partition <- bqPartitionName(table, date)
 
-  bqInsertData(table = target.partition,
-               data = data,
-               append = append)
+  bqInsertData(
+    table = target.partition,
+    data = data,
+    append = append
+  )
 }
 
 #' Functions to transforms partitioned data form one table to another
