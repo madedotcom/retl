@@ -509,7 +509,7 @@ bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
   params <- named_arguments(args, args.reserved)
 
   assert_that(
-    !use.legacy.sql & !(length(params) > 0L & noname_arguments_count(args) > 0L),
+    !use.legacy.sql & !(length(params) > 0L & noname_items_count(args) > 0L),
     msg = "Don't mix named and anonymous parameters in the call."
   )
 
@@ -556,10 +556,11 @@ named_arguments <- function(args, reserved) {
   args[args.names]
 }
 
-noname_arguments_count <- function(args) {
-  args.names <- names(args)
-  args.names <- args.names[nchar(args.names) == 0]
-  length(args.names)
+#' Counts number of items in the list that don't have names
+#'
+#' @noRd
+noname_items_count <- function(x) {
+  sum(nchar(names(x)) == 0)
 }
 
 
