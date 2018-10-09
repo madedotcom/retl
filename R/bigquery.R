@@ -749,7 +749,11 @@ bqInsertPartition <- function(table, date, data, append = FALSE) {
 #'    partition date will be always passed first in format `yyyymmdd`
 #'    followed by arguments in `...`
 #' @param priority sets priority of job execution to INTERACTIVE or BATCH
-bqTransformPartition <- function(table, file, ..., priority = "INTERACTIVE") {
+bqTransformPartition <- function(table,
+                                 file,
+                                 ...,
+                                 priority = "INTERACTIVE",
+                                 use.legacy.sql = bqUseLegacySql()) {
   existing.dates <- bqExistingPartitionDates(table)
   start.date <- bqStartDate(unset = "2017-01-01")
   end.date <- bqEndDate()
@@ -771,7 +775,8 @@ bqTransformPartition <- function(table, file, ..., priority = "INTERACTIVE") {
       sql.exec,
       table = destination.partition,
       write.disposition = "WRITE_TRUNCATE",
-      priority = priority
+      priority = priority,
+      use.legacy.sql = use.legacy.sql
     )
   })
 
