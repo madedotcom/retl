@@ -5,8 +5,9 @@
 
 ETL project provides means to:
 
-- exchange data with different sources through packages: aws.s3, bigrquery, DBI.
-- log metadata related to job executions to facilitate incremental data processing.
+- exchange data with different sources through packages: 
+    * [bigrquery](https://github.com/r-dbi/bigrquery)
+    * [aws.s3](https://github.com/cloudyr/aws.s3)
 - defensive data transformations that preserve original granularity or total of a metric.
 
 ## BigQuery ##
@@ -148,18 +149,3 @@ dt <- s3PutFile(dt, "path/to/myfile.csv")
 # s3://{AWS_S3_BUCKET}/{AWS_S3_ROOT}/path/to/myfile_3.csv
 dt <- s3GetData("path/to/myfile_")
 ```
-
-## Schema for metadata ##
-
-### model_performance ###
-
-Field Name | Type | Description
------------|------|------------
-__date__ | DATE | Cross-validation execution date.
-__project__ | STRING | Name of the project.
-__model__ | STRING | This is usually the name of a business metric, e.g. `Revenue Forecast`
-__metric__ | STRING | This is a statistical metric of the model, e.g. `MAE`.
-__group__ | STRING | Name of the group within the population. If data is not split use `All`.
-__size__ | INTEGER | Size of the group on which cross-validation was performed.
-__value__ | FLOAT | Numeric value of the metric.
-__dataset__ | STRING | Name of the dataset source if available as table in BigQuery.
