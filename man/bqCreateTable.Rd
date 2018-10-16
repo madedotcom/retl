@@ -9,7 +9,7 @@ bqCreateTable(sql, table, dataset = bqDefaultDataset(),
   use.legacy.sql = bqUseLegacySql())
 }
 \arguments{
-\item{sql}{SQL statement to use a source for a new table}
+\item{sql}{string with sql statement or query template}
 
 \item{table}{name of a table to be created}
 
@@ -19,7 +19,8 @@ bqCreateTable(sql, table, dataset = bqDefaultDataset(),
 
 \item{priority}{sets priority of job execution to INTERACTIVE or BATCH}
 
-\item{use.legacy.sql}{allows to switch between BigQuery SQL dialects}
+\item{use.legacy.sql}{switches SQL dialect.
+Defaults to value set in `BIGQUERY_LEGACY_SQL` env.}
 }
 \value{
 results of the execution as returned by bigrquery::query_exec
