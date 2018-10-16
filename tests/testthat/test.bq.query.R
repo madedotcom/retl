@@ -38,5 +38,3 @@ test_that("Correct sql statement is read", {
     label = "Correct query is read with parameter applied"
   )
 })
-
-
