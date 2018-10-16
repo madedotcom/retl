@@ -24,6 +24,8 @@ test_that("Correct sql statement is read", {
 })
 
 test_that("Query can be combined by supporting function", {
+  skip_on_travis()
+
   sql <- bqCombineQueries(
     sql = list(
       "SELECT 1 a",
