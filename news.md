@@ -1,4 +1,8 @@
 # RETL Package Updates
+
+## 0.1.4.9000
+
+* `bqTransformPartition()`, `bqRefreshPartitionData()` - added parameter to control sql dialect of BigQuery. 
  
 ## 0.1.4
 
