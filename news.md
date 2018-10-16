@@ -1,5 +1,9 @@
 # RETL Package Updates
  
+## 0.1.4.9000
+
+`bqCreatePartitionTable()` - updated to create partition from several shard tables with one combined query. This is done to reduce the number of changes against the target table to meet the limit of 5000 changes per day.
+ 
 ## 0.1.4
 
 * `bqCreateTable()` 

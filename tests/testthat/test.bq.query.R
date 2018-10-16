@@ -22,3 +22,28 @@ test_that("Correct sql statement is read", {
     label = "Correct query is read with parameter applied"
   )
 })
+
+test_that("Query can be combined by supporting function", {
+  sql <- bqCombineQueries(
+    sql = list(
+      "SELECT 1 a",
+      "SELECT 5 a"
+    ),
+    use.legacy.sql = TRUE
+  )
+
+  res <- bqExecuteSql(sql, use.legacy.sql = TRUE)
+  expect_equal(res$a, c(1, 5))
+
+  # Same as above works for Standard sql
+  sql <- bqCombineQueries(
+    sql = list(
+      "SELECT 1 a",
+      "SELECT 5 a"
+    ),
+    use.legacy.sql = FALSE
+  )
+
+  res <- bqExecuteSql(sql, use.legacy.sql = FALSE)
+  expect_equal(res$a, c(1, 5))
+})
