@@ -342,12 +342,11 @@ readSql <- function(file, ...) {
 #' Creates table using given sql
 #'
 #' @export
-#' @param sql SQL statement to use a source for a new table
 #' @param table name of a table to be created
 #' @param dataset name of the destination dataset
 #' @param write.disposition defines whether records will be appended
 #' @param priority sets priority of job execution to INTERACTIVE or BATCH
-#' @param use.legacy.sql allows to switch between BigQuery SQL dialects
+#' @inheritParams bqExecuteSql
 #' @return results of the execution as returned by bigrquery::query_exec
 bqCreateTable <- function(sql,
                           table,
@@ -754,6 +753,7 @@ bqInsertPartition <- function(table, date, data, append = FALSE) {
   )
 }
 
+
 #' Functions to transforms partitioned data form one table to another
 #'
 #' @description `bqTransformPartition` creates new partitions for the missing dates
@@ -764,8 +764,12 @@ bqInsertPartition <- function(table, date, data, append = FALSE) {
 #' @param ...  parameters that will be passed via `sprintf` to build dynamic SQL.
 #'    partition date will be always passed first in format `yyyymmdd`
 #'    followed by arguments in `...`
-#' @param priority sets priority of job execution to INTERACTIVE or BATCH
-bqTransformPartition <- function(table, file, ..., priority = "INTERACTIVE") {
+#' @inheritParams bqCreateTable
+bqTransformPartition <- function(table,
+                                 file,
+                                 ...,
+                                 priority = "INTERACTIVE",
+                                 use.legacy.sql = bqUseLegacySql()) {
   existing.dates <- bqExistingPartitionDates(table)
   start.date <- bqStartDate(unset = "2017-01-01")
   end.date <- bqEndDate()
@@ -787,7 +791,8 @@ bqTransformPartition <- function(table, file, ..., priority = "INTERACTIVE") {
       sql.exec,
       table = destination.partition,
       write.disposition = "WRITE_TRUNCATE",
-      priority = priority
+      priority = priority,
+      use.legacy.sql = use.legacy.sql
     )
   })
 
@@ -798,7 +803,11 @@ bqTransformPartition <- function(table, file, ..., priority = "INTERACTIVE") {
 #'
 #' @rdname bqPartition
 #' @export
-bqRefreshPartitionData <- function(table, file, ..., priority = "BATCH") {
+bqRefreshPartitionData <- function(table,
+                                   file,
+                                   ...,
+                                   priority = "BATCH",
+                                   use.legacy.sql = bqUseLegacySql()) {
   existing.dates <- bqExistingPartitionDates(table)
 
   jobs <- lapply(existing.dates, function(d) {
@@ -810,7 +819,8 @@ bqRefreshPartitionData <- function(table, file, ..., priority = "BATCH") {
       sql = sql,
       table = destination.partition,
       write.disposition = "WRITE_TRUNCATE",
-      priority = priority
+      priority = priority,
+      use.legacy.sql = use.legacy.sql
     )
   })
   bqWait(jobs, priority)

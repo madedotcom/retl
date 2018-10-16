@@ -5,9 +5,11 @@
 \alias{bqRefreshPartitionData}
 \title{Functions to transforms partitioned data form one table to another}
 \usage{
-bqTransformPartition(table, file, ..., priority = "INTERACTIVE")
+bqTransformPartition(table, file, ..., priority = "INTERACTIVE",
+  use.legacy.sql = bqUseLegacySql())
 
-bqRefreshPartitionData(table, file, ..., priority = "BATCH")
+bqRefreshPartitionData(table, file, ..., priority = "BATCH",
+  use.legacy.sql = bqUseLegacySql())
 }
 \arguments{
 \item{table}{destination partition table where results of the query will be saved}
@@ -19,6 +21,9 @@ partition date will be always passed first in format `yyyymmdd`
 followed by arguments in `...`}
 
 \item{priority}{sets priority of job execution to INTERACTIVE or BATCH}
+
+\item{use.legacy.sql}{switches SQL dialect.
+Defaults to value set in `BIGQUERY_LEGACY_SQL` env.}
 }
 \description{
 `bqTransformPartition` creates new partitions for the missing dates
