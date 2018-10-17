@@ -605,7 +605,8 @@ bqCreatePartitionTable <- function(table,
       bqCreateTable(
         sql = bqCombineQueries(sql.list, TRUE),
         table =  destination.partition,
-        priority = priority
+        priority = priority,
+        write.disposition = "WRITE_TRUNCATE"
       )
     })
   jobs <- unlist(jobs, recursive = F)
