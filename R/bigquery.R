@@ -594,21 +594,38 @@ bqCreatePartitionTable <- function(table,
       destination.partition <- bqPartitionName(table, d)
       print(paste0("Partition name: ", destination.partition))
 
-      bqDeleteTable(destination.partition)
 
-      lapply(datasets, function(p) {
+      sql.list <- lapply(datasets, function(p) {
         # Replace placeholders in sql template.
         sql.exec <- sprintf(sql, p, d, bqDatasetLabel(datasets, p))
-        sql.exec <- paste(sql.exec, collapse = "\n")
-        bqCreateTable(
-          sql = sql.exec,
-          table =  destination.partition,
-          priority = priority
-        )
+        paste(sql.exec, collapse = "\n")
       })
+
+      bqCreateTable(
+        sql = bqCombineQueries(sql.list, TRUE),
+        table =  destination.partition,
+        priority = priority,
+        write.disposition = "WRITE_TRUNCATE"
+      )
     })
   jobs <- unlist(jobs, recursive = F)
   bqWait(jobs, priority)
+}
+
+#' Combines list of queries into a single query
+#'
+#' @noRd
+#' @param sql list of queries that will be combined into one
+#' @param use.legacy.sql defines which flavour to use
+bqCombineQueries <- function(sql, use.legacy.sql = bqUseLegacySql()) {
+  if (use.legacy.sql) {
+    sql.list <- lapply(sql, function(x) {
+      paste0("(", x, ")")
+    })
+    paste0("SELECT * FROM\n", paste0(sql.list, collapse = ",\n"))
+  } else {
+    paste0(sql, collapse = "\n UNION ALL \n")
+  }
 }
 
 #' Inserts data into BigQuery table
