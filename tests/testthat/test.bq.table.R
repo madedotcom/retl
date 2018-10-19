@@ -18,6 +18,8 @@ test_that("table is created from schema file", {
          type = "STRING")
   )
   expected.partition <- TRUE
+
+  expect_s3_class(res, "bq_table")
 })
 
 test_that("correct schema is generated for a given dataset", {

@@ -135,4 +135,14 @@ test_that("shard tables from several datasets can
   )
   res <- bqExecuteSql("SELECT COUNT(*) as result FROM partitioned_shards")
   expect_equal(res$result, 4)
+
+  # partition is updated with BATCH priority and results don't change
+  bqCreatePartitionTable(
+    table = "partitioned_shards",
+    datasets = datasets,
+    sql = "SELECT value AS count FROM %1s.shard_%2$s",
+    priority = "BATCH"
+  )
+  res <- bqExecuteSql("SELECT COUNT(*) as result FROM partitioned_shards")
+  expect_equal(res$result, 4)
 })
