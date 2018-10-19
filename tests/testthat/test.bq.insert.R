@@ -98,6 +98,8 @@ test_that("partitioned table can be created and data is added", {
 
 })
 
+context("Create partition table from shards")
+
 test_that("shard tables from several datasets can
           be tranformed in day partitioned tables", {
   skip_on_travis()
