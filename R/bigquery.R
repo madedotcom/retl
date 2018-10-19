@@ -608,7 +608,7 @@ bqCreatePartitionTable <- function(table,
         write.disposition = "WRITE_TRUNCATE"
       )
     })
-  jobs <- unlist(jobs, recursive = F)
+
   bqWait(jobs, priority)
 }
 
@@ -833,7 +833,7 @@ bqWait <- function(jobs, priority) {
   if (priority == "BATCH") {
     # Wait for all the jobs that were submitted
     jobs <- lapply(jobs, function(job) {
-       bq_job_wait(job)
+      bq_job_wait(job)
     })
   }
   invisible(jobs)
