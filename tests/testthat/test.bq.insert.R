@@ -98,6 +98,8 @@ test_that("partitioned table can be created and data is added", {
 
 })
 
+context("Create partition table from shards")
+
 test_that("shard tables from several datasets can
           be tranformed in day partitioned tables", {
   skip_on_travis()
@@ -132,6 +134,16 @@ test_that("shard tables from several datasets can
     table = "partitioned_shards",
     datasets = datasets,
     sql = "SELECT value AS count FROM %1s.shard_%2$s"
+  )
+  res <- bqExecuteSql("SELECT COUNT(*) as result FROM partitioned_shards")
+  expect_equal(res$result, 4)
+
+  # partition is updated with BATCH priority and results don't change
+  bqCreatePartitionTable(
+    table = "partitioned_shards",
+    datasets = datasets,
+    sql = "SELECT value AS count FROM %1s.shard_%2$s",
+    priority = "BATCH"
   )
   res <- bqExecuteSql("SELECT COUNT(*) as result FROM partitioned_shards")
   expect_equal(res$result, 4)
