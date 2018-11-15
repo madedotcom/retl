@@ -786,7 +786,7 @@ bqTransformPartition <- function(table,
     partition <- gsub("-", "", d)
     destination.partition <- paste0(table, "$", partition)
     print(destination.partition)
-    sql.exec <- readSql(file, d, ...)
+    sql.exec <- readSql(file, partition, ...)
 
     bqCreateTable(
       sql.exec,
