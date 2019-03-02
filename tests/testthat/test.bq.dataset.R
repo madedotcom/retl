@@ -3,8 +3,6 @@ library(mockery)
 
 context("BigQuery Dataset")
 
-bq_dataset_exists_mock <- mock(TRUE, FALSE)
-
 test_that("Check that datasets can be checked", {
   skip_on_travis()
   res <- bqDatasetExists()

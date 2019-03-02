@@ -1,3 +1,5 @@
 linters: with_defaults(
     camel_case_linter = NULL,
-    object_name_linter = object_name_linter(c("lowerCamelCase", "dotted.case")))
+    object_name_linter = object_name_linter(c("lowerCamelCase", "dotted.case")),
+    line_length_linter = line_length_linter(120))
+exclusions: list("R/aws-s3.R")
