@@ -11,7 +11,6 @@ safeLookup <- function(data,
                        lookup,
                        by,
                        select = setdiff(colnames(lookup), by)) {
-
   assert_that(
     is.data.table(data),
     is.data.table(lookup),
@@ -34,7 +33,7 @@ safeLookup <- function(data,
     collapse = ""
   )
 
-  data[, eval(tempColName) :=  1:.N]
+  data[, eval(tempColName) := 1:.N]
   res <- merge(data, lookup[, mget(c(by, select))], by = by, all.x = TRUE)
   res <- res[order(get(tempColName))]
   data[, eval(tempColName) := NULL]
@@ -46,7 +45,7 @@ safeLookup <- function(data,
 #' @param names column names to correct.
 #' @param separator char to use between words in column names.
 conformHeader <- function(names, separator = ".") {
- gsub("[\\.| |_|-]", separator, tolower(names))
+  gsub("[\\.| |_|-]", separator, tolower(names))
 }
 
 #' Splits table rows into multiple by the integer "by".

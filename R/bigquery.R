@@ -118,7 +118,6 @@ bqProjectDatasets <- function(project = bqDefaultProject()) {
 #' @param datasets list of dataset object to filter results
 bqProjectTables <- function(project = bqDefaultProject(),
                             datasets = bqProjectDatasets()) {
-
   if (bqUseLegacySql()) {
     sql <- "
     SELECT
@@ -145,7 +144,6 @@ bqProjectTables <- function(project = bqDefaultProject(),
       size_bytes,
       type
     FROM `%1$s.__TABLES__`"
-
   }
 
   tables <- lapply(datasets, function(d) {
@@ -330,7 +328,7 @@ bqDeleteTable <- function(table, dataset = bqDefaultDataset()) {
 #'   to fill in placeholders in the template with sprintf
 #' @return SQL statement as a string
 readSql <- function(file, ...) {
-  sql <-  paste(readLines(file), collapse = "\n")
+  sql <- paste(readLines(file), collapse = "\n")
 
   if (length(list(...)) > 0) {
     # template requires parameters.
@@ -453,7 +451,7 @@ bqTableSchema <- function(table, dataset = bqDefaultDataset()) {
 bqExecuteFile <- function(file, ...) {
   # Function to load data from BigQuery using file with SQL.
 
-  sql <-  paste(readLines(file), collapse = "\n")
+  sql <- paste(readLines(file), collapse = "\n")
   bqExecuteSql(sql, ...)
 }
 
@@ -567,7 +565,6 @@ bqCreatePartitionTable <- function(table,
                                    existing.dates = NULL,
                                    missing.dates = NULL,
                                    priority = "INTERACTIVE") {
-
   assert_that(
     xor(is.null(sql), is.null(file)),
     msg = "Either sql or file must be provided"
@@ -607,7 +604,7 @@ bqCreatePartitionTable <- function(table,
 
       bqCreateTable(
         sql = bqCombineQueries(sql.list, TRUE),
-        table =  destination.partition,
+        table = destination.partition,
         priority = priority,
         write.disposition = "WRITE_TRUNCATE"
       )
@@ -646,7 +643,6 @@ bqInsertData <- function(table,
                          dataset = bqDefaultDataset(),
                          append = TRUE,
                          fields = NULL) {
-
   assert_that(
     nchar(dataset) > 0,
     msg = "Set dataset parameter or BIGQUERY_DATASET env var."
@@ -946,7 +942,7 @@ bqJsonField <- function(x) {
     name = jsonlite::unbox(x$name),
     type = jsonlite::unbox(x$type),
     mode = jsonlite::unbox(x$mode)
-   )
+  )
   if (!is.null(x$fields) & length(x$fields) > 0) {
     res$fields <- bqJsonFields(x$fields)
   }

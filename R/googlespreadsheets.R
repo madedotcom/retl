@@ -9,9 +9,11 @@ gsAuth <- function() {
   if (is.null(gs.env$access.cred)) {
     service.token <- gar_auth_service(
       json_file = Sys.getenv("BIGQUERY_ACCESS_TOKEN_PATH"),
-      scope = c("https://www.googleapis.com/auth/drive",
-                "https://spreadsheets.google.com/feeds")
+      scope = c(
+        "https://www.googleapis.com/auth/drive",
+        "https://spreadsheets.google.com/feeds"
       )
+    )
     gs.env$access.cred <- gs_auth(token = service.token)
   }
 }

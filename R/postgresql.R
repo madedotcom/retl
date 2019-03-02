@@ -34,7 +34,6 @@ dbExecuteQueryFile <- function(file, ...) {
 #' @param sql string with sql query
 #' @param ... any parameters that will be used to fill in placeholders with sprintf
 dbExecuteQuery <- function(sql, ...) {
-
   if (length(list(...)) > 0) {
     # template requires parameters.
     sql <- sprintf(sql, ...)

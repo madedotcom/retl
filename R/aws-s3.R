@@ -28,8 +28,7 @@ s3PutFile <- function(dt,
                       path,
                       bucket = s3DefaultBucket(),
                       root = s3DefaultRoot(),
-                      ...
-                      ) {
+                      ...) {
   args <- c(as.list(environment()), list(...))
   do.call(
     what = s3PutFile.factory(path),
@@ -58,8 +57,10 @@ s3PutFile.factory <- function(path) { # nolint
   if (grepl("\\.rds$", path)) {
     return(s3PutFile.rds)
   }
-  stop(paste0("Unsupported file extension in the path of the s3PutFile call: ",
-              tools::file_ext(path)))
+  stop(paste0(
+    "Unsupported file extension in the path of the s3PutFile call: ",
+    tools::file_ext(path)
+  ))
 }
 
 #' @export
@@ -144,8 +145,10 @@ s3GetFile.factory <- function(path) { # nolint
   if (grepl("\\.rds$", path)) {
     return(s3GetFile.rds)
   }
-  stop(paste0("Unsupported file extension in the path of s3GetFile call: ",
-              tools::file_ext(path)))
+  stop(paste0(
+    "Unsupported file extension in the path of s3GetFile call: ",
+    tools::file_ext(path)
+  ))
 }
 
 #' @export
@@ -163,8 +166,9 @@ s3GetFile.csv <- function(path, # nolint
   )
 
   # In case of error, print error message.
-  if (!is.raw(raw.data))
+  if (!is.raw(raw.data)) {
     stop(print(raw.data[1:3]))
+  }
 
   data <- iconv(
     readBin(raw.data, character()),
@@ -193,7 +197,6 @@ s3GetData <- function(path, header = TRUE,
                       root = s3DefaultRoot(),
                       s3.get.fun = s3GetFile,
                       fill = TRUE) {
-
   full.path <- paste0(root, path)
   full.path <- gsub("^/", "", full.path)
   objects <- aws.s3::get_bucket(
@@ -202,7 +205,7 @@ s3GetData <- function(path, header = TRUE,
     check_region = FALSE
   )
   dt.list <- lapply(objects, function(o) {
-   s3.get.fun(o$Key, bucket = bucket, root = "")
+    s3.get.fun(o$Key, bucket = bucket, root = "")
   })
 
   invisible(
@@ -239,7 +242,6 @@ s3PutFile.gz <- function(dt, path, # nolint
                          bucket = s3DefaultBucket(),
                          root = s3DefaultRoot(),
                          na.value = "") {
-
   tmp.file <- tempfile(fileext = ".gz")
   on.exit(unlink(tmp.file))
   gz.connection <- gzfile(tmp.file, "w")
@@ -270,7 +272,6 @@ s3PutFile.gz <- function(dt, path, # nolint
 s3GetFile.gz <- function(path, # nolint
                          bucket = s3DefaultBucket(),
                          root = s3DefaultRoot()) {
-
   full.path <- paste0(root, path)
   tmp.file <- tempfile(fileext = ".gz")
   on.exit(unlink(tmp.file))
@@ -292,7 +293,6 @@ s3GetFile.gz <- function(path, # nolint
 s3PutFile.rds <- function(dt, path, # nolint
                           bucket = s3DefaultBucket(),
                           root = s3DefaultRoot()) {
-
   full.path <- paste0(root, path)
   s3saveRDS(
     x = dt,
@@ -308,7 +308,6 @@ s3PutFile.rds <- function(dt, path, # nolint
 s3GetFile.rds <- function(path, # nolint
                           bucket = s3DefaultBucket(),
                           root = s3DefaultRoot()) {
-
   full.path <- paste0(root, path)
   s3readRDS(
     bucket = bucket,
@@ -324,7 +323,6 @@ s3GetFile.rds <- function(path, # nolint
 s3GetFile.zip <- function(path, # nolint
                           bucket = s3DefaultBucket(),
                           root = s3DefaultRoot()) {
-
   full.path <- paste0(root, path)
   tmp.file <- tempfile(fileext = ".zip")
   on.exit(unlink(tmp.file))
@@ -345,9 +343,8 @@ s3GetFile.zip <- function(path, # nolint
 #' @return `s3PutFile.json.gz` saves data as `.json.gz` (json archived) file in S3
 #' @importFrom jsonlite write_json
 s3PutFile.json.gz <- function(dt, path, # nolint
-                         bucket = s3DefaultBucket(),
-                         root = s3DefaultRoot()) {
-
+                              bucket = s3DefaultBucket(),
+                              root = s3DefaultRoot()) {
   tmp.file <- tempfile(fileext = ".gz")
   on.exit(unlink(tmp.file))
   gz.connection <- gzfile(tmp.file, "w")
@@ -371,7 +368,6 @@ s3PutFile.json.gz <- function(dt, path, # nolint
 s3GetFile.json.gz <- function(path, # nolint
                               bucket = s3DefaultBucket(),
                               root = s3DefaultRoot()) {
-
   full.path <- paste0(root, path)
   tmp.file <- tempfile(fileext = ".gz")
   on.exit(unlink(tmp.file))

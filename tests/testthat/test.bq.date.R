@@ -8,5 +8,4 @@ test_that("Missing dates function is correct.", {
   res <- getMissingDates(start.date, end.date, existing.dates)
 
   expect_identical(length(res), as.integer(8), "Existing dates are exluded.")
-
 })
