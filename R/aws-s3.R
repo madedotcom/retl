@@ -45,8 +45,7 @@ s3DefaultRoot <- function() {
   Sys.getenv("AWS_S3_ROOT")
 }
 
-# nolint start
-s3PutFile.factory <- function(path) {
+s3PutFile.factory <- function(path) { # nolint
   if (grepl("\\.csv$", path)) {
     return(s3PutFile.csv)
   }
@@ -66,7 +65,7 @@ s3PutFile.factory <- function(path) {
 #' @export
 #' @rdname s3PutFile
 #' @return `s3PutFile.csv` saves data into `.csv` file in S3.
-s3PutFile.csv <- function(dt,
+s3PutFile.csv <- function(dt, # nolint
                           path,
                           bucket = s3DefaultBucket(),
                           root = s3DefaultRoot(),
@@ -90,7 +89,6 @@ s3PutFile.csv <- function(dt,
     check_region = FALSE
   )
 }
-# nolint end
 
 #' Loads data from AWS S3 into data.table object
 #'
@@ -130,8 +128,7 @@ s3GetFile <- function(path,
   )
 }
 
-# nolint start
-s3GetFile.factory <- function(path) {
+s3GetFile.factory <- function(path) { # nolint
   if (grepl("\\.csv$", path)) {
     return(s3GetFile.csv)
   }
@@ -154,7 +151,7 @@ s3GetFile.factory <- function(path) {
 #' @export
 #' @rdname s3GetFile
 #' @return `s3GetFile.csv` loads data from `.csv` files
-s3GetFile.csv <- function(path,
+s3GetFile.csv <- function(path, # nolint
                           bucket = s3DefaultBucket(),
                           root = s3DefaultRoot(),
                           header = TRUE) {
@@ -178,7 +175,6 @@ s3GetFile.csv <- function(path,
   names(dt) <- conformHeader(names(dt))
   invisible(dt)
 }
-# nolint end
 
 #' Loads data from several files in S3 based on the path prefix
 #'
@@ -236,12 +232,10 @@ s3ListFiles <- function(path,
   as.data.table(objects)
 }
 
-# nolint start
-
 #' @export
 #' @rdname s3PutFile
 #' @return `s3PutFile.gz` saves data into `.gz` (csv archived) file in S3.
-s3PutFile.gz <- function(dt, path,
+s3PutFile.gz <- function(dt, path, # nolint
                          bucket = s3DefaultBucket(),
                          root = s3DefaultRoot(),
                          na.value = "") {
@@ -273,7 +267,7 @@ s3PutFile.gz <- function(dt, path,
 #' @export
 #' @rdname s3GetFile
 #' @return `s3GetFile.gz` loads data from `.gz` files
-s3GetFile.gz <- function(path,
+s3GetFile.gz <- function(path, # nolint
                          bucket = s3DefaultBucket(),
                          root = s3DefaultRoot()) {
 
@@ -295,7 +289,7 @@ s3GetFile.gz <- function(path,
 #' @export
 #' @rdname s3PutFile
 #' @return `s3PutFile.rds` saves data as `.rds` file in S3
-s3PutFile.rds <- function(dt, path,
+s3PutFile.rds <- function(dt, path, # nolint
                           bucket = s3DefaultBucket(),
                           root = s3DefaultRoot()) {
 
@@ -311,7 +305,7 @@ s3PutFile.rds <- function(dt, path,
 #' @export
 #' @rdname s3GetFile
 #' @return `s3GetFile.rds` loads data from `.rds` files
-s3GetFile.rds <- function(path,
+s3GetFile.rds <- function(path, # nolint
                           bucket = s3DefaultBucket(),
                           root = s3DefaultRoot()) {
 
@@ -327,7 +321,7 @@ s3GetFile.rds <- function(path,
 #' @export
 #' @return `s3GetFile.zip` loads data from `.zip` files
 #' @importFrom utils unzip
-s3GetFile.zip <- function(path,
+s3GetFile.zip <- function(path, # nolint
                           bucket = s3DefaultBucket(),
                           root = s3DefaultRoot()) {
 
@@ -350,7 +344,7 @@ s3GetFile.zip <- function(path,
 #' @export
 #' @return `s3PutFile.json.gz` saves data as `.json.gz` (json archived) file in S3
 #' @importFrom jsonlite write_json
-s3PutFile.json.gz <- function(dt, path,
+s3PutFile.json.gz <- function(dt, path, # nolint
                          bucket = s3DefaultBucket(),
                          root = s3DefaultRoot()) {
 
@@ -374,7 +368,7 @@ s3PutFile.json.gz <- function(dt, path,
 #' @return `s3GetFile.json.gz` loads data from `.json.gz` files
 #' @import data.table
 #' @importFrom jsonlite fromJSON
-s3GetFile.json.gz <- function(path,
+s3GetFile.json.gz <- function(path, # nolint
                               bucket = s3DefaultBucket(),
                               root = s3DefaultRoot()) {
 
@@ -393,7 +387,6 @@ s3GetFile.json.gz <- function(path,
   names(dt) <- conformHeader(names(dt))
   invisible(dt)
 }
-# nolint end
 
 #' Gets the path to the object based on the root path setup via
 #' environment variable
