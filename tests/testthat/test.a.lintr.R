@@ -12,7 +12,7 @@ if (requireNamespace("lintr", quietly = TRUE)) {
         lintr::absolute_path_linter,
         lintr::object_name_linter(c("lowerCamelCase", "dotted.case"))
       ),
-      exclusions = list("../../R/aws-s3.R")
+      exclusions = list("../../R/aws-s3.R", "R/aws-s3.R")
     )
   })
 }
