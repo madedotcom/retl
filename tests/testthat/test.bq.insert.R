@@ -15,9 +15,9 @@ test_that("Data is inserted correctly without metadata", {
 
   expect_equal(nrow(iris.bq), nrow(dt.test))
   # data from bigquery matches the data we sent, up to:
-  # - column names
-  # - types
-  # - order
+  # * column names
+  # * types
+  # * order
   colnames(dt.test) <- tolower(colnames(dt.test))
   iris.bq[, species := as.factor(species)]
   expect_equal(

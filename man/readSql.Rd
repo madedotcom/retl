@@ -9,7 +9,8 @@ readSql(file, ...)
 \arguments{
 \item{file}{file with sql statement template}
 
-\item{...}{any parameters that will be used to fill in placeholders in the template with sprintf}
+\item{...}{any parameters that will be used
+to fill in placeholders in the template with sprintf}
 }
 \value{
 SQL statement as a string

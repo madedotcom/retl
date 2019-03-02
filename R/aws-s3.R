@@ -12,7 +12,7 @@
 #' @param dt data.table to save
 #' @param path S3 object path starting after root folder.
 #' @param bucket name of the S3 bucket.
-#'     Defaults to value in `AWS_S3_BUCKET` environment variable.
+#'     Defaults to value in `AWS_S3_BUCKET` environment variable.#'
 #' @param root project root path that is appended before the path, e.g. "/prod/".
 #'     Defaults to value in `AWS_S3_ROOT` environment variable.
 #' @param na.value the string to use for missing values in the data.
@@ -156,18 +156,18 @@ s3GetFile.csv <- function(path,
                           root = s3DefaultRoot(),
                           header = TRUE) {
   full.path <- paste0(root, path)
-  raw_data <- get_object(
+  raw.data <- get_object(
     object = full.path,
     bucket = bucket,
     check_region = FALSE
   )
 
   # In case of error, print error message.
-  if (!is.raw(raw_data))
-    stop(print(raw_data[1:3]))
+  if (!is.raw(raw.data))
+    stop(print(raw.data[1:3]))
 
   data <- iconv(
-    readBin(raw_data, character()),
+    readBin(raw.data, character()),
     from = "UTF-8",
     to = "UTF-8"
   )

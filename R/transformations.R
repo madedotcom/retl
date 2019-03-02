@@ -49,15 +49,18 @@ conformHeader <- function(names, separator = ".") {
  gsub("[\\.| |_|-]", separator, tolower(names))
 }
 
-#' Splits table rows into multiple by the integer "by". All other fields are duplicated.
+#' Splits table rows into multiple by the integer "by".
+#'   All other fields are duplicated.
+#'
 #' @export
 #' @param dt data.table to disaggregate.
 #' @param by integer by which each line is split into units of 1.
-#' @param keep.row.number boolean whether to keep the original row number as 'rn' in the final table
+#' @param keep.row.number boolean whether to keep the original
+#'   row number as 'rn' in the final table
 disaggregate <- function(dt, by, keep.row.number = FALSE) {
   rn <- NULL
   if (keep.row.number) dt[, rn := .I]
-  res <- dt[as.integer(rep(row.names(dt), dt[, get(by)])),]
+  res <- dt[as.integer(rep(row.names(dt), dt[, get(by)])), ]
   res[, eval(by) := 1]
 
   stopifnot(sum(res[, get(by)]) == sum(dt[, get(by)]))

@@ -69,12 +69,17 @@ dcPredictionBody <- function(clickId, conversionId, datetime, custom.metrics) {
 #'
 #' @param metrics named vector with custom metrics values
 metricsToList <- function(metrics) {
-  res <- mapply(function(value, name) {
-     list(
+  res <- mapply(
+    function(value, name) {
+      list(
        name = name,
        value = value
-     )
-  }, metrics, name = names(metrics), SIMPLIFY = FALSE)
+      )
+    },
+    metrics,
+    name = names(metrics),
+    SIMPLIFY = FALSE
+  )
   res <- unname(res)
 }
 

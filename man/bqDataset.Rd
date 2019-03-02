@@ -32,5 +32,6 @@ Gets list of tables for a given dataset
 Dataset manipulation functions
 }
 \details{
-`bqDeleteDataset()` - You can protect dataset from programmatic deletion by adding `delete:never` label (key:value) to it.
+`bqDeleteDataset()` - You can protect dataset
+  from programmatic deletion by adding `delete:never` label (key:value) to it.
 }
