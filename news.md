@@ -1,12 +1,18 @@
 # RETL Package Updates
 
-## 0.1.4.9000
+## 0.1.7
+
+* `s3GetData()` renamed `s3Get.FUN` to `s3.get.fun` to comply with coding style.
+
+* Style changes and `.lintr` added. Lint checks added to the testthat to make 
+  code validation part of CI.
+
+## 0.1.5
 
 * `bqTransformPartition()`, `bqRefreshPartitionData()` - added parameter to control sql dialect of BigQuery. 
  
-## 0.1.4.9000
 
-`bqCreatePartitionTable()` - updated to create partition from several shard tables with one combined query. This is done to reduce the number of changes against the target table to meet the limit of 5000 changes per day.
+* `bqCreatePartitionTable()` - updated to create partition from several shard tables with one combined query.   This is done to reduce the number of changes against the target table to meet the limit of 5000 changes per   day.
  
 ## 0.1.4
 
