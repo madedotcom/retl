@@ -16,7 +16,6 @@ bqExtractTable <- function(table,
                            dataset = bqDefaultDataset(),
                            format = "CSV",
                            compression = "GZIP") {
-
   x <- bq_table(
     project = bqDefaultProject(),
     dataset = dataset,
@@ -47,7 +46,6 @@ bqImportData <- function(table,
                          format = "CSV",
                          compression = "GZIP",
                          nskip = 1) {
-
   write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
   x <- bq_table(
     project = bqDefaultProject(),
@@ -73,7 +71,6 @@ bqImportData <- function(table,
     nskip = 1,
     fields = table.schema
   )
-
 }
 
 #' makes full path to the gs file from relative part

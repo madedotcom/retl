@@ -8,7 +8,9 @@ if (requireNamespace("lintr", quietly = TRUE)) {
         lintr::line_length_linter,
         lintr::no_tab_linter,
         lintr::assignment_linter,
-        lintr::closed_curly_linter
+        lintr::closed_curly_linter,
+        lintr::absolute_path_linter,
+        lintr::object_name_linter(c("lowerCamelCase", "dotted.case"))
       )
     )
   })

@@ -5,7 +5,7 @@
 \title{Loads data from several files in S3 based on the path prefix}
 \usage{
 s3GetData(path, header = TRUE, bucket = s3DefaultBucket(),
-  root = s3DefaultRoot(), s3Get.FUN = s3GetFile, fill = TRUE)
+  root = s3DefaultRoot(), s3.get.fun = s3GetFile, fill = TRUE)
 }
 \arguments{
 \item{path}{is the path to the S3 object}
@@ -18,7 +18,7 @@ Defaults to value in \code{AWS_S3_BUCKET} environment variable.}
 \item{root}{project root path that is appended before the path in the argument.
 Defaults to value in \code{AWS_S3_ROOT} environment variable.}
 
-\item{s3Get.FUN}{Function that will be used to read data from the individual files.}
+\item{s3.get.fun}{Function that will be used to read data from the individual files.}
 
 \item{fill}{see data.table::rbindList}
 }

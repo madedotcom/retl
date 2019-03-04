@@ -11,7 +11,6 @@ safeLookup <- function(data,
                        lookup,
                        by,
                        select = setdiff(colnames(lookup), by)) {
-
   assert_that(
     is.data.table(data),
     is.data.table(lookup),
@@ -34,7 +33,7 @@ safeLookup <- function(data,
     collapse = ""
   )
 
-  data[, eval(tempColName) :=  1:.N]
+  data[, eval(tempColName) := 1:.N]
   res <- merge(data, lookup[, mget(c(by, select))], by = by, all.x = TRUE)
   res <- res[order(get(tempColName))]
   data[, eval(tempColName) := NULL]
@@ -46,18 +45,21 @@ safeLookup <- function(data,
 #' @param names column names to correct.
 #' @param separator char to use between words in column names.
 conformHeader <- function(names, separator = ".") {
- gsub("[\\.| |_|-]", separator, tolower(names))
+  gsub("[\\.| |_|-]", separator, tolower(names))
 }
 
-#' Splits table rows into multiple by the integer "by". All other fields are duplicated.
+#' Splits table rows into multiple by the integer "by".
+#'   All other fields are duplicated.
+#'
 #' @export
 #' @param dt data.table to disaggregate.
 #' @param by integer by which each line is split into units of 1.
-#' @param keep.row.number boolean whether to keep the original row number as 'rn' in the final table
+#' @param keep.row.number boolean whether to keep the original
+#'   row number as 'rn' in the final table
 disaggregate <- function(dt, by, keep.row.number = FALSE) {
   rn <- NULL
   if (keep.row.number) dt[, rn := .I]
-  res <- dt[as.integer(rep(row.names(dt), dt[, get(by)])),]
+  res <- dt[as.integer(rep(row.names(dt), dt[, get(by)])), ]
   res[, eval(by) := 1]
 
   stopifnot(sum(res[, get(by)]) == sum(dt[, get(by)]))

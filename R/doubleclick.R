@@ -45,7 +45,6 @@ dcListConversions <- function(clickId,
 #' @param datetime POSIX timestamp in milliseconds
 #' @param custom.metrics list with named vectors of custom metric values
 dcPredictionBody <- function(clickId, conversionId, datetime, custom.metrics) {
-
   assert_that(
     length(clickId) == length(conversionId),
     length(clickId) == length(datetime),
@@ -69,12 +68,17 @@ dcPredictionBody <- function(clickId, conversionId, datetime, custom.metrics) {
 #'
 #' @param metrics named vector with custom metrics values
 metricsToList <- function(metrics) {
-  res <- mapply(function(value, name) {
-     list(
-       name = name,
-       value = value
-     )
-  }, metrics, name = names(metrics), SIMPLIFY = FALSE)
+  res <- mapply(
+    function(value, name) {
+      list(
+        name = name,
+        value = value
+      )
+    },
+    metrics,
+    name = names(metrics),
+    SIMPLIFY = FALSE
+  )
   res <- unname(res)
 }
 

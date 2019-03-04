@@ -2,8 +2,9 @@
 % Please edit documentation in R/bigquery.R
 \name{bqAuth}
 \alias{bqAuth}
-\title{Wrapper for the set_service_token that uses BIGQUERY_ACCESS_TOKEN_PATH env var
- as default value for the secret token location.}
+\title{Wrapper for the set_service_token that
+  uses BIGQUERY_ACCESS_TOKEN_PATH env var
+  as default value for the secret token location.}
 \usage{
 bqAuth()
 }

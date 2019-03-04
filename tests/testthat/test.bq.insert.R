@@ -15,14 +15,15 @@ test_that("Data is inserted correctly without metadata", {
 
   expect_equal(nrow(iris.bq), nrow(dt.test))
   # data from bigquery matches the data we sent, up to:
-  # - column names
-  # - types
-  # - order
+  # * column names
+  # * types
+  # * order
   colnames(dt.test) <- tolower(colnames(dt.test))
   iris.bq[, species := as.factor(species)]
   expect_equal(
     iris.bq[order(sepal.length, sepal.width, petal.length, petal.width)],
-    dt.test[order(sepal.length, sepal.width, petal.length, petal.width)])
+    dt.test[order(sepal.length, sepal.width, petal.length, petal.width)]
+  )
 })
 
 test_that("table can be created from schema", {
@@ -74,7 +75,8 @@ test_that("partitioned table can be created and data is added", {
   )
   res <- bqExecuteSql(
     "SELECT SUM(count) as result
-    FROM table_partion_transformation")
+    FROM table_partion_transformation"
+  )
   expect_equal(res$result, 6 * 2)
 
   dt <- data.table(count = c(1L, 1L, 1L))
@@ -93,9 +95,9 @@ test_that("partitioned table can be created and data is added", {
 
   res <- bqExecuteSql(
     "SELECT SUM(count) as result
-    FROM table_partion_transformation")
+    FROM table_partion_transformation"
+  )
   expect_equal(res$result, 8 * 2)
-
 })
 
 context("Create partition table from shards")

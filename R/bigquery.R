@@ -4,8 +4,9 @@
 #' @import assertthat
 NULL
 
-#' Wrapper for the set_service_token that uses BIGQUERY_ACCESS_TOKEN_PATH env var
-#'  as default value for the secret token location.
+#' Wrapper for the set_service_token that
+#'   uses BIGQUERY_ACCESS_TOKEN_PATH env var
+#'   as default value for the secret token location.
 #'
 #' @description
 #' Required environment variables to use BigQuery helper functions:
@@ -117,7 +118,6 @@ bqProjectDatasets <- function(project = bqDefaultProject()) {
 #' @param datasets list of dataset object to filter results
 bqProjectTables <- function(project = bqDefaultProject(),
                             datasets = bqProjectDatasets()) {
-
   if (bqUseLegacySql()) {
     sql <- "
     SELECT
@@ -144,7 +144,6 @@ bqProjectTables <- function(project = bqDefaultProject(),
       size_bytes,
       type
     FROM `%1$s.__TABLES__`"
-
   }
 
   tables <- lapply(datasets, function(d) {
@@ -176,7 +175,8 @@ bqDatasetTables <- function(dataset = bqDefaultDataset(),
 }
 
 
-#' Gets dates that are missing from the date range for a give list of existing dates
+#' Gets dates that are missing from the date range
+#'   for a give list of existing dates
 #'
 #' @export
 #' @param start.date begining of the period
@@ -231,7 +231,8 @@ bqCreateDataset <- function(dataset = bqDefaultDataset(),
 }
 
 #' @rdname bqDataset
-#' @details `bqDeleteDataset()` - You can protect dataset from programmatic deletion by adding `delete:never` label (key:value) to it.
+#' @details `bqDeleteDataset()` - You can protect dataset
+#'   from programmatic deletion by adding `delete:never` label (key:value) to it.
 #' @export
 #' @param delete.contents removes all content from the dataset if is set to TRUE
 bqDeleteDataset <- function(dataset = bqDefaultDataset(),
@@ -323,10 +324,11 @@ bqDeleteTable <- function(table, dataset = bqDefaultDataset()) {
 #'
 #' @export
 #' @param file file with sql statement template
-#' @param ... any parameters that will be used to fill in placeholders in the template with sprintf
+#' @param ... any parameters that will be used
+#'   to fill in placeholders in the template with sprintf
 #' @return SQL statement as a string
 readSql <- function(file, ...) {
-  sql <-  paste(readLines(file), collapse = "\n")
+  sql <- paste(readLines(file), collapse = "\n")
 
   if (length(list(...)) > 0) {
     # template requires parameters.
@@ -449,7 +451,7 @@ bqTableSchema <- function(table, dataset = bqDefaultDataset()) {
 bqExecuteFile <- function(file, ...) {
   # Function to load data from BigQuery using file with SQL.
 
-  sql <-  paste(readLines(file), collapse = "\n")
+  sql <- paste(readLines(file), collapse = "\n")
   bqExecuteSql(sql, ...)
 }
 
@@ -474,11 +476,11 @@ bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
   args <- c(as.list(environment()), list(...))
   args.reserved <- c("sql", "use.legacy.sql")
 
-  params <- named_arguments(args, args.reserved)
+  params <- namedArguments(args, args.reserved)
 
   if (!use.legacy.sql) {
     assert_that(
-      !(length(params) > 0L & noname_items_count(args) > 0L),
+      !(length(params) > 0L & nonameItemsCount(args) > 0L),
       msg = "Don't mix named and anonymous parameters in the call."
     )
   }
@@ -496,7 +498,7 @@ bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
     cat("parameters applied to the template: \n")
     print(jsonlite::toJSON(params, auto_unbox = TRUE))
   } else {
-    params = NULL
+    params <- NULL
   }
 
 
@@ -520,7 +522,7 @@ bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
 #' Returns subset of arguments where name is set excluding reserved names
 #'
 #' @noRd
-named_arguments <- function(args, reserved) {
+namedArguments <- function(args, reserved) {
   args.names <- names(args)
   args.names <- args.names[nchar(args.names) > 0 & !(args.names %in% reserved)]
   args[args.names]
@@ -529,7 +531,7 @@ named_arguments <- function(args, reserved) {
 #' Counts number of items in the list that don't have names
 #'
 #' @noRd
-noname_items_count <- function(x) {
+nonameItemsCount <- function(x) {
   sum(nchar(names(x)) == 0)
 }
 
@@ -563,7 +565,6 @@ bqCreatePartitionTable <- function(table,
                                    existing.dates = NULL,
                                    missing.dates = NULL,
                                    priority = "INTERACTIVE") {
-
   assert_that(
     xor(is.null(sql), is.null(file)),
     msg = "Either sql or file must be provided"
@@ -603,7 +604,7 @@ bqCreatePartitionTable <- function(table,
 
       bqCreateTable(
         sql = bqCombineQueries(sql.list, TRUE),
-        table =  destination.partition,
+        table = destination.partition,
         priority = priority,
         write.disposition = "WRITE_TRUNCATE"
       )
@@ -642,14 +643,13 @@ bqInsertData <- function(table,
                          dataset = bqDefaultDataset(),
                          append = TRUE,
                          fields = NULL) {
-
   assert_that(
     nchar(dataset) > 0,
     msg = "Set dataset parameter or BIGQUERY_DATASET env var."
   )
 
   if (missing(fields) & ncol(data) > 0) {
-    colnames(data) <- conformHeader(colnames(data), '_')
+    colnames(data) <- conformHeader(colnames(data), "_")
     fields <- as_bq_fields(data)
   }
 
@@ -875,9 +875,9 @@ bqVectorToCase <- function(field, limits, alias = field) {
   case.body <- sapply(1:(length(limits) - 1), function(i) {
     paste0(
       "WHEN (",
-      case_condition(field, limits[i], limits[i + 1]),
+      caseCondition(field, limits[i], limits[i + 1]),
       ") THEN '",
-      case_label(i, limits[i], limits[i + 1])
+      caseLabel(i, limits[i], limits[i + 1])
     )
   })
   case.body <- paste0(case.body, collapse = "")
@@ -885,7 +885,7 @@ bqVectorToCase <- function(field, limits, alias = field) {
   paste0("CASE ", case.body, "END AS ", alias)
 }
 
-case_condition <- function(field, low, high) {
+caseCondition <- function(field, low, high) {
   low.limit <- paste0(field, " > ", low)
   high.limit <- paste0(field, " <= ", high)
   if (is.infinite(low)) {
@@ -899,11 +899,11 @@ case_condition <- function(field, low, high) {
   )
 }
 
-case_label <- function(index, low, high) {
-  paste0(LETTERS[index], ") (", low, ", ", high, case_right_bracket(high), "' ")
+caseLabel <- function(index, low, high) {
+  paste0(LETTERS[index], ") (", low, ", ", high, caseRightBracket(high), "' ")
 }
 
-case_right_bracket <- function(high) {
+caseRightBracket <- function(high) {
   ifelse(is.infinite(high), ")", "]")
 }
 
@@ -942,7 +942,7 @@ bqJsonField <- function(x) {
     name = jsonlite::unbox(x$name),
     type = jsonlite::unbox(x$type),
     mode = jsonlite::unbox(x$mode)
-   )
+  )
   if (!is.null(x$fields) & length(x$fields) > 0) {
     res$fields <- bqJsonFields(x$fields)
   }

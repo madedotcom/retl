@@ -2,7 +2,8 @@
 % Please edit documentation in R/transformations.R
 \name{disaggregate}
 \alias{disaggregate}
-\title{Splits table rows into multiple by the integer "by". All other fields are duplicated.}
+\title{Splits table rows into multiple by the integer "by".
+  All other fields are duplicated.}
 \usage{
 disaggregate(dt, by, keep.row.number = FALSE)
 }
@@ -11,8 +12,10 @@ disaggregate(dt, by, keep.row.number = FALSE)
 
 \item{by}{integer by which each line is split into units of 1.}
 
-\item{keep.row.number}{boolean whether to keep the original row number as 'rn' in the final table}
+\item{keep.row.number}{boolean whether to keep the original
+row number as 'rn' in the final table}
 }
 \description{
-Splits table rows into multiple by the integer "by". All other fields are duplicated.
+Splits table rows into multiple by the integer "by".
+  All other fields are duplicated.
 }

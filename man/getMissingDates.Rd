@@ -2,7 +2,8 @@
 % Please edit documentation in R/bigquery.R
 \name{getMissingDates}
 \alias{getMissingDates}
-\title{Gets dates that are missing from the date range for a give list of existing dates}
+\title{Gets dates that are missing from the date range
+  for a give list of existing dates}
 \usage{
 getMissingDates(start.date, end.date, existing.dates, format = "\%Y\%m\%d")
 }
@@ -19,5 +20,6 @@ getMissingDates(start.date, end.date, existing.dates, format = "\%Y\%m\%d")
 vector of dates from the period that don't exist in the give vector
 }
 \description{
-Gets dates that are missing from the date range for a give list of existing dates
+Gets dates that are missing from the date range
+  for a give list of existing dates
 }

@@ -31,7 +31,7 @@ test_that("function is matching the path name", {
 
   path <- "test/file_name.bad"
   res <-
-  expect_error(s3GetFile.factory(path), regexp = "extension.*bad")
+    expect_error(s3GetFile.factory(path), regexp = "extension.*bad")
 
   # Put File
   path <- "test/file_name.csv"
@@ -52,5 +52,4 @@ test_that("function is matching the path name", {
   path <- "test/file_name.gz"
   res <- s3PutFile.factory(path)
   expect_equal(res, s3PutFile.gz)
-
 })

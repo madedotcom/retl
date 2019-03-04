@@ -27,7 +27,7 @@ s3PutFile.json.gz(dt, path, bucket = s3DefaultBucket(),
 \item{path}{S3 object path starting after root folder.}
 
 \item{bucket}{name of the S3 bucket.
-Defaults to value in \code{AWS_S3_BUCKET} environment variable.}
+Defaults to value in \code{AWS_S3_BUCKET} environment variable.#'}
 
 \item{root}{project root path that is appended before the path, e.g. "/prod/".
 Defaults to value in \code{AWS_S3_ROOT} environment variable.}

@@ -12,10 +12,14 @@ test_that("table is created from schema file", {
   )
 
   expected.schema <- list(
-    list(name = "id",
-         type = "INTEGER"),
-    list(name = "first_name",
-         type = "STRING")
+    list(
+      name = "id",
+      type = "INTEGER"
+    ),
+    list(
+      name = "first_name",
+      type = "STRING"
+    )
   )
   expected.partition <- TRUE
 

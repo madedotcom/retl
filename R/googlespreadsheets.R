@@ -2,17 +2,19 @@
 #' @import googlesheets
 NULL
 
-gs_env <- new.env(parent = emptyenv())
+gs.env <- new.env(parent = emptyenv())
 
 #' Authentication for google sheets. Requires access_token.json path as env. var.
 gsAuth <- function() {
-  if (is.null(gs_env$access.cred)) {
-    service_token <- gar_auth_service(
+  if (is.null(gs.env$access.cred)) {
+    service.token <- gar_auth_service(
       json_file = Sys.getenv("BIGQUERY_ACCESS_TOKEN_PATH"),
-      scope = c("https://www.googleapis.com/auth/drive",
-                "https://spreadsheets.google.com/feeds")
+      scope = c(
+        "https://www.googleapis.com/auth/drive",
+        "https://spreadsheets.google.com/feeds"
       )
-    gs_env$access.cred <- gs_auth(token = service_token)
+    )
+    gs.env$access.cred <- gs_auth(token = service.token)
   }
 }
 
