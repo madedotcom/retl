@@ -629,6 +629,48 @@ bqCombineQueries <- function(sql, use.legacy.sql = bqUseLegacySql()) {
   }
 }
 
+#' Inserts LARGE data into BigQuery table
+#' 
+#' @description 
+#' Truncates the target table and appends data broken in chunks
+#' 
+#' @export
+#' @param table name of the target table
+#' @param data data to be inserted
+#' @param dataset name of the destination dataset
+#' @param append specifies if data should be appended or truncated
+#' @param fields list of fields with names and types (as `bq_fields`)
+#' @param chunks number of segments the data should be split into
+#' @return results of execution
+bqInsertLargeData <- function(table,
+                         data,
+                         dataset = bqDefaultDataset(),
+                         chunks = 5,
+                         append = TRUE) {
+
+  rows <- nrow(data)
+
+  upload.list <- split(
+    data, 
+    f = sample(1:chunks, size = nrow(data), replace = TRUE)
+  )
+
+  bqInsertData(
+      table = table,
+      dataset = dataset,
+      data = upload.list[1],
+      append = append
+  )
+  
+  lapply(upload.list[-1], function(dt) {
+    bqInsertData(
+      table = table,
+      dataset = dataset,
+      data = data,
+      append = TRUE
+    )
+  })
+
 #' Inserts data into BigQuery table
 #'
 #' @export
@@ -680,7 +722,6 @@ bqInsertData <- function(table,
     return(NULL)
   }
 }
-
 
 #' Copies table in BigQuery
 #'
