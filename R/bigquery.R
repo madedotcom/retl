@@ -646,10 +646,10 @@ bqInsertLargeData <- function(table,
                               data,
                               dataset = bqDefaultDataset(),
                               chunks = 5,
-                              append = TRUE) {
+                              append = TRUE,
+                              fields = NULL) {
 
   rows <- nrow(data)
-
   upload.list <- split(
     data,
     f = sample(1:chunks, size = nrow(data), replace = TRUE)
@@ -659,14 +659,15 @@ bqInsertLargeData <- function(table,
       table = table,
       dataset = dataset,
       data = upload.list[1],
-      append = append
+      append = append,
+      fields = fields
   )
 
   lapply(upload.list[-1], function(dt) {
     bqInsertData(
       table = table,
       dataset = dataset,
-      data = data,
+      data = dt,
       append = TRUE
     )
   })
