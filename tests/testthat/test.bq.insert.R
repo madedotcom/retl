@@ -32,10 +32,10 @@ test_that("Large dataset is inserted correctly", {
   res <- bqInsertLargeData("test_table_insert_empty", data.table())
 
   dt.test <- data.table(iris)
-  bqInsertLargeData("test_table_insert_iris", dt.test)
+  bqInsertLargeData("test_table_insert_large_iris", dt.test)
 
   # get data back
-  iris.bq <- bqExecuteQuery("SELECT * FROM test_table_insert_iris")
+  iris.bq <- bqExecuteQuery("SELECT * FROM test_table_insert_large_iris")
 
   expect_equal(nrow(iris.bq), nrow(dt.test))
   # data from bigquery matches the data we sent, up to:
