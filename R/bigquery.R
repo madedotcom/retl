@@ -643,10 +643,10 @@ bqCombineQueries <- function(sql, use.legacy.sql = bqUseLegacySql()) {
 #' @param chunks number of segments the data should be split into
 #' @return results of execution
 bqInsertLargeData <- function(table,
-                         data,
-                         dataset = bqDefaultDataset(),
-                         chunks = 5,
-                         append = TRUE) {
+                              data,
+                              dataset = bqDefaultDataset(),
+                              chunks = 5,
+                              append = TRUE) {
 
   rows <- nrow(data)
 
