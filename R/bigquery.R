@@ -630,10 +630,10 @@ bqCombineQueries <- function(sql, use.legacy.sql = bqUseLegacySql()) {
 }
 
 #' Inserts LARGE data into BigQuery table
-#' 
-#' @description 
+#'
+#' @description
 #' Truncates the target table and appends data broken in chunks
-#' 
+#'
 #' @export
 #' @param table name of the target table
 #' @param data data to be inserted
@@ -651,7 +651,7 @@ bqInsertLargeData <- function(table,
   rows <- nrow(data)
 
   upload.list <- split(
-    data, 
+    data,
     f = sample(1:chunks, size = nrow(data), replace = TRUE)
   )
 
@@ -661,7 +661,7 @@ bqInsertLargeData <- function(table,
       data = upload.list[1],
       append = append
   )
-  
+
   lapply(upload.list[-1], function(dt) {
     bqInsertData(
       table = table,
@@ -670,7 +670,7 @@ bqInsertLargeData <- function(table,
       append = TRUE
     )
   })
-
+}
 #' Inserts data into BigQuery table
 #'
 #' @export
