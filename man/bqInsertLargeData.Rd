@@ -17,8 +17,6 @@ bqInsertLargeData(table, data, dataset = bqDefaultDataset(), chunks = 5,
 \item{chunks}{number of segments the data should be split into}
 
 \item{append}{specifies if data should be appended or truncated}
-
-\item{fields}{list of fields with names and types (as `bq_fields`)}
 }
 \value{
 results of execution
