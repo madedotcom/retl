@@ -67,14 +67,25 @@ Hash: c590d29e555926af053055e23ee79efb
 
 Package: bigrquery
 Source: github
-Version: 1.0.0.9000
-Hash: addd91a8047f72af203e1b9e1b01fb8b
-Requires: DBI, Rcpp, assertthat, curl, glue, httr, jsonlite,
+Version: 1.1.0.9000
+Hash: 97a9f1fb0b001a42b0d2f8438208ce2b
+Requires: DBI, Rcpp, assertthat, bit64, curl, glue, httr, jsonlite,
     prettyunits, progress, rapidjsonr, tibble
 GithubRepo: bigrquery
 GithubUsername: r-dbi
 GithubRef: master
-GithubSha1: ee2507f32f1164a033512e945fc7eb35e0ef6544
+GithubSha1: 792a781a0abea7dd8eb359fcbbd185d5deb30cca
+
+Package: bit
+Source: CRAN
+Version: 1.1-12
+Hash: a4cdb11cf9fd6dd38f9f40c413b81e93
+
+Package: bit64
+Source: CRAN
+Version: 0.9-7
+Hash: 4b195615d19ba49c114eb04e09e30a96
+Requires: bit
 
 Package: brew
 Source: CRAN
@@ -161,8 +172,8 @@ Requires: R6, devtools, formatR, httr, jsonlite, miniUI, shiny,
 
 Package: googlesheets
 Source: CRAN
-Version: 0.2.1
-Hash: 342a70ab2fd21b7829a2acfbd1e31c3a
+Version: 0.2.2
+Hash: b317d6b5f8bdf48f56a5789f80b883bd
 Requires: cellranger, dplyr, httr, jsonlite, purrr, readr, stringr,
     tidyr, xml2
 
@@ -226,7 +237,7 @@ Package: knitr
 Source: CRAN
 Version: 1.20
 Hash: 9c6b215d1d02b97586c8232e94533e6a
-Requires: yaml, stringr, evaluate, highr, markdown
+Requires: highr, yaml, markdown, stringr, evaluate
 
 Package: lazyeval
 Source: CRAN
@@ -236,8 +247,8 @@ Hash: 3d6e7608e65bbf5cb170dab1e3c9ed8b
 Package: lintr
 Source: CRAN
 Version: 1.0.3
-Requires: crayon, digest, jsonlite, rstudioapi, httr, testthat, igraph,
-    knitr, rex, stringdist
+Requires: crayon, digest, jsonlite, rstudioapi, stringdist, rex, httr,
+    igraph, testthat, knitr
 
 Package: magrittr
 Source: CRAN
