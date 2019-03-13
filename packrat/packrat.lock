@@ -67,14 +67,14 @@ Hash: c590d29e555926af053055e23ee79efb
 
 Package: bigrquery
 Source: github
-Version: 1.1.0.9000
-Hash: 97a9f1fb0b001a42b0d2f8438208ce2b
-Requires: DBI, Rcpp, assertthat, bit64, curl, glue, httr, jsonlite,
+Version: 1.0.0.9000
+Hash: addd91a8047f72af203e1b9e1b01fb8b
+Requires: DBI, Rcpp, assertthat, curl, glue, httr, jsonlite,
     prettyunits, progress, rapidjsonr, tibble
 GithubRepo: bigrquery
 GithubUsername: r-dbi
 GithubRef: master
-GithubSha1: 792a781a0abea7dd8eb359fcbbd185d5deb30cca
+GithubSha1: ee2507f32f1164a033512e945fc7eb35e0ef6544
 
 Package: brew
 Source: CRAN
@@ -166,6 +166,11 @@ Hash: 342a70ab2fd21b7829a2acfbd1e31c3a
 Requires: cellranger, dplyr, httr, jsonlite, purrr, readr, stringr,
     tidyr, xml2
 
+Package: highr
+Source: CRAN
+Version: 0.7
+Hash: 20757f5c393ed0ecf96c9e8e6d8d514c
+
 Package: hms
 Source: CRAN
 Version: 0.4.0
@@ -200,6 +205,11 @@ Version: 1.3.1
 Hash: 2d32e01e53d532c812052e27a1021441
 Requires: R6, curl, jsonlite, mime, openssl
 
+Package: igraph
+Source: CRAN
+Version: 1.2.4
+Requires: magrittr, pkgconfig
+
 Package: influxdbr
 Source: CRAN
 Version: 0.13.0
@@ -212,15 +222,33 @@ Source: CRAN
 Version: 1.5
 Hash: 9c51936d8dd00b2f1d4fe9d10499694c
 
+Package: knitr
+Source: CRAN
+Version: 1.20
+Hash: 9c6b215d1d02b97586c8232e94533e6a
+Requires: yaml, stringr, evaluate, highr, markdown
+
 Package: lazyeval
 Source: CRAN
 Version: 0.2.0
 Hash: 3d6e7608e65bbf5cb170dab1e3c9ed8b
 
+Package: lintr
+Source: CRAN
+Version: 1.0.3
+Requires: crayon, digest, jsonlite, rstudioapi, httr, testthat, igraph,
+    knitr, rex, stringdist
+
 Package: magrittr
 Source: CRAN
 Version: 1.5
 Hash: bdc4d48c3135e8f3b399536ddf160df4
+
+Package: markdown
+Source: CRAN
+Version: 0.8
+Hash: 045d7c594d503b41f1c28946d076c8aa
+Requires: mime
 
 Package: memoise
 Source: CRAN
@@ -331,6 +359,11 @@ Version: 1.4.2
 Hash: f7149fba72d8b584862025bc4c375d6e
 Requires: Rcpp, plyr, stringr
 
+Package: rex
+Source: CRAN
+Version: 1.1.2
+Requires: lazyeval, magrittr
+
 Package: rlang
 Source: CRAN
 Version: 0.1.6
@@ -365,6 +398,10 @@ Package: sourcetools
 Source: CRAN
 Version: 0.1.6
 Hash: 226d56d7469587da40b0f96180e711b4
+
+Package: stringdist
+Source: CRAN
+Version: 0.9.5.1
 
 Package: stringi
 Source: CRAN
@@ -431,4 +468,3 @@ Package: zoo
 Source: CRAN
 Version: 1.8-0
 Hash: df9711767f56f086e8a8d1f0fb926ff6
-
