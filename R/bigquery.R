@@ -639,7 +639,6 @@ bqCombineQueries <- function(sql, use.legacy.sql = bqUseLegacySql()) {
 #' @param data data to be inserted
 #' @param dataset name of the destination dataset
 #' @param append specifies if data should be appended or truncated
-#' @param fields list of fields with names and types (as `bq_fields`)
 #' @param chunks number of segments the data should be split into
 #' @return results of execution
 bqInsertLargeData <- function(table,
@@ -681,7 +680,7 @@ bqInsertLargeData <- function(table,
 #' @param data data to be inserted
 #' @param dataset name of the destination dataset
 #' @param append specifies if data should be appended or truncated
-#' @param fields list of fields with names and types (as `bq_fields`)
+#' @param fields list of fields with names and types (as bq_fields)
 #' @return results of execution
 bqInsertData <- function(table,
                          data,

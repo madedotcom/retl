@@ -16,7 +16,7 @@ bqInsertData(table, data, dataset = bqDefaultDataset(), append = TRUE,
 
 \item{append}{specifies if data should be appended or truncated}
 
-\item{fields}{list of fields with names and types (as `bq_fields`)}
+\item{fields}{list of fields with names and types (as bq_fields)}
 }
 \value{
 results of execution
