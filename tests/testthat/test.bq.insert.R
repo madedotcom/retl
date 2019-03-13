@@ -3,6 +3,7 @@ library(mockery)
 library(data.table)
 
 context("BigQuery insert functions")
+
 test_that("Data is inserted correctly without metadata", {
   skip_on_travis()
   res <- bqInsertData("test_table_insert_empty", data.table())
@@ -12,6 +13,29 @@ test_that("Data is inserted correctly without metadata", {
 
   # get data back
   iris.bq <- bqExecuteQuery("SELECT * FROM test_table_insert_iris")
+
+  expect_equal(nrow(iris.bq), nrow(dt.test))
+  # data from bigquery matches the data we sent, up to:
+  # * column names
+  # * types
+  # * order
+  colnames(dt.test) <- tolower(colnames(dt.test))
+  iris.bq[, species := as.factor(species)]
+  expect_equal(
+    iris.bq[order(sepal.length, sepal.width, petal.length, petal.width)],
+    dt.test[order(sepal.length, sepal.width, petal.length, petal.width)]
+  )
+})
+
+test_that("Large dataset is inserted correctly", {
+  skip_on_travis()
+  res <- bqInsertLargeData("test_table_insert_empty", data.table())
+
+  dt.test <- data.table(iris)
+  bqInsertLargeData("test_table_insert_large_iris", dt.test)
+
+  # get data back
+  iris.bq <- bqExecuteQuery("SELECT * FROM test_table_insert_large_iris")
 
   expect_equal(nrow(iris.bq), nrow(dt.test))
   # data from bigquery matches the data we sent, up to:

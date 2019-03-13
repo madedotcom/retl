@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.8
+
+*   `bqInsertLargeData()` - new function to split large data into 'chunks' which is then inserted into the Big Query table iteratively.
+
 ## 0.1.7
 
 *   `s3GetData()` renamed `s3Get.FUN` to `s3.get.fun` to comply with coding style.
