@@ -604,8 +604,9 @@ bqCreatePartitionTable <- function(table,
         paste(sql.exec, collapse = "\n")
       })
 
+      print(use.legacy.sql)
       bqCreateTable(
-        sql = bqCombineQueries(sql.list, TRUE),
+        sql = bqCombineQueries(sql.list, use.legacy.sql),
         table = destination.partition,
         priority = priority,
         write.disposition = "WRITE_TRUNCATE",
