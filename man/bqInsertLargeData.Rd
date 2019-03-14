@@ -4,8 +4,8 @@
 \alias{bqInsertLargeData}
 \title{Inserts LARGE data into BigQuery table}
 \usage{
-bqInsertLargeData(table, data, dataset = bqDefaultDataset(), chunks = 5,
-  append = TRUE)
+bqInsertLargeData(table, data, dataset = bqDefaultDataset(),
+  chunks = 5, append = TRUE)
 }
 \arguments{
 \item{table}{name of the target table}
