@@ -11,7 +11,7 @@ LazyData: TRUE
 Suggests:
     testthat (>= 2.0.0),
     devtools,
-    mockery,
+    mockery (>= 0.4.0),
     lintr
 RoxygenNote: 6.1.1
 Imports:

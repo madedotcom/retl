@@ -609,7 +609,7 @@ bqCreatePartitionTable <- function(table,
         table = destination.partition,
         priority = priority,
         write.disposition = "WRITE_TRUNCATE",
-        use.legacy.sql
+        use.legacy.sql = use.legacy.sql
       )
     })
 

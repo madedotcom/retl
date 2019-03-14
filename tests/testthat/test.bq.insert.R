@@ -168,9 +168,24 @@ test_that("shard tables from several datasets can
   bqCreatePartitionTable(
     table = "partitioned_shards",
     datasets = datasets,
-    sql = "SELECT value AS count FROM %1s.shard_%2$s",
-    priority = "BATCH"
+    sql = "#standarSql
+        SELECT value AS count FROM `%1s.shard_%2$s`",
+    priority = "BATCH",
+    use.legacy.sql = FALSE
   )
   res <- bqExecuteSql("SELECT COUNT(*) as result FROM partitioned_shards")
   expect_equal(res$result, 4)
+
+  expect_error(
+    bqCreatePartitionTable(
+      table = "partitioned_shards",
+      datasets = datasets,
+      sql = "#standarSql
+      SELECT value AS count FROM %1s.shard_%2$s",
+      priority = "BATCH",
+      use.legacy.sql = TRUE
+    ),
+    "standard"
+  )
+
 })
