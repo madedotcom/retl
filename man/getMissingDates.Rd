@@ -5,7 +5,8 @@
 \title{Gets dates that are missing from the date range
   for a give list of existing dates}
 \usage{
-getMissingDates(start.date, end.date, existing.dates, format = "\%Y\%m\%d")
+getMissingDates(start.date, end.date, existing.dates,
+  format = "\%Y\%m\%d")
 }
 \arguments{
 \item{start.date}{begining of the period}

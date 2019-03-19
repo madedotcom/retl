@@ -558,13 +558,15 @@ bqDatasetLabel <- function(datasets, dataset) {
 #' @param existing.dates dates that should be skipped
 #' @param missing.dates dates calculation for which will be enforced
 #' @param priority sets priority of job execution to INTERACTIVE or BATCH
+#' @inheritParams bqExecuteSql
 bqCreatePartitionTable <- function(table,
                                    datasets,
                                    sql = NULL,
                                    file = NULL,
                                    existing.dates = NULL,
                                    missing.dates = NULL,
-                                   priority = "INTERACTIVE") {
+                                   priority = "INTERACTIVE",
+                                   use.legacy.sql = bqUseLegacySql()) {
   assert_that(
     xor(is.null(sql), is.null(file)),
     msg = "Either sql or file must be provided"
@@ -602,11 +604,13 @@ bqCreatePartitionTable <- function(table,
         paste(sql.exec, collapse = "\n")
       })
 
+      print(use.legacy.sql)
       bqCreateTable(
-        sql = bqCombineQueries(sql.list, TRUE),
+        sql = bqCombineQueries(sql.list, use.legacy.sql),
         table = destination.partition,
         priority = priority,
-        write.disposition = "WRITE_TRUNCATE"
+        write.disposition = "WRITE_TRUNCATE",
+        use.legacy.sql = use.legacy.sql
       )
     })
 

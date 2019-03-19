@@ -7,14 +7,17 @@
 \alias{bqDeleteDataset}
 \title{Gets list of tables for a given dataset}
 \usage{
-bqDatasetTables(dataset = bqDefaultDataset(), project = bqDefaultProject())
+bqDatasetTables(dataset = bqDefaultDataset(),
+  project = bqDefaultProject())
 
-bqDatasetExists(dataset = bqDefaultDataset(), project = bqDefaultProject())
+bqDatasetExists(dataset = bqDefaultDataset(),
+  project = bqDefaultProject())
 
-bqCreateDataset(dataset = bqDefaultDataset(), project = bqDefaultProject())
+bqCreateDataset(dataset = bqDefaultDataset(),
+  project = bqDefaultProject())
 
-bqDeleteDataset(dataset = bqDefaultDataset(), project = bqDefaultProject(),
-  delete.contents = FALSE)
+bqDeleteDataset(dataset = bqDefaultDataset(),
+  project = bqDefaultProject(), delete.contents = FALSE)
 }
 \arguments{
 \item{dataset}{name of the dataset}

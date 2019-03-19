@@ -5,7 +5,8 @@
 \title{Creates partition table for a given sql}
 \usage{
 bqCreatePartitionTable(table, datasets, sql = NULL, file = NULL,
-  existing.dates = NULL, missing.dates = NULL, priority = "INTERACTIVE")
+  existing.dates = NULL, missing.dates = NULL,
+  priority = "INTERACTIVE", use.legacy.sql = bqUseLegacySql())
 }
 \arguments{
 \item{table}{name of the destination table}
@@ -21,6 +22,9 @@ bqCreatePartitionTable(table, datasets, sql = NULL, file = NULL,
 \item{missing.dates}{dates calculation for which will be enforced}
 
 \item{priority}{sets priority of job execution to INTERACTIVE or BATCH}
+
+\item{use.legacy.sql}{switches SQL dialect.
+Defaults to value set in `BIGQUERY_LEGACY_SQL` env.}
 }
 \description{
 Parameters that will be passed to SQL for the placeholders:
