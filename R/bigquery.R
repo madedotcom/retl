@@ -74,7 +74,6 @@ bqUseLegacySql <- function(x = NULL) {
     Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
   }
   else {
-
     Sys.setenv("BIGQUERY_LEGACY_SQL" = x)
   }
 }
