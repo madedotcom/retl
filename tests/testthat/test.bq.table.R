@@ -52,7 +52,7 @@ test_that("Table can be patched", {
   res <- bqTableSchema(table = table)
   bqPatchTable(table = table, "bq-table-schema-patch.json")
   table.schema <- bqTableSchema(table = table)
-  print(table.schema)
+
   expect_equal(length(table.schema), 3, label = "Field was added to the table")
 
   expect_error(
