@@ -1,0 +1,14 @@
+[
+  {
+    "name": "id",
+    "type": "INTEGER"
+  },
+  {
+    "name": "first_name",
+    "type": "STRING"
+  },
+  {
+    "name": "new_field",
+    "type": "BOOLEAN"
+  }
+]

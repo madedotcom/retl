@@ -13,7 +13,7 @@ Suggests:
     devtools,
     mockery (>= 0.4.0),
     lintr
-RoxygenNote: 6.1.1
+RoxygenNote: 6.1.1.9000
 Imports:
     aws.s3 (>= 0.3.2),
     bigrquery (>= 1.0.0.0),

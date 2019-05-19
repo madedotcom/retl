@@ -1,5 +1,10 @@
 # RETL Package Updates
 
+## 0.1.10
+
+* `bqInitiateTable()` - Will fail if schema file is missing fields compared to the target table.
+* `bqPatchTable()` - Function that allows to update table fields using the schema file.
+
 ## 0.1.9
 
 * `bqCreatePartitionTable()` - added `use.legacy.sql` parameter to simplify control for sql type.
