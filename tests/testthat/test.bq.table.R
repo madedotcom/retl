@@ -1,6 +1,3 @@
-library(bigrquery)
-library(mockery)
-
 context("BigQuery Table")
 
 test_that("table is created from schema file", {

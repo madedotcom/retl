@@ -1,4 +1,7 @@
 suppressPackageStartupMessages({
+  library(googleAuthR)
+  library(jsonlite)
+  library(withr)
   library(testthat)
   library(devtools)
   library(mockery)

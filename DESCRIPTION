@@ -12,7 +12,8 @@ Suggests:
     testthat (>= 2.0.0),
     devtools,
     mockery (>= 0.4.0),
-    lintr
+    lintr,
+    withr
 RoxygenNote: 6.1.1.9000
 Imports:
     aws.s3 (>= 0.3.2),

@@ -1,7 +1,3 @@
-library(bigrquery)
-library(mockery)
-library(data.table)
-
 context("BigQuery insert functions")
 
 test_that("Data is inserted correctly without metadata", {
