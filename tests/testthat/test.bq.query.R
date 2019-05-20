@@ -1,5 +1,3 @@
-library(bigrquery)
-library(mockery)
 context("BigQuery query functions.")
 
 test_that("Correct sql is executed", {

@@ -1,6 +1,3 @@
-library(googleAuthR)
-library(jsonlite)
-
 context("DoubleClick Search API")
 
 test_that("DoubleClick call List to body works", {

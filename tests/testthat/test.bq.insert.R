@@ -1,7 +1,3 @@
-library(bigrquery)
-library(mockery)
-library(data.table)
-
 context("BigQuery insert functions")
 
 test_that("Data is inserted correctly without metadata", {
@@ -126,53 +122,56 @@ test_that("partitioned table can be created and data is added", {
 
 context("Create partition table from shards")
 
-test_that("shard tables from several datasets can
-          be tranformed in day partitioned tables", {
-  skip_on_travis()
-  Sys.setenv(BIGQUERY_START_DATE = "2015-01-01")
-  Sys.setenv(BIGQUERY_END_DATE = "2015-01-02")
-  datasets <- c(a = "ds_retl_test_1", b = "ds_retl_test_2")
-  lapply(datasets, function(ds) {
-    if (bqDatasetExists(ds)) {
-      bqDeleteTable("shard_20150101", ds)
-      bqDeleteTable("shard_20150102", ds)
-    } else {
-      bqCreateDataset(ds)
-    }
-    bqCreateTable(
-      sql = "SELECT 1 AS value",
-      table = "shard_20150101",
-      dataset = ds
+withr::with_envvar(
+  new = c(BIGQUERY_START_DATE = "2015-01-01",
+          BIGQUERY_END_DATE = "2015-01-02"),
+  action = "replace",
+  test_that("shard tables from several datasets can
+            be tranformed in day partitioned tables", {
+    skip_on_travis()
+    datasets <- c(a = "ds_retl_test_1", b = "ds_retl_test_2")
+    lapply(datasets, function(ds) {
+      if (bqDatasetExists(ds)) {
+        bqDeleteTable("shard_20150101", ds)
+        bqDeleteTable("shard_20150102", ds)
+      } else {
+        bqCreateDataset(ds)
+      }
+      bqCreateTable(
+        sql = "SELECT 1 AS value",
+        table = "shard_20150101",
+        dataset = ds
+      )
+      bqCreateTable(
+        sql = "SELECT 2 AS value",
+        table = "shard_20150102",
+        dataset = ds
+      )
+    })
+
+    bqInitiateTable(
+      "partitioned_shards",
+      schema.file = "test-schema.json",
+      partition = TRUE
     )
-    bqCreateTable(
-      sql = "SELECT 2 AS value",
-      table = "shard_20150102",
-      dataset = ds
+    bqCreatePartitionTable(
+      table = "partitioned_shards",
+      datasets = datasets,
+      sql = "SELECT value AS count FROM %1s.shard_%2$s"
     )
+    res <- bqExecuteSql("SELECT COUNT(*) as result FROM partitioned_shards")
+    expect_equal(res$result, 4)
+
+    # partition is updated with BATCH priority and results don't change
+    bqCreatePartitionTable(
+      table = "partitioned_shards",
+      datasets = datasets,
+      sql = "SELECT value AS count FROM `%1s.shard_%2$s",
+      priority = "INTERACTIVE",
+      use.legacy.sql = FALSE
+    )
+    res <- bqExecuteSql("SELECT COUNT(*) as result FROM partitioned_shards")
+    expect_equal(res$result, 4)
+
   })
-
-  bqInitiateTable(
-    "partitioned_shards",
-    schema.file = "test-schema.json",
-    partition = TRUE
-  )
-  bqCreatePartitionTable(
-    table = "partitioned_shards",
-    datasets = datasets,
-    sql = "SELECT value AS count FROM %1s.shard_%2$s"
-  )
-  res <- bqExecuteSql("SELECT COUNT(*) as result FROM partitioned_shards")
-  expect_equal(res$result, 4)
-
-  # partition is updated with BATCH priority and results don't change
-  bqCreatePartitionTable(
-    table = "partitioned_shards",
-    datasets = datasets,
-    sql = "SELECT value AS count FROM `%1s.shard_%2$s",
-    priority = "INTERACTIVE",
-    use.legacy.sql = FALSE
-  )
-  res <- bqExecuteSql("SELECT COUNT(*) as result FROM partitioned_shards")
-  expect_equal(res$result, 4)
-
-})
+)

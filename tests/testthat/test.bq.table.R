@@ -1,6 +1,3 @@
-library(bigrquery)
-library(mockery)
-
 context("BigQuery Table")
 
 test_that("table is created from schema file", {
@@ -45,4 +42,21 @@ test_that("Table can be copied", {
   expect_true(!bqTableExists("test_table_copy"))
   bqCopyTable("test_table", "test_table_copy")
   expect_true(bqTableExists("test_table_copy"))
+})
+
+test_that("Table can be patched", {
+  skip_on_travis()
+  table <- "test_table"
+  res <- bqTableSchema(table = table)
+  bqPatchTable(table = table, "bq-table-schema-patch.json")
+  table.schema <- bqTableSchema(table = table)
+
+  expect_equal(length(table.schema), 3, label = "Field was added to the table")
+
+  expect_error(
+    bqPatchTable(table = table, "bq-table-schema-cleanup.json"),
+    regexp = "removed",
+    label = "Patch fails if field removal is attempted."
+  )
+
 })

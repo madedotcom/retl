@@ -1,6 +1,3 @@
-library(bigrquery)
-library(mockery)
-
 context("BigQuery Dataset")
 
 test_that("Check that datasets can be checked", {

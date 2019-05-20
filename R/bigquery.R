@@ -386,7 +386,9 @@ bqCreateTable <- function(sql,
 
 
 #' @rdname bqTable
-#'
+#' @details `bqInitiateTable()` - creates table from schema file.
+#'   If table already exists it will attempt to patch the table with new fields.
+#'   Will fail if schema file is missing fields compared to the target table.
 #' @export
 #' @importFrom jsonlite read_json
 #'
@@ -421,13 +423,52 @@ bqInitiateTable <- function(table,
     }
   }
   else {
-    warning(paste0("Table already exists: [", dataset, ".", table, "]"))
+    warning(paste0("Table already exists: [", dataset, ".", table, "], attempting patch."))
+    bqPatchTable(table = table, schema.file = schema.file, dataset = dataset)
   }
 }
+
+
+#' @details `bqPatchTable()`
+#'   Adds new fields to a BigQuery table from a schema file.
+#'   Will raise an exception if fields are removed from the schema file,
+#'   but are still present in the target table.
+#'
+#' @rdname bqTable
+#' @export
+bqPatchTable <- function(table, schema.file, dataset = bqDefaultDataset()) {
+  bqAuth()
+
+  table.schema <- bqTableSchema(table, dataset)
+  code.schema <- bqReadSchema(schema.file)
+
+  new.fields <- setdiff(code.schema, table.schema)
+  removed.fields <- setdiff(table.schema, code.schema)
+
+  assert_that(length(removed.fields) == 0L)
+
+  if (length(new.fields) > 0L) {
+    table <- bq_table(
+      project = bqDefaultProject(),
+      dataset = dataset,
+      table = table
+    )
+    bq_table_patch(table, code.schema)
+  }
+}
+
+
+#' @noRd
+bqReadSchema <- function(schema.file) {
+  bqAuth()
+  as_bq_fields(read_json(schema.file))
+}
+
 
 #' @export
 #' @rdname bqTable
 bqTableSchema <- function(table, dataset = bqDefaultDataset()) {
+  bqAuth()
   bq_table_fields(
     bq_table(
       project = bqDefaultProject(),
@@ -651,13 +692,12 @@ bqInsertLargeData <- function(table,
                               chunks = 5,
                               append = TRUE) {
 
-  rows <- nrow(data)
   upload.list <- split(
     data,
-    f = sample(1:chunks, size = nrow(data), replace = TRUE)
+    f = sort(sample(1:chunks, size = nrow(data), replace = TRUE))
   )
 
-  if(length(upload.list) == 0) {
+  if (length(upload.list) == 0) {
     return(NULL)
   }
 
