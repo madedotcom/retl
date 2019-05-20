@@ -45,6 +45,7 @@ test_that("Table can be copied", {
 })
 
 test_that("Table can be patched", {
+  skip_on_travis()
   table <- "test_table"
   res <- bqTableSchema(table = table)
   bqPatchTable(table = table, "bq-table-schema-patch.json")
