@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.11
+
+* `bqExecuteQuery()` and `bqExecuteFile()` - fixed to allow parameterised queries with vector values in params.
+
 ## 0.1.10
 
 * `bqInitiateTable()` - Will fail if schema file is missing fields compared to the target table.
