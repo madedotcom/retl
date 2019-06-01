@@ -40,7 +40,7 @@ Family of functions for common operations on tables
 \details{
 `bqInitiateTable()` - creates table from schema file.
   If table already exists it will attempt to patch the table with new fields.
-  Will fail if schema file is missing fields compared ot the target table.
+  Will fail if schema file is missing fields compared to the target table.
 
 `bqPatchTable()`
   Adds new fields to a BigQuery table from a schema file.
