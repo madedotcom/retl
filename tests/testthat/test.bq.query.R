@@ -1,3 +1,5 @@
+library(bigrquery)
+library(mockery)
 context("BigQuery query functions.")
 
 test_that("Correct sql is executed", {
@@ -25,6 +27,17 @@ test_that("Parameters work", {
     use.legacy.sql = FALSE
   )
   expect_equal(res$value, 5)
+})
+
+test_that("Parameter can be used with a vector", {
+  skip_on_travis()
+  res <- bqExecuteSql(
+    sql = "SELECT * FROM (SELECT 'A' AS test) t
+           WHERE test IN UNNEST(@tests)",
+    tests = c("A", "B"),
+    use.legacy.sql = FALSE
+  )
+  expect_equal(res$test, "A")
 })
 
 test_that("Correct sql statement is read", {

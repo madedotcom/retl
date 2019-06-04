@@ -526,7 +526,7 @@ bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
     )
   }
 
-  if (length(list(...)) > 0) {
+  if (nonameItemsCount(args) > 0L) {
     # template requires parameters.
     sql <- sprintf(sql, ...)
   } else {
