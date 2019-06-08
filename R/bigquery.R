@@ -428,6 +428,24 @@ bqInitiateTable <- function(table,
   }
 }
 
+#' @noRd
+bqSetdiffSchemas <- function(new.schema, old.schema) {
+  res <- lapply(new.schema, function(x) {
+    bq_match_field(x, old.schema)
+  })
+  res <- unlist(res)
+  new.schema[!res]
+}
+
+#' @noRd
+bq_match_field <- function(x, fields) {
+  for (field in fields) {
+    if (x$name == field$name & x$type == field$type) {
+      return(TRUE)
+    }
+  }
+  FALSE
+}
 
 #' @details `bqPatchTable()`
 #'   Adds new fields to a BigQuery table from a schema file.
@@ -442,8 +460,8 @@ bqPatchTable <- function(table, schema.file, dataset = bqDefaultDataset()) {
   table.schema <- bqTableSchema(table, dataset)
   code.schema <- bqReadSchema(schema.file)
 
-  new.fields <- setdiff(code.schema, table.schema)
-  removed.fields <- setdiff(table.schema, code.schema)
+  new.fields <- bqSetdiffSchemas(code.schema, table.schema)
+  removed.fields <- bqSetdiffSchemas(table.schema, code.schema)
 
   assert_that(length(removed.fields) == 0L)
 
@@ -645,7 +663,6 @@ bqCreatePartitionTable <- function(table,
         paste(sql.exec, collapse = "\n")
       })
 
-      print(use.legacy.sql)
       bqCreateTable(
         sql = bqCombineQueries(sql.list, use.legacy.sql),
         table = destination.partition,

@@ -5,6 +5,7 @@
   },
   {
     "name": "first_name",
-    "type": "STRING"
+    "type": "STRING",
+    "description" : "First name"
   }
 ]
