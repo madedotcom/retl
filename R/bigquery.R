@@ -428,7 +428,6 @@ bqInitiateTable <- function(table,
   }
 }
 
-
 #' @details `bqPatchTable()`
 #'   Adds new fields to a BigQuery table from a schema file.
 #'   Will raise an exception if fields are removed from the schema file,
@@ -442,8 +441,8 @@ bqPatchTable <- function(table, schema.file, dataset = bqDefaultDataset()) {
   table.schema <- bqTableSchema(table, dataset)
   code.schema <- bqReadSchema(schema.file)
 
-  new.fields <- setdiff(code.schema, table.schema)
-  removed.fields <- setdiff(table.schema, code.schema)
+  new.fields <- bqSetdiffSchemas(code.schema, table.schema)
+  removed.fields <- bqSetdiffSchemas(table.schema, code.schema)
 
   assert_that(length(removed.fields) == 0L)
 
@@ -457,6 +456,37 @@ bqPatchTable <- function(table, schema.file, dataset = bqDefaultDataset()) {
   }
 }
 
+#' Finds asymmetric difference between two sets of bq_fields objects
+#'
+#' @param x bq_fields object
+#' @param y bq_fields object
+#' @seealso setdiff bqMatchField
+#' @export
+bqSetdiffSchemas <- function(x, y) {
+  res <- lapply(x, function(field) {
+    bqMatchField(field, y)
+  })
+  res <- unlist(res)
+  x[!res]
+}
+
+#' Returns true of field is found in a set of fields
+#'
+#' Field is matched to a given set based on name and type.
+#' All other attributes of fields are ignored, and this implementation
+#' is not recursive which might cause problems for RECORD fields.
+#'
+#' @param x field to be matched
+#' @param fields fields to be matched against
+#' @noRd
+bqMatchField <- function(x, fields) {
+  for (field in fields) {
+    if (x$name == field$name & x$type == field$type) {
+      return(TRUE)
+    }
+  }
+  FALSE
+}
 
 #' @noRd
 bqReadSchema <- function(schema.file) {
@@ -645,7 +675,6 @@ bqCreatePartitionTable <- function(table,
         paste(sql.exec, collapse = "\n")
       })
 
-      print(use.legacy.sql)
       bqCreateTable(
         sql = bqCombineQueries(sql.list, use.legacy.sql),
         table = destination.partition,

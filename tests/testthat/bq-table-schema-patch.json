@@ -5,7 +5,8 @@
   },
   {
     "name": "first_name",
-    "type": "STRING"
+    "type": "STRING",
+    "description" : "First name of the person"
   },
   {
     "name": "new_field",

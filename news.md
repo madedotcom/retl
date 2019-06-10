@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.12
+
+* `bqPatchTable()` - now uses field name and type for matching.
+
 ## 0.1.11
 
 * `bqExecuteQuery()` and `bqExecuteFile()` - fixed to allow parameterised queries with vector values in params.
