@@ -14,8 +14,8 @@ NULL
 #'   `BIGQUERY_DATASET`` - name of the default dataset in BigQuery.
 #'   `BIGQUERY_ACCESS_TOKEN_PATH` - path to the json token file.
 bqAuth <- function() {
-  if (!bigrquery::has_access_cred()) {
-    bigrquery::set_service_token(bqTokenFile())
+  if (!bigrquery::bq_has_token()) {
+    bigrquery::bq_auth(path = bqTokenFile())
   }
 }
 
