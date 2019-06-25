@@ -1,5 +1,10 @@
 # RETL Package Updates
 
+## 0.1.13
+
+* `bqExecuteDml()` - added support for DML statement execution that can be run with 
+  different priority without loading data to the server.
+
 ## 0.1.12
 
 * `bqPatchTable()` - now uses field name and type for matching.

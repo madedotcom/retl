@@ -590,6 +590,37 @@ bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
   dt
 }
 
+
+#' @description
+#' `bqExecuteDml()` - Executes DML query without loading results
+#'
+#' @param priority sets priority of job execution to INTERACTIVE or BATCH
+#' @rdname bqQuery
+#' @export
+bqExecuteDml <- function(query, ...,
+                         priority = "INTERACTIVE") {
+  bqAuth()
+
+  ds <- bq_dataset(
+    project = bqDefaultProject(),
+    dataset = bqDefaultDataset()
+  )
+
+  job <- bq_perform_query(
+    query = query,
+    billing = bqBillingProject(),
+    default_dataset = ds,
+    use_legacy_sql = FALSE,
+    priority = priority
+  )
+  if (priority == "INTERACTIVE") {
+    bq_job_wait(job)
+  }
+  else {
+    job
+  }
+}
+
 #' Returns subset of arguments where name is set excluding reserved names
 #'
 #' @noRd
