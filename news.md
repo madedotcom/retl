@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.13
+
+* Switched to versions of bigrquery above [1.2.0](https://github.com/r-dbi/bigrquery/blob/master/NEWS.md#bigrquery-120).
+
 ## 0.1.12
 
 * `bqPatchTable()` - now uses field name and type for matching.
