@@ -28,16 +28,7 @@ safeLookup <- function(data,
     return(data)
   }
 
-  tempColName <- paste0(
-    rep(0, max(sapply(colnames(data), nchar)) + 1),
-    collapse = ""
-  )
-
-  data[, eval(tempColName) := 1:.N]
-  res <- merge(data, lookup[, mget(c(by, select))], by = by, all.x = TRUE)
-  res <- res[order(get(tempColName))]
-  data[, eval(tempColName) := NULL]
-  res[, eval(tempColName) := NULL]
+  lookup[, mget(c(by, select))][data, on = by]
 }
 
 #' Replace " ", "-" and "_" with a given separator in the header.
