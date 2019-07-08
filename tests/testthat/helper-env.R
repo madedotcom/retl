@@ -1,3 +1,9 @@
+if (gargle:::secret_pw_exists("retl")) {
+  print("Have password for retl")
+} else {
+  stop("No password retl")
+}
+
 if (gargle:::secret_can_decrypt("retl")) {
   print("Can decrypt retl")
   json <- gargle:::secret_read(package = "retl", name = "retl-testing.json")
