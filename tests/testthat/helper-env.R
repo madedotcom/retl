@@ -1,5 +1,5 @@
 if (gargle:::secret_can_decrypt("retl")) {
-  print("Can decrypt")
+  print("Can decrypt retl")
   json <- gargle:::secret_read(package = "retl", name = "retl-testing.json")
   bigrquery::bq_auth(path = rawToChar(json))
 
@@ -10,4 +10,6 @@ if (gargle:::secret_can_decrypt("retl")) {
     "Created test dataset"
     bqCreateDataset()
   }
+} else {
+  stop("Cannot decrypt retl")
 }
