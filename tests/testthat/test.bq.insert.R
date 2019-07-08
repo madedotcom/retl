@@ -1,7 +1,6 @@
 context("BigQuery insert functions")
 
 test_that("Data is inserted correctly without metadata", {
-  skip_on_travis()
   res <- bqInsertData("test_table_insert_empty", data.table())
 
   dt.test <- data.table(iris)
@@ -24,7 +23,6 @@ test_that("Data is inserted correctly without metadata", {
 })
 
 test_that("Large dataset is inserted correctly", {
-  skip_on_travis()
   res <- bqInsertLargeData("test_table_insert_empty", data.table())
 
   dt.test <- data.table(iris)
@@ -47,7 +45,6 @@ test_that("Large dataset is inserted correctly", {
 })
 
 test_that("table can be created from schema", {
-  skip_on_travis()
   bqInitiateTable(
     table = "table_from_schema",
     schema.file = "test-schema.json"
@@ -56,7 +53,6 @@ test_that("table can be created from schema", {
 })
 
 test_that("partitioned table can be created and data is added", {
-  skip_on_travis()
   table.name <- "table_daily_from_schema"
   res <- bqInitiateTable(
     table = table.name,
@@ -128,7 +124,6 @@ withr::with_envvar(
   action = "replace",
   test_that("shard tables from several datasets can
             be tranformed in day partitioned tables", {
-    skip_on_travis()
     datasets <- c(a = "ds_retl_test_1", b = "ds_retl_test_2")
     lapply(datasets, function(ds) {
       if (bqDatasetExists(ds)) {
