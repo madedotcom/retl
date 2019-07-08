@@ -12,3 +12,10 @@ r_github_packages:
 
 after_success:
   - Rscript -e 'covr::codecov()'
+
+addons:
+  apt:
+    sources:
+    - sourceline: 'ppa:chris-lea/libsodium'
+    packages:
+    - libsodium-dev
