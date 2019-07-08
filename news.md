@@ -1,8 +1,13 @@
 # RETL Package Updates
 
-## 0.1.13
+## Unreleased
 
 * Switched to versions of bigrquery above [1.2.0](https://github.com/r-dbi/bigrquery/blob/master/NEWS.md#bigrquery-120).
+
+## 0.1.13
+
+* `bqExecuteDml()` - added support for DML statement execution that can be run with 
+  different priority without loading data to the server.
 
 ## 0.1.12
 

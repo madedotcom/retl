@@ -5,6 +5,7 @@
 \alias{bqExecuteFile}
 \alias{bqExecuteQuery}
 \alias{bqExecuteSql}
+\alias{bqExecuteDml}
 \title{Functions that execute query against BigQuery database}
 \usage{
 bqExecuteFile(file, ...)
@@ -12,6 +13,8 @@ bqExecuteFile(file, ...)
 bqExecuteQuery(query, ...)
 
 bqExecuteSql(sql, ..., use.legacy.sql = bqUseLegacySql())
+
+bqExecuteDml(query, ..., priority = "INTERACTIVE")
 }
 \arguments{
 \item{file}{file with sql statement}
@@ -24,8 +27,12 @@ bqExecuteSql(sql, ..., use.legacy.sql = bqUseLegacySql())
 
 \item{use.legacy.sql}{switches SQL dialect.
 Defaults to value set in `BIGQUERY_LEGACY_SQL` env.}
+
+\item{priority}{sets priority of job execution to INTERACTIVE or BATCH}
 }
 \description{
 Execute templated query given as string or file.
 Placeholders in template are replaced with values provided in ellipsis parameter with sprintf
+
+`bqExecuteDml()` - Executes DML query without loading results
 }
