@@ -74,7 +74,7 @@ test_that("Query can be combined by supporting function", {
 test_that("Can execute DML query", {
   bqInsertData(table = "udpate_test", data = cars)
   job <- bqExecuteDml("UPDATE udpate_test SET speed = 1 WHERE TRUE")
-  expect_equal(job, "bq_job")
+  expect_equal(class(job), "bq_job")
 
   res <- bqExecuteQuery("SELECT SUM(speed) speed FROM udpate_test")
   expect_equal(res$speed, 50)
