@@ -1,5 +1,14 @@
 # RETL Package Updates
 
+## 0.1.14
+
+* Switched to versions of bigrquery above [1.2.0](https://github.com/r-dbi/bigrquery/blob/master/NEWS.md#bigrquery-120).
+
+* Fixed test `bqExecuteDml()`
+
+* Added gargle for access token encryption which allows to do full bigquery test
+  on Travis, see [how to manage tokens securely article](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html).
+
 ## 0.1.13
 
 * `bqExecuteDml()` - added support for DML statement execution that can be run with 

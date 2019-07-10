@@ -1,7 +1,7 @@
 Package: retl
 Type: Package
 Title: Support for common ETL operations and connections
-Version: 0.1.13
+Version: 0.1.14
 Date: 2019-03-13
 Author: byapparov@gmail.com
 Maintainer: Bulat Yapparov <byapparov@gmail.com>
@@ -13,11 +13,13 @@ Suggests:
     devtools,
     mockery (>= 0.4.0),
     lintr,
-    withr
+    withr,
+    sodium
 RoxygenNote: 6.1.1.9000
 Imports:
     aws.s3 (>= 0.3.2),
-    bigrquery (>= 1.0.0.0),
+    bigrquery (>= 1.2.0),
+    gargle (>= 0.3.0),
     data.table (>= 1.10.0),
     stringr (>= 1.2.0),
     httr,

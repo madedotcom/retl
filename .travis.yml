@@ -7,8 +7,16 @@ sudo: false
 r_github_packages:
   - cloudyr/aws.s3
   - jimhester/covr
-  - r-dbi/bigrquery
+  - byapparov/bigrquery
+  - r-lib/gargle
   - jimhester/lintr
 
 after_success:
   - Rscript -e 'covr::codecov()'
+
+addons:
+  apt:
+    sources:
+    - sourceline: 'ppa:chris-lea/libsodium'
+    packages:
+    - libsodium-dev

@@ -3,8 +3,6 @@ library(mockery)
 context("BigQuery query functions.")
 
 test_that("Correct sql is executed", {
-  skip_on_travis()
-
   res <- bqExecuteQuery("SELECT '%1$s' AS value", "TEST")
   expect_equal(res$value, "TEST")
 
@@ -13,7 +11,6 @@ test_that("Correct sql is executed", {
 })
 
 test_that("Parameters work", {
-  skip_on_travis()
   res <- bqExecuteQuery(
     "SELECT @test AS value",
     test = "TEST",
@@ -30,7 +27,6 @@ test_that("Parameters work", {
 })
 
 test_that("Parameter can be used with a vector", {
-  skip_on_travis()
   res <- bqExecuteSql(
     sql = "SELECT * FROM (SELECT 'A' AS test) t
            WHERE test IN UNNEST(@tests)",
@@ -51,8 +47,6 @@ test_that("Correct sql statement is read", {
 })
 
 test_that("Query can be combined by supporting function", {
-  skip_on_travis()
-
   sql <- bqCombineQueries(
     sql = list(
       "SELECT 1 a",
@@ -78,10 +72,9 @@ test_that("Query can be combined by supporting function", {
 })
 
 test_that("Can execute DML query", {
-  skip_on_travis()
   bqInsertData(table = "udpate_test", data = cars)
   job <- bqExecuteDml("UPDATE udpate_test SET speed = 1 WHERE TRUE")
-  expect_equal(job, "bq_job")
+  expect_equal(class(job), "bq_job")
 
   res <- bqExecuteQuery("SELECT SUM(speed) speed FROM udpate_test")
   expect_equal(res$speed, 50)
