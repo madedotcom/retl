@@ -67,20 +67,24 @@ sqlRangeTransform <- function(field, limits, labels) {
     is.numeric(limits),
     is.character(field)
   )
+
   limits <- c(-Inf, limits, Inf)
 
   case.body <- sapply(1:(length(limits) - 1), function(i) {
+    value <- labels(i, limits[i], limits[i + 1])
+    quote.char <- ifelse(is.integer(value), "", "'")
     paste0(
       " WHEN (",
       caseCondition(field, limits[i], limits[i + 1]),
       ") THEN ",
-      labels(i, limits[i], limits[i + 1])
+      quote.char,
+      value,
+      quote.char
     )
   })
 
   case.body <- paste0(case.body, collapse = "")
-
-  paste0("CASE ", case.body, "END")
+  paste0("CASE ", case.body, " END")
 }
 
 #' Creates single condition statement
@@ -105,15 +109,15 @@ caseCondition <- function(field, low, high) {
 }
 
 rangeLabel <- function(index, low, high) {
-  paste0("'(", low, ", ", high, caseRightBracket(high), "'")
+  paste0("(", low, ", ", high, caseRightBracket(high))
 }
 
 rangeIndex <- function(index, low, high) {
-  paste0(index, " ")
+  index
 }
 
 caseLabel <- function(index, low, high) {
-  paste0("'", LETTERS[index], ") (", low, ", ", high, caseRightBracket(high), "'")
+  paste0(LETTERS[index], ") (", low, ", ", high, caseRightBracket(high))
 }
 
 caseRightBracket <- function(high) {
