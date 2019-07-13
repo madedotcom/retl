@@ -34,6 +34,9 @@ bqVectorToCase <- function(field, limits, alias = field) {
   )
 }
 
+#' Functions that allow to convert numeric vector in to SQL case statement
+#'
+#' @description
 #' Creates CASE statement that turns numberic field into ranges
 #'
 #' @param field field name to be used for the binning
@@ -41,6 +44,7 @@ bqVectorToCase <- function(field, limits, alias = field) {
 #' @param limits vector of separator values
 #' @param labels function that turns index, low
 #' @export
+#' @rdname sqlRange
 sqlRangeLabel <- function(field, limits, labels = rangeLabel) {
   sqlRangeTransform(
     field,
@@ -49,9 +53,12 @@ sqlRangeLabel <- function(field, limits, labels = rangeLabel) {
   )
 }
 
+#' @description
 #' Creates CASE statement that turns index for the range field
+#'
 #' @inheritParams sqlRangeLabel
 #' @export
+#' @rdname sqlRange
 sqlRangeIndex <- function(field, limits, labels = rangeIndex) {
   sqlRangeTransform(
     field = field,
@@ -61,6 +68,7 @@ sqlRangeIndex <- function(field, limits, labels = rangeIndex) {
 }
 
 #' Creates CASE statement that turns numberic field into ranges
+#' @noRd
 sqlRangeTransform <- function(field, limits, labels) {
   assert_that(
     length(limits) > 0,
