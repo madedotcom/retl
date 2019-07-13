@@ -23,32 +23,73 @@ readSql <- function(file, ...) {
 #' to n+1 bins
 #'
 #' @export
-#' @param field field name to be used for the binning
-#' @param limits vector of separator values
-#' @param alias resulting field name for the case
+#' @inheritParams sqlRangeLabel
+#' @param alias name of the target label field
 #' @return case clause to be included in a SQL statement
 bqVectorToCase <- function(field, limits, alias = field) {
+  paste0(
+    sqlRangeTransform(field, limits, labels = caseLabel),
+    " AS ",
+    alias
+  )
+}
+
+#' Creates CASE statement that turns numberic field into ranges
+#'
+#' @param field field name to be used for the binning
+#' @param alias resulting field name for the case
+#' @param limits vector of separator values
+#' @param labels function that turns index, low
+#' @export
+sqlRangeLabel <- function(field, limits, labels = rangeLabel) {
+  sqlRangeTransform(
+    field,
+    limits,
+    labels
+  )
+}
+
+#' Creates CASE statement that turns index for the range field
+#' @inheritParams sqlRangeLabel
+#' @export
+sqlRangeIndex <- function(field, limits, labels = rangeIndex) {
+  sqlRangeTransform(
+    field = field,
+    limits = limits,
+    labels = labels
+  )
+}
+
+#' Creates CASE statement that turns numberic field into ranges
+sqlRangeTransform <- function(field, limits, labels) {
   assert_that(
     length(limits) > 0,
     is.numeric(limits),
     is.character(field)
   )
-
   limits <- c(-Inf, limits, Inf)
 
   case.body <- sapply(1:(length(limits) - 1), function(i) {
     paste0(
-      "WHEN (",
+      " WHEN (",
       caseCondition(field, limits[i], limits[i + 1]),
-      ") THEN '",
-      caseLabel(i, limits[i], limits[i + 1])
+      ") THEN ",
+      labels(i, limits[i], limits[i + 1])
     )
   })
+
   case.body <- paste0(case.body, collapse = "")
 
-  paste0("CASE ", case.body, "END AS ", alias)
+  paste0("CASE ", case.body, "END")
 }
 
+#' Creates single condition statement
+#' for given range values
+#'
+#' @param field name of the field in the table
+#' @param low lower limit of the range (exclusive)
+#' @param high highest limit of the range (inclusive)
+#' @noRd
 caseCondition <- function(field, low, high) {
   low.limit <- paste0(field, " > ", low)
   high.limit <- paste0(field, " <= ", high)
@@ -63,8 +104,16 @@ caseCondition <- function(field, low, high) {
   )
 }
 
+rangeLabel <- function(index, low, high) {
+  paste0("'(", low, ", ", high, caseRightBracket(high), "'")
+}
+
+rangeIndex <- function(index, low, high) {
+  paste0(index, " ")
+}
+
 caseLabel <- function(index, low, high) {
-  paste0(LETTERS[index], ") (", low, ", ", high, caseRightBracket(high), "' ")
+  paste0("'", LETTERS[index], ") (", low, ", ", high, caseRightBracket(high), "'")
 }
 
 caseRightBracket <- function(high) {
