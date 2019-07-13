@@ -40,7 +40,6 @@ bqVectorToCase <- function(field, limits, alias = field) {
 #' Creates CASE statement that turns numberic field into ranges
 #'
 #' @param field field name to be used for the binning
-#' @param alias resulting field name for the case
 #' @param limits vector of separator values
 #' @param labels function that turns index, low
 #' @export

@@ -15,8 +15,6 @@ sqlRangeIndex(field, limits, labels = rangeIndex)
 \item{limits}{vector of separator values}
 
 \item{labels}{function that turns index, low}
-
-\item{alias}{resulting field name for the case}
 }
 \description{
 Creates CASE statement that turns numberic field into ranges
