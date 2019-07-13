@@ -82,9 +82,9 @@ sqlRangeTransform <- function(field, limits, labels) {
     value <- labels(i, limits[i], limits[i + 1])
     quote.char <- ifelse(is.integer(value), "", "'")
     paste0(
-      " WHEN (",
+      " WHEN ",
       caseCondition(field, limits[i], limits[i + 1]),
-      ") THEN ",
+      " THEN ",
       quote.char,
       value,
       quote.char

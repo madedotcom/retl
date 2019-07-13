@@ -24,8 +24,8 @@ test_that("Case is calculated correctly", {
   expect_true(
     grepl(
       paste0(
-        "WHEN \\(test_me <= 0\\) THEN 'A\\) \\(\\-Inf, 0\\]' ",
-        "WHEN \\(test_me > 0\\) THEN 'B\\) \\(0, \\Inf\\)' END"
+        "WHEN test_me <= 0 THEN 'A\\) \\(\\-Inf, 0\\]' ",
+        "WHEN test_me > 0 THEN 'B\\) \\(0, \\Inf\\)' END"
       ),
       res
     ),
