@@ -124,17 +124,22 @@ caseCondition <- function(field, low, high) {
 
 rangeLabel <- function(index, low, high) {
   if (is.na(low)) {
-    return("(unknown)")
+    "(unknown)"
+  } else {
+    paste0("(", low, ", ", high, caseRightBracket(high))
   }
-  paste0("(", low, ", ", high, caseRightBracket(high))
 }
 
 rangeIndex <- function(index, low, high) {
-  index
+  index - 1
 }
 
 caseLabel <- function(index, low, high) {
-  paste0(LETTERS[index], ") (", low, ", ", high, caseRightBracket(high))
+  if (is.na(low)) {
+    "(unknown)"
+  } else {
+    paste0(LETTERS[index - 1], ") (", low, ", ", high, caseRightBracket(high))
+  }
 }
 
 caseRightBracket <- function(high) {
