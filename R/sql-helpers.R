@@ -68,7 +68,7 @@ sqlRangeTransform <- function(field, limits, labels) {
     is.character(field)
   )
 
-  limits <- c(-Inf, limits, Inf)
+  limits <- c(NA, -Inf, limits, Inf)
 
   case.body <- sapply(1:(length(limits) - 1), function(i) {
     value <- labels(i, limits[i], limits[i + 1])
@@ -95,8 +95,14 @@ sqlRangeTransform <- function(field, limits, labels) {
 #' @param high highest limit of the range (inclusive)
 #' @noRd
 caseCondition <- function(field, low, high) {
+  if (is.na(low)) {
+    return(
+      paste0(field, " IS NULL ")
+    )
+  }
   low.limit <- paste0(field, " > ", low)
   high.limit <- paste0(field, " <= ", high)
+
   if (is.infinite(low)) {
     return(high.limit)
   }
@@ -109,6 +115,9 @@ caseCondition <- function(field, low, high) {
 }
 
 rangeLabel <- function(index, low, high) {
+  if (is.na(low)) {
+    return("(unknown)")
+  }
   paste0("(", low, ", ", high, caseRightBracket(high))
 }
 
