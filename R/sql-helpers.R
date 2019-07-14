@@ -23,35 +23,93 @@ readSql <- function(file, ...) {
 #' to n+1 bins
 #'
 #' @export
-#' @param field field name to be used for the binning
-#' @param limits vector of separator values
-#' @param alias resulting field name for the case
+#' @inheritParams sqlRangeLabel
+#' @param alias name of the target label field
 #' @return case clause to be included in a SQL statement
 bqVectorToCase <- function(field, limits, alias = field) {
+  paste0(
+    sqlRangeTransform(field, limits, labels = caseLabel),
+    " AS ",
+    alias
+  )
+}
+
+#' Functions that allow to convert numeric vector in to SQL case statement
+#'
+#' @description
+#' Creates CASE statement that turns numberic field into ranges
+#'
+#' @param field field name to be used for the binning
+#' @param limits vector of separator values
+#' @param labels function that turns index, low
+#' @export
+#' @rdname sqlRange
+sqlRangeLabel <- function(field, limits, labels = rangeLabel) {
+  sqlRangeTransform(
+    field,
+    limits,
+    labels
+  )
+}
+
+#' @description
+#' Creates CASE statement that turns index for the range field
+#'
+#' @inheritParams sqlRangeLabel
+#' @export
+#' @rdname sqlRange
+sqlRangeIndex <- function(field, limits, labels = rangeIndex) {
+  sqlRangeTransform(
+    field = field,
+    limits = limits,
+    labels = labels
+  )
+}
+
+#' Creates CASE statement that turns numberic field into ranges
+#' @noRd
+sqlRangeTransform <- function(field, limits, labels) {
   assert_that(
     length(limits) > 0,
     is.numeric(limits),
     is.character(field)
   )
 
-  limits <- c(-Inf, limits, Inf)
+  limits <- c(NA, -Inf, limits, Inf)
 
   case.body <- sapply(1:(length(limits) - 1), function(i) {
+    value <- labels(i, limits[i], limits[i + 1])
+    quote.char <- ifelse(is.integer(value), "", "'")
     paste0(
-      "WHEN (",
+      " WHEN ",
       caseCondition(field, limits[i], limits[i + 1]),
-      ") THEN '",
-      caseLabel(i, limits[i], limits[i + 1])
+      " THEN ",
+      quote.char,
+      value,
+      quote.char
     )
   })
-  case.body <- paste0(case.body, collapse = "")
 
-  paste0("CASE ", case.body, "END AS ", alias)
+  case.body <- paste0(case.body, collapse = "")
+  paste0("CASE ", case.body, " END")
 }
 
+#' Creates single condition statement
+#' for given range values
+#'
+#' @param field name of the field in the table
+#' @param low lower limit of the range (exclusive)
+#' @param high highest limit of the range (inclusive)
+#' @noRd
 caseCondition <- function(field, low, high) {
+  if (is.na(low)) {
+    return(
+      paste0(field, " IS NULL ")
+    )
+  }
   low.limit <- paste0(field, " > ", low)
   high.limit <- paste0(field, " <= ", high)
+
   if (is.infinite(low)) {
     return(high.limit)
   }
@@ -63,8 +121,24 @@ caseCondition <- function(field, low, high) {
   )
 }
 
+rangeLabel <- function(index, low, high) {
+  if (is.na(low)) {
+    "(unknown)"
+  } else {
+    paste0("(", low, ", ", high, caseRightBracket(high))
+  }
+}
+
+rangeIndex <- function(index, low, high) {
+  index - 1
+}
+
 caseLabel <- function(index, low, high) {
-  paste0(LETTERS[index], ") (", low, ", ", high, caseRightBracket(high), "' ")
+  if (is.na(low)) {
+    "(unknown)"
+  } else {
+    paste0(LETTERS[index - 1], ") (", low, ", ", high, caseRightBracket(high))
+  }
 }
 
 caseRightBracket <- function(high) {

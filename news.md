@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.15
+
+* `sqlRangeLabel()`, `sqlRangeIndex()` - function allow to create `CASE` statements from limits vector that defines ranges (@byapparov, #122) 
+
 ## 0.1.14
 
 * Switched to versions of bigrquery above [1.2.0](https://github.com/r-dbi/bigrquery/blob/master/NEWS.md#bigrquery-120).
