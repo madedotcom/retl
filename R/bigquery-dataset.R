@@ -83,3 +83,15 @@ bqProtectedDataset <- function(dataset, project) {
     FALSE
   }
 }
+
+#' Function to get list of datasets matching given pattern
+#'
+#' @param pattern regex to match
+#' @return list of dataset objects (bigrquery)
+bqMatchDatasets <- function(pattern) {
+  
+  bqAuth()
+  datasets <- bq_project_datasets(Sys.getenv("BIGQUERY_PROJECT"))
+  Filter(function(d) grepl(pattern, d$dataset), datasets)
+
+}
