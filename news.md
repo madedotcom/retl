@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.16
+
+* `dcWriteCustomMetics` - add the correction for the binary read
+
 ## 0.1.15
 
 * `sqlRangeLabel()`, `sqlRangeIndex()` - function allow to create `CASE` statements from limits vector that defines ranges (@byapparov, #122) 

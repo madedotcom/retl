@@ -96,7 +96,8 @@ dcWriteCustomMetics <- function(clickId, conversionId, timestamp, metrics) {
   body <- dcPredictionBody(clickId, conversionId, datetime = ts, metrics)
   dcWriteConversion <- gar_api_generator(
     baseURI = "https://www.googleapis.com/doubleclicksearch/v2/conversion",
-    http_header = "POST"
+    http_header = "POST",
+    data_parse_function = function(x) x
   )
   dcWriteConversion(the_body = body)
 }
