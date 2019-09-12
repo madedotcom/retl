@@ -2,7 +2,7 @@
 
 ## 0.1.16
 
-* 
+* `dcWriteCustomMetics` - add the correction for the binary read
 
 ## 0.1.15
 
