@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.17
+
+* `bqExecuteSql()` - #127 is resolved, now you can pass parameters to query with explicit `bq_param_array` class (@byapparov, #129)
+
 ## 0.1.16
 
 * `dcWriteCustomMetics` - add the correction for the binary read

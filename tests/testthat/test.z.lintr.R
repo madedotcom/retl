@@ -10,7 +10,7 @@ if (requireNamespace("lintr", quietly = TRUE)) {
         lintr::assignment_linter,
         lintr::closed_curly_linter,
         lintr::absolute_path_linter,
-        lintr::object_name_linter(c("lowerCamelCase", "dotted.case"))
+        lintr::object_name_linter(c("camelCase", "dotted.case"))
       )
     )
   })

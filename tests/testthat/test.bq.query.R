@@ -1,5 +1,3 @@
-library(bigrquery)
-library(mockery)
 context("BigQuery query functions.")
 
 test_that("Correct sql is executed", {
@@ -34,6 +32,25 @@ test_that("Parameter can be used with a vector", {
     use.legacy.sql = FALSE
   )
   expect_equal(res$test, "A")
+
+  # Param values passed as explicit object should work
+  res <- bqExecuteSql(
+    sql = "SELECT * FROM (SELECT 'A' AS test) t
+           WHERE test IN UNNEST(@tests)",
+    tests = bigrquery::bq_param_array("A"),
+    use.legacy.sql = FALSE
+  )
+  expect_equal(res$test, "A")
+
+  # Named values passed to paramaterised query should also work
+  res <- bqExecuteSql(
+    sql = "SELECT * FROM (SELECT 'A' AS test) t
+           WHERE test IN UNNEST(@tests)",
+    tests = c(a = "A", b = "B"),
+    use.legacy.sql = FALSE
+  )
+  expect_equal(res$test, "A")
+
 })
 
 test_that("Correct sql statement is read", {

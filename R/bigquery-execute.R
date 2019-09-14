@@ -56,7 +56,7 @@ bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
 
   if (!use.legacy.sql & length(params) > 0) {
     cat("parameters applied to the template: \n")
-    print(jsonlite::toJSON(params, auto_unbox = TRUE))
+    print(jsonlite::toJSON(params, auto_unbox = TRUE, force = TRUE))
   } else {
     params <- NULL
   }
