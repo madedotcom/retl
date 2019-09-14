@@ -237,4 +237,3 @@ bqDatasetLabel <- function(datasets, dataset) {
   names(labels) <- datasets
   return(labels[as.character(dataset)])
 }
-

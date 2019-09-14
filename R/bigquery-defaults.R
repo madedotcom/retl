@@ -7,6 +7,7 @@ bqUseLegacySql <- function(x = NULL) {
     Sys.getenv("BIGQUERY_LEGACY_SQL", unset = "TRUE") == "TRUE"
   }
   else {
+    .Deprecated("bqExecuteQuery", msg = "Use `use.legacy.sql` parameter instead.")
     Sys.setenv("BIGQUERY_LEGACY_SQL" = x)
   }
 }

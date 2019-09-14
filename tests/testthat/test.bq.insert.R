@@ -123,7 +123,7 @@ withr::with_envvar(
           BIGQUERY_END_DATE = "2015-01-02"),
   action = "replace",
   test_that("shard tables from several datasets can
-            be tranformed in day partitioned tables", {
+            be transformed in day partitioned tables", {
     datasets <- c(a = "ds_retl_test_1", b = "ds_retl_test_2")
     lapply(datasets, function(ds) {
       if (bqDatasetExists(ds)) {
