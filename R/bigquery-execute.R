@@ -90,6 +90,22 @@ bqExecuteDml <- function(query, ...,
                          priority = "INTERACTIVE") {
   bqAuth()
 
+  # Extract named arguments and turn them into query params
+  args <- c(as.list(environment()), list(...))
+  args.reserved <- c("query", "priority")
+
+  params <- namedArguments(args, args.reserved)
+
+  assert_that(
+    !(length(params) > 0L & nonameItemsCount(args) > 0L),
+    msg = "All parameters must be named."
+  )
+
+  if (length(params) > 0) {
+    cat("parameters applied to the template: \n")
+    print(jsonlite::toJSON(params, auto_unbox = TRUE, force = TRUE))
+  }
+
   ds <- bq_dataset(
     project = bqDefaultProject(),
     dataset = bqDefaultDataset()
@@ -100,7 +116,8 @@ bqExecuteDml <- function(query, ...,
     billing = bqBillingProject(),
     default_dataset = ds,
     use_legacy_sql = FALSE,
-    priority = priority
+    priority = priority,
+    parameters = params
   )
   if (priority == "INTERACTIVE") {
     bq_job_wait(job)

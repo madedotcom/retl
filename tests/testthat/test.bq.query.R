@@ -95,4 +95,12 @@ test_that("Can execute DML query", {
 
   res <- bqExecuteQuery("SELECT SUM(speed) speed FROM udpate_test")
   expect_equal(res$speed, 50)
+
+  # Dml works with parameters
+  job <- bqExecuteDml("UPDATE udpate_test SET speed = @speed WHERE TRUE", speed = 2)
+  expect_equal(class(job), "bq_job")
+
+  res <- bqExecuteQuery("SELECT SUM(speed) speed FROM udpate_test")
+  expect_equal(res$speed, 100)
+
 })
