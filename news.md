@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.19
+
+* `bqCreatePartitionTable()` - change missing.dates parameter logic 
+
 ## 0.1.18
 
 * `bqExecuteDml()` - takes parameters
