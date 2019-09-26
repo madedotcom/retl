@@ -39,7 +39,7 @@ bqCreatePartitionTable <- function(table,
     existing.dates <- bqExistingPartitionDates(table)
   }
 
-  if (missing(missing.dates)) {
+  if (missing(missing.dates) || is.null(missing.dates)) {
     missing.dates <- getMissingDates(
       bqStartDate(),
       bqEndDate(),
