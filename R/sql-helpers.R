@@ -151,9 +151,10 @@ getInString <- function(x) {
 
 #' Glues variables passed in ellipsis into a text of the file
 #'
-#' @return text with values replaced based the template
+#' @export
 #' @param ... file with text to glue
 #' @param ... named parameters for glue
+#' @return text with values replaced based the template
 readSqlGlue <- function(file, ...) {
   sql <- paste(readLines(file), collapse = "\n")
   if (length(list(...)) > 0) {
