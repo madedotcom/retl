@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.20
+
+* `readSqlGlue()` - new function to pass variables passed in ellipsis into a text of the file
+
 ## 0.1.19
 
 * `bqCreatePartitionTable()` - change missing.dates parameter logic 

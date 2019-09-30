@@ -148,3 +148,20 @@ caseRightBracket <- function(high) {
 getInString <- function(x) {
   paste0("'", paste(x, collapse = "', '"), "'")
 }
+
+#' Glues variables passed in ellipsis into a text of the file
+#'
+#' @return text with values replaced based the template
+#' @param ... file with text to glue
+#' @param ... named parameters for glue
+readSqlGlue <- function(file, ...) {
+  sql <- paste(readLines(file), collapse = "\n")
+  if (length(list(...)) > 0) {
+    args <- list2env(list(...))
+    # template requires parameters.
+    glue::glue(sql, .envir = args)
+  } else {
+    # template does not have parameteres.
+    sql
+  }
+}
