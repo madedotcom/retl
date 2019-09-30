@@ -152,7 +152,7 @@ getInString <- function(x) {
 #' Glues variables passed in ellipsis into a text of the file
 #'
 #' @export
-#' @param ... file with text to glue
+#' @param file file with text to glue
 #' @param ... named parameters for glue
 #' @return text with values replaced based the template
 readSqlGlue <- function(file, ...) {

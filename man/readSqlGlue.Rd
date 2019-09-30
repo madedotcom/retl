@@ -7,7 +7,7 @@
 readSqlGlue(file, ...)
 }
 \arguments{
-\item{...}{file with text to glue}
+\item{file}{file with text to glue}
 
 \item{...}{named parameters for glue}
 }
