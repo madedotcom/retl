@@ -1,6 +1,3 @@
-#' @import glue
-NULL
-
 #' Creates SQL statement from the source file
 #'
 #' @export
