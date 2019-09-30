@@ -1,3 +1,6 @@
+#' @import glue
+NULL
+
 #' Creates SQL statement from the source file
 #'
 #' @export
@@ -155,12 +158,13 @@ getInString <- function(x) {
 #' @param file file with text to glue
 #' @param ... named parameters for glue
 #' @return text with values replaced based the template
+#' @import glue
 readSqlGlue <- function(file, ...) {
   sql <- paste(readLines(file), collapse = "\n")
   if (length(list(...)) > 0) {
     args <- list2env(list(...))
     # template requires parameters.
-    glue::glue(sql, .envir = args)
+    glue:::glue(sql, .envir = args)
   } else {
     # template does not have parameteres.
     sql
