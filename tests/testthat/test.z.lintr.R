@@ -3,7 +3,7 @@ context("Code Style")
 if (requireNamespace("lintr", quietly = TRUE)) {
   test_that("Package Style", {
     lintr::expect_lint_free(
-      exclusions = list("packrat/"),
+      exclusions = list("packrat/init.R"),
       linters = c(
         lintr::commas_linter,
         lintr::line_length_linter,
