@@ -5,8 +5,8 @@
 \title{Creates partition table for a given sql}
 \usage{
 bqCreatePartitionTable(table, datasets, sql = NULL, file = NULL,
-  existing.dates = NULL, missing.dates = NULL, priority = "INTERACTIVE",
-  use.legacy.sql = bqUseLegacySql())
+  existing.dates = NULL, missing.dates = NULL,
+  priority = "INTERACTIVE", use.legacy.sql = bqUseLegacySql())
 }
 \arguments{
 \item{table}{name of the destination table}

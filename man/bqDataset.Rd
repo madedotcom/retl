@@ -7,14 +7,17 @@
 \alias{bqDatasetTables}
 \title{Dataset manipulation functions}
 \usage{
-bqDatasetExists(dataset = bqDefaultDataset(), project = bqDefaultProject())
+bqDatasetExists(dataset = bqDefaultDataset(),
+  project = bqDefaultProject())
 
-bqCreateDataset(dataset = bqDefaultDataset(), project = bqDefaultProject())
+bqCreateDataset(dataset = bqDefaultDataset(),
+  project = bqDefaultProject())
 
-bqDeleteDataset(dataset = bqDefaultDataset(), project = bqDefaultProject(),
-  delete.contents = FALSE)
+bqDeleteDataset(dataset = bqDefaultDataset(),
+  project = bqDefaultProject(), delete.contents = FALSE)
 
-bqDatasetTables(dataset = bqDefaultDataset(), project = bqDefaultProject())
+bqDatasetTables(dataset = bqDefaultDataset(),
+  project = bqDefaultProject())
 }
 \arguments{
 \item{dataset}{name of the dataset}
