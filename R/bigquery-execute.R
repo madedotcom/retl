@@ -153,7 +153,7 @@ bqDownloadQuery <- function(query, ...) {
   )
 
   # Load data from Storage to data.table
-  temp.file.path <- paste0(tempfile(), ".csv.gz")
+  temp.file.path <- tempfile(fileext = ".csv.gz")
   on.exit({
     unlink(temp.file.path)
     googleCloudStorageR::gcs_delete_object(
@@ -165,7 +165,7 @@ bqDownloadQuery <- function(query, ...) {
     )
   })
 
-  googleCloudStorageR::gcs_auth()
+  googleCloudStorageR::gcs_auth(json_file = Sys.getenv("GCS_AUTH_FILE"))
   googleCloudStorageR::gcs_get_object(
     gsUri(bq.table, format = export.format, compression = export.compression),
     saveToDisk = temp.file.path
