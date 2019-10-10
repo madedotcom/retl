@@ -127,6 +127,39 @@ bqExecuteDml <- function(query, ...,
   }
 }
 
+bqDownloadQuery <- function(query, ...) {
+  export.format = "CSV"
+  export.compression = "GZIP"
+
+  # Execute Query to get results into a temporary table
+  job <- bqExecuteDml(query, ...)
+  job.meta <- bigrquery::bq_job_meta(job)
+  bq.table <- job.meta$configuration$query$destinationTable
+
+  # Export temporary table to Storage
+  bqExtractTable(
+    table = bq.table$tableId,
+    dataset = bq.table$datasetId,
+    format = export.format,
+    compression = export.compression
+  )
+
+  # Load data from Storage to data.table
+  temp.file.path <- paste0(tempfile(), ".csv.gz")
+  on.exit({
+    unlink(temp.file.path)
+    googleCloudStorageR::gcs_delete_object(gsUri(bq.table))
+  })
+
+  googleCloudStorageR::gcs_auth(bqTokenFile())
+  googleCloudStorageR::gcs_get_object(
+    gsUri(bq.table, format = export.format, compression = export.compression),
+    saveToDisk = temp.file.path
+  )
+  dt <- fread(paste0("zcat < ", temp.file.path))
+  dt
+}
+
 #' Returns subset of arguments where name is set excluding reserved names
 #'
 #' @noRd

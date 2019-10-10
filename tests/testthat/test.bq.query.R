@@ -104,3 +104,9 @@ test_that("Can execute DML query", {
   expect_equal(res$speed, 100)
 
 })
+
+
+test_that("Download query output via Storage", {
+  res <- bqDownloadQuery("SELECT 1 as field_name")
+  expect_equal(res$field_name, 1L)
+})
