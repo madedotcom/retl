@@ -4,6 +4,9 @@ language: r
 cache: packages
 sudo: false
 
+r_packages:
+  - R.utils
+
 r_github_packages:
   - cloudyr/aws.s3
   - jimhester/covr
