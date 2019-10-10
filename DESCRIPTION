@@ -1,7 +1,7 @@
 Package: retl
 Type: Package
 Title: Support for common ETL operations and connections
-Version: 0.1.20
+Version: 0.1.21
 Date: 2019-09-26
 Author: byapparov@gmail.com
 Maintainer: Bulat Yapparov <byapparov@gmail.com>
@@ -29,4 +29,5 @@ Imports:
     googlesheets (>= 0.2.2),
     xts,
     jsonlite (>= 1.5),
-    assertthat (>= 0.2.0)
+    assertthat (>= 0.2.0),
+    googleCloudStorageR (>= 0.5.1)

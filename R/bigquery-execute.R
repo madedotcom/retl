@@ -127,6 +127,10 @@ bqExecuteDml <- function(query, ...,
   }
 }
 
+#' Download query output via Storage
+#'
+#' @rdname bqQuery
+#' @export
 bqDownloadQuery <- function(query, ...) {
   export.format = "CSV"
   export.compression = "GZIP"
@@ -148,7 +152,13 @@ bqDownloadQuery <- function(query, ...) {
   temp.file.path <- paste0(tempfile(), ".csv.gz")
   on.exit({
     unlink(temp.file.path)
-    googleCloudStorageR::gcs_delete_object(gsUri(bq.table))
+    googleCloudStorageR::gcs_delete_object(
+      gsUri(
+        bq.table,
+        format = export.format,
+        compression = export.compression
+      )
+    )
   })
 
   googleCloudStorageR::gcs_auth(bqTokenFile())

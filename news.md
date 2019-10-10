@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.21
+
+* `bqDownloadQuery()` - allows to load data from BigQuery via Storage.
+
 ## 0.1.20
 
 * `readSqlGlue()` - new function to pass variables passed in ellipsis into a text of the file
