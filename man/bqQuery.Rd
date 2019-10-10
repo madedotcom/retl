@@ -6,6 +6,8 @@
 \alias{bqExecuteQuery}
 \alias{bqExecuteSql}
 \alias{bqExecuteDml}
+\alias{bqDownloadQuery}
+\alias{bqDownloadQueryFile}
 \title{Functions that execute query against BigQuery database}
 \usage{
 bqExecuteFile(file, ...)
@@ -15,6 +17,10 @@ bqExecuteQuery(query, ...)
 bqExecuteSql(sql, ..., use.legacy.sql = bqUseLegacySql())
 
 bqExecuteDml(query, ..., priority = "INTERACTIVE")
+
+bqDownloadQuery(query, ...)
+
+bqDownloadQueryFile(file, ...)
 }
 \arguments{
 \item{file}{file with sql statement}

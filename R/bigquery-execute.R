@@ -170,6 +170,16 @@ bqDownloadQuery <- function(query, ...) {
   dt
 }
 
+#' Download results of query from a file via Storage
+#'
+#' @rdname bqQuery
+#' @export
+bqDownloadQueryFile <- function(file, ...) {
+  query <- paste(readLines(file), collapse = "\n")
+  bqDownloadQuery(query, ...)
+}
+
+
 #' Returns subset of arguments where name is set excluding reserved names
 #'
 #' @noRd
