@@ -15,7 +15,8 @@ Suggests:
     lintr,
     withr,
     sodium,
-    googleAuthR
+    googleAuthR,
+    R.utils
 RoxygenNote: 6.1.1.9000
 Imports:
     aws.s3 (>= 0.3.2),
