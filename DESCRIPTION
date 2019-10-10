@@ -20,7 +20,7 @@ Imports:
     aws.s3 (>= 0.3.2),
     bigrquery (>= 1.2.0),
     gargle (>= 0.3.0),
-    data.table (>= 1.10.0),
+    data.table (>= 1.12.4),
     stringr (>= 1.2.0),
     httr,
     DBI,

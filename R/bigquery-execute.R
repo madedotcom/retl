@@ -132,8 +132,8 @@ bqExecuteDml <- function(query, ...,
 #' @rdname bqQuery
 #' @export
 bqDownloadQuery <- function(query, ...) {
-  export.format = "CSV"
-  export.compression = "GZIP"
+  export.format <- "CSV"
+  export.compression <- "GZIP"
 
   # Execute Query to get results into a temporary table
   job <- bqExecuteDml(query, ...)
@@ -166,7 +166,7 @@ bqDownloadQuery <- function(query, ...) {
     gsUri(bq.table, format = export.format, compression = export.compression),
     saveToDisk = temp.file.path
   )
-  dt <- fread(paste0("zcat < ", temp.file.path))
+  dt <- fread(temp.file.path)
   dt
 }
 
