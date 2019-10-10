@@ -14,7 +14,8 @@ Suggests:
     mockery (>= 0.4.0),
     lintr,
     withr,
-    sodium
+    sodium,
+    googleAuthR
 RoxygenNote: 6.1.1.9000
 Imports:
     aws.s3 (>= 0.3.2),
