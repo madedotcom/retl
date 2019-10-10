@@ -129,6 +129,8 @@ bqExecuteDml <- function(query, ...,
 
 #' Download query output via Storage
 #'
+#' `bqDownloadQuery()` Only works with Standard SQL
+#'
 #' @rdname bqQuery
 #' @export
 bqDownloadQuery <- function(query, ...) {
