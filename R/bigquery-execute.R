@@ -171,6 +171,7 @@ bqDownloadQuery <- function(query, ...) {
     saveToDisk = temp.file.path
   )
   dt <- fread(temp.file.path)
+  colnames(dt) <- conformHeader(colnames(dt))
   dt
 }
 
