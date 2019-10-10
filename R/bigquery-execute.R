@@ -161,7 +161,7 @@ bqDownloadQuery <- function(query, ...) {
     )
   })
 
-  googleCloudStorageR::gcs_auth(bqTokenFile())
+  googleCloudStorageR::gcs_auth()
   googleCloudStorageR::gcs_get_object(
     gsUri(bq.table, format = export.format, compression = export.compression),
     saveToDisk = temp.file.path
