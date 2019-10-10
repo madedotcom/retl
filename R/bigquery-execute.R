@@ -137,6 +137,8 @@ bqDownloadQuery <- function(query, ...) {
   export.format <- "CSV"
   export.compression <- "GZIP"
 
+  gcs_global_bucket(Sys.getenv("GCS_DEFAULT_BUCKET"))
+
   # Execute Query to get results into a temporary table
   job <- bqExecuteDml(query, ...)
   job.meta <- bigrquery::bq_job_meta(job)
