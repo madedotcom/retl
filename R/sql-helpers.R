@@ -160,7 +160,7 @@ readSqlGlue <- function(file, ...) {
   if (length(list(...)) > 0) {
     args <- list2env(list(...))
     # template requires parameters.
-    glue:::glue(sql, .envir = args)
+    glue::glue(sql, .envir = args)
   } else {
     # template does not have parameteres.
     sql
