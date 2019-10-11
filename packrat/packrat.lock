@@ -1,6 +1,6 @@
 PackratFormat: 1.4
-PackratVersion: 0.4.8.1
-RVersion: 3.3.3
+PackratVersion: 0.5.0
+RVersion: 3.5.3
 Repos: CRAN=https://cran.rstudio.com/
 
 Package: BH
@@ -10,8 +10,8 @@ Hash: 95f62be4d6916aae14a310a8b56a6475
 
 Package: DBI
 Source: CRAN
-Version: 0.7
-Hash: 1ab72df487f06ad5f0de05446cdd4bd6
+Version: 1.0.0
+Hash: 6abedd7919c4457604c0aa44529a6683
 
 Package: MASS
 Source: CRAN
@@ -42,14 +42,14 @@ Hash: b2366cd9d2f3851a5704b4e192b985c2
 
 Package: RPostgreSQL
 Source: CRAN
-Version: 0.4-1
-Hash: 42460e37a21dc9e3f1f47c7d8d210592
+Version: 0.6-2
+Hash: 3f9effd1b6b265ca9287546537bf5d96
 Requires: DBI
 
 Package: Rcpp
 Source: CRAN
-Version: 0.12.14
-Hash: f9a2a481350397e53b0768bf488329cd
+Version: 1.0.2
+Hash: d04e441a8d398e3d3a71f294c07fa94d
 
 Package: RcppArmadillo
 Source: CRAN
@@ -59,8 +59,8 @@ Requires: Rcpp
 
 Package: assertthat
 Source: CRAN
-Version: 0.2.0
-Hash: e8805df54c65ac96d50235c44a82615c
+Version: 0.2.1
+Hash: 622be49032fe50bd42e96aaef613e209
 
 Package: aws.signature
 Source: github
@@ -128,8 +128,8 @@ Requires: rematch, tibble
 
 Package: cli
 Source: CRAN
-Version: 1.0.0
-Hash: f4239f89feb7ddc65821e4514e9734ae
+Version: 1.1.0
+Hash: bc4e54014c2049f2605ad0c3ba0cce6b
 Requires: assertthat, crayon
 
 Package: commonmark
@@ -145,8 +145,8 @@ Requires: crayon, httr, jsonlite, rex, withr
 
 Package: crayon
 Source: CRAN
-Version: 1.3.2
-Hash: 576a9d297a567d6a5ebd164ca5221590
+Version: 1.3.4
+Hash: ff2840dd9b0d563fc80377a5a45510cd
 
 Package: curl
 Source: CRAN
@@ -371,8 +371,8 @@ Hash: 3858537ac10388a5db1687450908f257
 
 Package: packrat
 Source: CRAN
-Version: 0.4.8-1
-Hash: 6ad605ba7b4b476d84be6632393f5765
+Version: 0.5.0
+Hash: 498643e765d1442ba7b1160a1df3abf9
 
 Package: pkgconfig
 Source: CRAN
@@ -496,7 +496,8 @@ Hash: 226d56d7469587da40b0f96180e711b4
 
 Package: stringdist
 Source: CRAN
-Version: 0.9.5.1
+Version: 0.9.5.2
+Hash: 99696dca58fc3a46f53eb616f53cf371
 
 Package: stringi
 Source: CRAN
