@@ -79,7 +79,7 @@ bqImportData <- function(table,
 gsPathUri <- function(path) {
   paste0(
     "gs://",
-    s3DefaultBucket(), "/",
+    googleCloudStorageR::gcs_get_global_bucket(), "/",
     gsub("/", "", s3DefaultRoot()), "/",
     path
   )

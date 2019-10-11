@@ -127,6 +127,64 @@ bqExecuteDml <- function(query, ...,
   }
 }
 
+#' Download query output via Storage
+#'
+#' `bqDownloadQuery()` Only works with Standard SQL
+#'
+#' @rdname bqQuery
+#' @export
+bqDownloadQuery <- function(query, ...) {
+  export.format <- "CSV"
+  export.compression <- "GZIP"
+
+  googleCloudStorageR::gcs_global_bucket(Sys.getenv("GCS_DEFAULT_BUCKET"))
+
+  # Execute Query to get results into a temporary table
+  job <- bqExecuteDml(query, ...)
+  job.meta <- bigrquery::bq_job_meta(job)
+  bq.table <- job.meta$configuration$query$destinationTable
+
+  # Export temporary table to Storage
+  bqExtractTable(
+    table = bq.table$tableId,
+    dataset = bq.table$datasetId,
+    format = export.format,
+    compression = export.compression
+  )
+
+  # Load data from Storage to data.table
+  temp.file.path <- tempfile(fileext = ".csv.gz")
+  on.exit({
+    unlink(temp.file.path)
+    googleCloudStorageR::gcs_delete_object(
+      gsUri(
+        bq.table,
+        format = export.format,
+        compression = export.compression
+      )
+    )
+  })
+
+  # googleCloudStorageR::gcs_auth(json_file = Sys.getenv("GCS_AUTH_FILE"))
+  googleCloudStorageR::gcs_get_object(
+    gsUri(bq.table, format = export.format, compression = export.compression),
+    saveToDisk = temp.file.path
+  )
+  dt <- fread(temp.file.path)
+  colnames(dt) <- conformHeader(colnames(dt))
+  dt
+}
+
+#' Download results of query from a file via Storage
+#'
+#' @rdname bqQuery
+#' @export
+bqDownloadQueryFile <- function(file, ...) {
+  query <- paste(readLines(file), collapse = "\n")
+  bqDownloadQuery(query, ...)
+}
+
+
 #' Returns subset of arguments where name is set excluding reserved names
 #'
 #' @noRd

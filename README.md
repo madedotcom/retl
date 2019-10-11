@@ -71,6 +71,17 @@ bqDeleteDataset("my_dataset")
 
 You can protect dataset from programmatic deletion by adding `delete:never` label (key:value) to it.
 
+### Load data through storage
+
+`bqDownloadQuery()` & `bqDownloadQueryFile()` allow downloads of large datasets through Storage.
+
+You will need to provide environment variables to support GCS processing:
+
+```
+GCS_DEFAULT_BUCKET={gcs bucket where tables will exported to}
+GCS_AUTH_FILE={path to json file with service token}
+```
+
 ### transform partitioned data
 
 If your raw data is in daily partitioned tables you can transform

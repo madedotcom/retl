@@ -4,12 +4,16 @@ language: r
 cache: packages
 sudo: false
 
+r_packages:
+  - R.utils
+
 r_github_packages:
   - cloudyr/aws.s3
   - jimhester/covr
   - byapparov/bigrquery
   - r-lib/gargle
   - jimhester/lintr
+  - cloudyr/googleCloudStorageR
 
 after_success:
   - Rscript -e 'covr::codecov()'
