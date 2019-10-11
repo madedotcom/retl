@@ -32,4 +32,5 @@ Imports:
     xts,
     jsonlite (>= 1.5),
     assertthat (>= 0.2.0),
-    googleCloudStorageR (>= 0.5.1)
+    googleCloudStorageR (>= 0.5.1),
+    glue
