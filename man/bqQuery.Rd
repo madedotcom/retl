@@ -41,4 +41,8 @@ Execute templated query given as string or file.
 Placeholders in template are replaced with values provided in ellipsis parameter with sprintf
 
 `bqExecuteDml()` - Executes DML query without loading results
+
+`bqDownloadQuery()` Only works with Standard SQL
+
+Download results of query from a file via Storage
 }
