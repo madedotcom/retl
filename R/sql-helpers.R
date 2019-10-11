@@ -155,6 +155,7 @@ getInString <- function(x) {
 #' @param file file with text to glue
 #' @param ... named parameters for glue
 #' @return text with values replaced based the template
+#' @importFrom glue glue
 readSqlGlue <- function(file, ...) {
   sql <- paste(readLines(file), collapse = "\n")
   if (length(list(...)) > 0) {
