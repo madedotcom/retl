@@ -51,7 +51,7 @@ bqCreatePartitionTable <- function(table,
     lapply(missing.dates, function(d) {
       # Create partition for every missing date.
       destination.partition <- bqPartitionName(table, d)
-      print(paste0("Partition name: ", destination.partition))
+      message("Updating partition: ", destination.partition)
 
 
       sql.list <- lapply(datasets, function(p) {
@@ -161,7 +161,7 @@ bqTransformPartition <- function(table,
   jobs <- lapply(missing.dates, function(d) {
     partition <- gsub("-", "", d)
     destination.partition <- paste0(table, "$", partition)
-    print(destination.partition)
+    message("Updating partition: ", destination.partition)
     sql.exec <- readSql(file, partition, ...)
 
     bqCreateTable(

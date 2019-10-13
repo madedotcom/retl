@@ -167,7 +167,7 @@ s3GetFile.csv <- function(path, # nolint
 
   # In case of error, print error message.
   if (!is.raw(raw.data)) {
-    stop(print(raw.data[1:3]))
+    stop(raw.data[1:3])
   }
 
   data <- iconv(

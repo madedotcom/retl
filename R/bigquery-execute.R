@@ -56,7 +56,7 @@ bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
 
   if (!use.legacy.sql & length(params) > 0) {
     cat("parameters applied to the template: \n")
-    print(jsonlite::toJSON(params, auto_unbox = TRUE, force = TRUE))
+    message(jsonlite::toJSON(params, auto_unbox = TRUE, force = TRUE))
   } else {
     params <- NULL
   }
@@ -103,7 +103,7 @@ bqExecuteDml <- function(query, ...,
 
   if (length(params) > 0) {
     cat("parameters applied to the template: \n")
-    print(jsonlite::toJSON(params, auto_unbox = TRUE, force = TRUE))
+    message(jsonlite::toJSON(params, auto_unbox = TRUE, force = TRUE))
   }
 
   ds <- bq_dataset(
