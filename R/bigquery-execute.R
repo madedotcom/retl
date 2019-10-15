@@ -244,3 +244,52 @@ bqCreateTable <- function(sql,
     job
   }
 }
+
+#' Upload query output to Storage.
+#' The extension of the file needs to either be CSV or GZ
+#'
+#' `bqUploadQuery()` Only works with Standard SQL
+#'
+#' @rdname bqUploadQuery
+#' @export
+bqUploadQuery <- function(query, path, ...) {
+  format <- "CSV"
+  compression <- "GZIP"
+
+    ".csv"
+    ".csv.gz"
+  raise Error
+
+  .csv ==> csv..gz
+
+  googleCloudStorageR::gcs_global_bucket(Sys.getenv("GCS_DEFAULT_BUCKET"))
+
+  # Execute Query to get results into a temporary table
+  job <- bqExecuteDml(query, ...)
+  job.meta <- bigrquery::bq_job_meta(job)
+  bq.table <- job.meta$configuration$query$destinationTable
+
+  # Create temporary table
+  temp.table <- bigrquery::bq_table(
+    project =  bqDefaultProject(),
+    dataset = bq.table$datasetId,
+    table = bq.table$tableId
+  )
+
+  # Export temporary table to Storage
+  tryCatch({
+    gs.path <- gsPathUri(path)
+    bigrquery::bq_table_save(
+      temp.table,
+      destination_uris = gs.path,
+      destination_format = format,
+      compression = compression
+    )
+    print(paste0('Successfully uploaded query to ', gs.path))
+  }, error = function(e) {
+    print(paste0('Failed to upload file to Google Storage with the following error: ', e))
+  })
+
+}
+
+bqUploadQuery(query='SELECT * FROM data.countries', path='karim.csv')

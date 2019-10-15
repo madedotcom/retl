@@ -40,6 +40,10 @@ s3DefaultBucket <- function() {
   Sys.getenv("AWS_S3_BUCKET")
 }
 
+gcsDefaultRoot <- function() {
+  Sys.getenv("GCS_ROOT")
+}
+
 s3DefaultRoot <- function() {
   Sys.getenv("AWS_S3_ROOT")
 }

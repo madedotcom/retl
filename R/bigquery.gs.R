@@ -80,7 +80,7 @@ gsPathUri <- function(path) {
   paste0(
     "gs://",
     googleCloudStorageR::gcs_get_global_bucket(), "/",
-    gsub("/", "", s3DefaultRoot()), "/",
+    gsub("/", "", gcsDefaultRoot()), "/",
     path
   )
 }
