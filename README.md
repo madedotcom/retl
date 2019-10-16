@@ -163,13 +163,11 @@ dt <- s3GetData("path/to/myfile_")
 
 ## Release process ##
 
-# .Renviron #
+### .Renviron ###
 
 `.Renviron` file is needed and need to be configured as below:
 
 ```
-.Renviron
-
 RETL_PASSWORD=
 BIGQUERY_ACCESS_TOKEN_PATH=
 BIGQUERY_TEST_PROJECT=
@@ -189,9 +187,7 @@ AWS_S3_BUCKET=
 AWS_S3_ROOT=
 ```
 
-RETL_PASSWORD needs to be fetch from the vault (bi/secrets/retl/)
-
-# Steps to follow #
+### Steps to follow ###
 
 1. Modify/Add the function in the appropriate .R file in the R/ folder. 
 2. Update news.md (version, description)
