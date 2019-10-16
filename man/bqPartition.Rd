@@ -8,8 +8,8 @@
 bqRefreshPartitionData(table, file, ..., priority = "BATCH",
   use.legacy.sql = bqUseLegacySql())
 
-bqTransformPartition(table, file, ..., priority = "INTERACTIVE",
-  use.legacy.sql = bqUseLegacySql())
+bqTransformPartition(table, file, ..., missing.dates = NULL,
+  priority = "INTERACTIVE", use.legacy.sql = bqUseLegacySql())
 }
 \arguments{
 \item{table}{destination partition table where results of the query will be saved}

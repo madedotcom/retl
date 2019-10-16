@@ -145,18 +145,22 @@ bqRefreshPartitionData <- function(table,
 bqTransformPartition <- function(table,
                                  file,
                                  ...,
+                                 missing.dates = NULL,
                                  priority = "INTERACTIVE",
                                  use.legacy.sql = bqUseLegacySql()) {
+
   existing.dates <- bqExistingPartitionDates(table)
   start.date <- bqStartDate(unset = "2017-01-01")
   end.date <- bqEndDate()
 
-  missing.dates <- getMissingDates(
-    start.date,
-    end.date,
-    existing.dates,
-    "%Y-%m-%d"
-  )
+  if (missing(missing.dates) || is.null(missing.dates)) {
+    missing.dates <- getMissingDates(
+      bqStartDate(),
+      bqEndDate(),
+      existing.dates,
+      "%Y-%m-%d"
+    )
+  }
 
   jobs <- lapply(missing.dates, function(d) {
     partition <- gsub("-", "", d)
