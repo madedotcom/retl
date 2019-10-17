@@ -144,6 +144,11 @@ withr::with_envvar(
       )
     })
 
+    bqExecuteSql("SELECT value AS count FROM ds_retl_test_1.shard_20150101")
+    bqExecuteSql("SELECT value AS count FROM ds_retl_test_1.shard_20150102")
+    bqExecuteSql("SELECT value AS count FROM ds_retl_test_2.shard_20150101")
+    bqExecuteSql("SELECT value AS count FROM ds_retl_test_2.shard_20150102")
+
     bqInitiateTable(
       "partitioned_shards",
       schema.file = "test-schema.json",
