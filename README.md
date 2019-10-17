@@ -160,3 +160,37 @@ dt <- s3PutFile(dt, "path/to/myfile.csv")
 # s3://{AWS_S3_BUCKET}/{AWS_S3_ROOT}/path/to/myfile_3.csv
 dt <- s3GetData("path/to/myfile_")
 ```
+
+## Release process ##
+
+### .Renviron ###
+
+`.Renviron` file is needed and need to be configured as below:
+
+```
+RETL_PASSWORD=
+BIGQUERY_ACCESS_TOKEN_PATH=
+BIGQUERY_TEST_PROJECT=
+BIGQUERY_METADATA_DATASET=
+BIGQUERY_START_DATE=
+BIGQUERY_END_DATE=
+
+GCS_AUTH_FILE=
+GCS_DEFAULT_BUCKET=
+
+GITHUB_PAT=
+
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=
+AWS_S3_BUCKET=
+AWS_S3_ROOT=
+```
+
+### Steps to follow ###
+
+1. Modify/Add the function in the appropriate .R file in the R/ folder. 
+2. Update news.md (version, description)
+3. Updated DESCRIPTION (version, data, Suggests and Imports if needed)
+4. Run devtools::document().
+5. Push your changes and create a PR against master branch. 

@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.22
+
+* `bqTransformPartition()` - made missing.dates parameter of the function
+
 ## 0.1.21
 
 * `bqDownloadQuery()` - allows to load data from BigQuery via Storage.
