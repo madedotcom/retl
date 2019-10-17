@@ -127,8 +127,12 @@ withr::with_envvar(
     datasets <- c(a = "ds_retl_test_1", b = "ds_retl_test_2")
     lapply(datasets, function(ds) {
       if (bqDatasetExists(ds)) {
-        bqDeleteTable("shard_20150101", ds)
-        bqDeleteTable("shard_20150102", ds)
+        if (bqTableExists("shard_20150101", ds)) {
+          bqDeleteTable("shard_20150101", ds)
+        }
+        if (bqTableExists("shard_20150102", ds)) {
+          bqDeleteTable("shard_20150102", ds)
+        }
       } else {
         bqCreateDataset(ds)
       }
