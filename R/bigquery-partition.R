@@ -104,10 +104,18 @@ bqPartitionDatesSql <- function(table) {
   }
 }
 
+#' Functions to update existing partitions in the target table
+#'
 #' @description `bqRefreshPartitionData` updates existing partitions in the target table
 #'
-#' @rdname bqPartition
+#' @rdname bqRefreshPartitionData
 #' @export
+#' @param table destination partition table where results of the query will be saved
+#' @param file path to the sql file that will be used for the transformation
+#' @param ...  parameters that will be passed via `sprintf` to build dynamic SQL.
+#'    partition date will be always passed first in format `yyyymmdd`
+#'    followed by arguments in `...`
+#' @inheritParams bqCreateTable
 bqRefreshPartitionData <- function(table,
                                    file,
                                    ...,
@@ -134,7 +142,7 @@ bqRefreshPartitionData <- function(table,
 #' Functions to transforms partitioned data form one table to another
 #'
 #' @description `bqTransformPartition` creates new partitions for the missing dates
-#' @rdname bqPartition
+#' @rdname bqTransformPartition
 #' @export
 #' @param table destination partition table where results of the query will be saved
 #' @param file path to the sql file that will be used for the transformation
