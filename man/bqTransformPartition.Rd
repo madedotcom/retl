@@ -16,10 +16,11 @@ bqTransformPartition(table, file, ..., missing.dates = NULL,
 partition date will be always passed first in format `yyyymmdd`
 followed by arguments in `...`}
 
-\item{priority}{sets priority of job execution to INTERACTIVE or BATCH}
+\item{missing.dates}{dates for which to run this function for}
 
-\item{use.legacy.sql}{switches SQL dialect.
-Defaults to value set in `BIGQUERY_LEGACY_SQL` env.}
+\item{priority}{Default to INTERACTIVE}
+
+\item{use.legacy.sql}{Defaults to env variable if specified}
 }
 \description{
 `bqTransformPartition` creates new partitions for the missing dates
