@@ -129,6 +129,7 @@ withr::with_envvar(
     lapply(datasets, function(ds) {
       if (bqDatasetExists(ds)) {
         bqDeleteDataset(ds, delete.contents = TRUE)
+        Sys.sleep(10)
       }
       bqCreateDataset(ds)
       bqCreateTable(
