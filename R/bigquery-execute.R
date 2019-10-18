@@ -234,9 +234,6 @@ bqCreateTable <- function(sql,
   }
   else {
     message("Schema file passed. Initiating table.")
-    print(table)
-    print(schema.file)
-    print(dataset)
     bqInitiateTable(table = table,
                     schema.file = schema.file,
                     dataset = dataset)
