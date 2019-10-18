@@ -216,7 +216,8 @@ bqCreateTable <- function(sql,
                           dataset = bqDefaultDataset(),
                           write.disposition = "WRITE_APPEND",
                           priority = "INTERACTIVE",
-                          use.legacy.sql = bqUseLegacySql()) {
+                          use.legacy.sql = bqUseLegacySql(),
+                          schema.file = NULL) {
   bqAuth()
   tbl <- bq_table(
     project = bqDefaultProject(),
@@ -227,6 +228,29 @@ bqCreateTable <- function(sql,
     project = bqDefaultProject(),
     dataset = dataset
   )
+
+  if (missing(schema.file) || is.null(schema.file)) {
+    message("No schema file was passed")
+  }
+  else {
+    message("Schema file passed. Initiating table.")
+    print(table)
+    print(schema.file)
+    print(dataset)
+    bqInitiateTable(table = table,
+                    schema.file = schema.file,
+                    dataset = dataset)
+    print("Initiated successfully")
+    if (write.disposition == "WRITE_TRUNCATE") {
+      message("Truncating ", dataset, ".", table)
+      bqExecuteSql("DELETE FROM %1$s.%2$s WHERE 1=1",
+                   dataset,
+                   table,
+                   use.legacy.sql = FALSE)
+      write.disposition <- "WRITE_EMPTY"
+    }
+  }
+
   job <- bq_perform_query(
     query = sql,
     billing = bqBillingProject(),

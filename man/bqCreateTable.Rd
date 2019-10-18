@@ -6,7 +6,7 @@
 \usage{
 bqCreateTable(sql, table, dataset = bqDefaultDataset(),
   write.disposition = "WRITE_APPEND", priority = "INTERACTIVE",
-  use.legacy.sql = bqUseLegacySql())
+  use.legacy.sql = bqUseLegacySql(), schema.file = NULL)
 }
 \arguments{
 \item{sql}{string with sql statement or query template}
