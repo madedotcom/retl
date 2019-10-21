@@ -126,29 +126,35 @@ withr::with_envvar(
             be transformed in day partitioned tables", {
     datasets <- c(a = "ds_retl_test_1", b = "ds_retl_test_2")
 
-    lapply(datasets, function(ds) {
+    for (ds in datasets) {
+
       if (bqDatasetExists(ds)) {
         bqDeleteDataset(ds, delete.contents = TRUE)
         Sys.sleep(10)
       }
+
       bqCreateDataset(ds)
+
       bqCreateTable(
         sql = "SELECT 1 AS value",
         table = "shard_20150101",
         dataset = ds
       )
+
       bqCreateTable(
         sql = "SELECT 2 AS value",
         table = "shard_20150102",
         dataset = ds
       )
-    })
+
+    }
 
     bqInitiateTable(
       "partitioned_shards",
       schema.file = "test-schema.json",
       partition = TRUE
     )
+
     bqCreatePartitionTable(
       table = "partitioned_shards",
       datasets = datasets,
