@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.23
+
+* `bqCreateTable()` - add initiation capability via argument schema.file
+
 ## 0.1.22
 
 * `bqTransformPartition()` - made missing.dates parameter of the function

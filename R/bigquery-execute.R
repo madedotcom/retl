@@ -209,6 +209,8 @@ nonameItemsCount <- function(x) {
 #' @param dataset name of the destination dataset
 #' @param write.disposition defines whether records will be appended
 #' @param priority sets priority of job execution to INTERACTIVE or BATCH
+#' @param use.legacy.sql sets SQL flavour
+#' @param schema.file sets path to schema file for initialisation
 #' @inheritParams bqExecuteSql
 #' @return results of the execution as returned by bigrquery::query_exec
 bqCreateTable <- function(sql,
@@ -216,7 +218,8 @@ bqCreateTable <- function(sql,
                           dataset = bqDefaultDataset(),
                           write.disposition = "WRITE_APPEND",
                           priority = "INTERACTIVE",
-                          use.legacy.sql = bqUseLegacySql()) {
+                          use.legacy.sql = bqUseLegacySql(),
+                          schema.file = NULL) {
   bqAuth()
   tbl <- bq_table(
     project = bqDefaultProject(),
@@ -227,6 +230,26 @@ bqCreateTable <- function(sql,
     project = bqDefaultProject(),
     dataset = dataset
   )
+
+  if (missing(schema.file) || is.null(schema.file)) {
+    message("No schema file was passed")
+  }
+  else {
+    message("Schema file passed. Initiating table.")
+    bqInitiateTable(table = table,
+                    schema.file = schema.file,
+                    dataset = dataset)
+    print("Initiated successfully")
+    if (write.disposition == "WRITE_TRUNCATE") {
+      message("Truncating ", dataset, ".", table)
+      bqExecuteSql("DELETE FROM %1$s.%2$s WHERE 1=1",
+                   dataset,
+                   table,
+                   use.legacy.sql = FALSE)
+      write.disposition <- "WRITE_EMPTY"
+    }
+  }
+
   job <- bq_perform_query(
     query = sql,
     billing = bqBillingProject(),
