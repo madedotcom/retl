@@ -2,7 +2,7 @@ Package: retl
 Type: Package
 Title: Support for common ETL operations and connections
 Version: 0.1.23
-Date: 2019-10-17
+Date: 2019-10-21
 Author: byapparov@gmail.com
 Maintainer: Bulat Yapparov <byapparov@gmail.com>
 Description: Wrappers for connections with PostgreSQL, S3, BigQuery, InfluxDB.
