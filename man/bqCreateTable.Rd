@@ -19,8 +19,9 @@ bqCreateTable(sql, table, dataset = bqDefaultDataset(),
 
 \item{priority}{sets priority of job execution to INTERACTIVE or BATCH}
 
-\item{use.legacy.sql}{switches SQL dialect.
-Defaults to value set in `BIGQUERY_LEGACY_SQL` env.}
+\item{use.legacy.sql}{sets SQL flavour}
+
+\item{schema.file}{sets path to schema file for initialisation}
 }
 \value{
 results of the execution as returned by bigrquery::query_exec
