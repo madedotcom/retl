@@ -128,23 +128,23 @@ withr::with_envvar(
 
     for (ds in datasets) {
 
-      if (bqDatasetExists(ds)) {
-        bqDeleteDataset(ds, delete.contents = TRUE)
+      if (!bqDatasetExists(ds)) {
+        bqCreateDataset(ds)
         Sys.sleep(10)
       }
-
-      bqCreateDataset(ds)
 
       bqCreateTable(
         sql = "SELECT 1 AS value",
         table = "shard_20150101",
-        dataset = ds
+        dataset = ds,
+        write.disposition = "WRITE_TRUNCATE"
       )
 
       bqCreateTable(
         sql = "SELECT 2 AS value",
         table = "shard_20150102",
-        dataset = ds
+        dataset = ds,
+        write.disposition = "WRITE_TRUNCATE"
       )
 
     }
