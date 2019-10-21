@@ -1,5 +1,10 @@
 # RETL Package Updates
 
+## 0.1.24
+
+* `bqInsertData()` - add initiation capability via argument schema.file
+* `bqInsertLargeData()` - add initiation capability via argument schema.file
+
 ## 0.1.23
 
 * `bqCreateTable()` - add initiation capability via argument schema.file

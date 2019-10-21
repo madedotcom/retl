@@ -5,7 +5,7 @@
 \title{Inserts data into BigQuery table}
 \usage{
 bqInsertData(table, data, dataset = bqDefaultDataset(), append = TRUE,
-  fields = NULL)
+  fields = NULL, schema.file = NULL)
 }
 \arguments{
 \item{table}{name of the target table}
@@ -17,6 +17,8 @@ bqInsertData(table, data, dataset = bqDefaultDataset(), append = TRUE,
 \item{append}{specifies if data should be appended or truncated}
 
 \item{fields}{list of fields with names and types (as bq_fields)}
+
+\item{schema.file}{sets path to schema file for initialisation}
 }
 \value{
 results of execution
