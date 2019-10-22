@@ -1,5 +1,10 @@
 context("DoubleClick Search API")
 
+options(
+  segmentation.type = "FLOODLIGHT",
+  segmentation.name = "KARIM"
+)
+
 test_that("DoubleClick call List to body works", {
   metrics <- c(
     "Predicted Revenue" = 20L,
