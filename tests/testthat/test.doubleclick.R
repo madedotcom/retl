@@ -2,7 +2,7 @@ context("DoubleClick Search API")
 
 options(
   segmentation.type = "FLOODLIGHT",
-  segmentation.name = "KARIM"
+  segmentation.name = "ML"
 )
 
 test_that("DoubleClick call List to body works", {
