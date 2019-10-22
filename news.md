@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.25
+
+* `dcListConversions()` - use env variables DOUBLECLICK_SEGMENTATION_TYPE and DOUBLECLICK_SEGMENTATION_NAME to allow to push metrics to new Doubleclick activities
+
 ## 0.1.24
 
 * `bqInsertData()` - add initiation capability via argument schema.file
