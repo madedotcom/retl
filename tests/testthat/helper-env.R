@@ -7,6 +7,8 @@ if (gargle:::secret_can_decrypt("retl")) {
   ds <- bigrquery::bq_test_dataset()
   Sys.setenv(BIGQUERY_DATASET = ds$dataset)
   Sys.setenv(BIGQUERY_PROJECT = Sys.getenv("BIGQUERY_TEST_PROJECT"))
+  Sys.setenv(DOUBLECLICK_SEGMATATION_TYPE = "FLOODLIGHT")
+  Sys.setenv(DOUBLECLICK_SEGMATATION_NAME = "ML")
   if (!bqDatasetExists()) {
     "Created test dataset"
     bqCreateDataset()
