@@ -19,7 +19,9 @@ options(
   googleAuthR.client_id = Sys.getenv("GOOGLE_CLIENT_ID"),
   googleAuthR.client_secret = Sys.getenv("GOOGLE_CLIENT_SECRET"),
   googleAuthR.scopes.selected = c("https://www.googleapis.com/auth/doubleclicksearch"),
-  googleAuthR.httr_oauth_cache = TRUE
+  googleAuthR.httr_oauth_cache = TRUE,
+  segmentation.type = Sys.getenv("DOUBLECLICK_SEGMENTATION_TYPE"),
+  segmentation.name = Sys.getenv("DOUBLECLICK_SEGMENTATION_NAME")
 )
 
 dcListConversions <- function(clickId,
@@ -32,8 +34,8 @@ dcListConversions <- function(clickId,
     clickId = clickId,
     conversionId = conversionId,
     conversionTimestamp = as.character(datetime),
-    segmentationType = "FLOODLIGHT",
-    segmentationName = "ML",
+    segmentationType = getOption("segmentation.type"),
+    segmentationName = getOption("segmentation.name"),
     customMetric = metricsToList(custom.metrics)
   )
 }
@@ -51,7 +53,7 @@ dcPredictionBody <- function(clickId, conversionId, datetime, custom.metrics) {
     length(clickId) == length(custom.metrics)
   )
 
-  coversion.list <- mapply(
+  conversion.list <- mapply(
     dcListConversions,
     clickId, conversionId, datetime, custom.metrics,
     USE.NAMES = FALSE,
@@ -60,7 +62,7 @@ dcPredictionBody <- function(clickId, conversionId, datetime, custom.metrics) {
 
   list(
     kind = "doubleclicksearch#conversionList",
-    conversion = coversion.list
+    conversion = conversion.list
   )
 }
 
