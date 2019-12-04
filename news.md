@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.26
+
+* `s3GetFile.zip()` - add fread.fill param to function to prevent R session error on large files
+
 ## 0.1.25
 
 * `dcListConversions()` - use env variables DOUBLECLICK_SEGMENTATION_TYPE and DOUBLECLICK_SEGMENTATION_NAME to allow to push metrics to new Doubleclick activities
