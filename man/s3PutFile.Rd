@@ -8,17 +8,15 @@
 \alias{s3PutFile.json.gz}
 \title{Saves data to a file in AWS S3}
 \usage{
-s3PutFile(dt, path, bucket = s3DefaultBucket(), root = s3DefaultRoot(),
-  ...)
+s3PutFile(dt, path, bucket = s3DefaultBucket(), root = s3DefaultRoot(), ...)
 
-s3PutFile.csv(dt, path, bucket = s3DefaultBucket(),
-  root = s3DefaultRoot(), na.value = "")
+s3PutFile.csv(dt, path, bucket = s3DefaultBucket(), root = s3DefaultRoot(),
+  na.value = "")
 
-s3PutFile.gz(dt, path, bucket = s3DefaultBucket(),
-  root = s3DefaultRoot(), na.value = "")
+s3PutFile.gz(dt, path, bucket = s3DefaultBucket(), root = s3DefaultRoot(),
+  na.value = "")
 
-s3PutFile.rds(dt, path, bucket = s3DefaultBucket(),
-  root = s3DefaultRoot())
+s3PutFile.rds(dt, path, bucket = s3DefaultBucket(), root = s3DefaultRoot())
 
 s3PutFile.json.gz(dt, path, bucket = s3DefaultBucket(),
   root = s3DefaultRoot())

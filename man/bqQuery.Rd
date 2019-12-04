@@ -43,4 +43,6 @@ Placeholders in template are replaced with values provided in ellipsis parameter
 `bqExecuteDml()` - Executes DML query without loading results
 
 `bqDownloadQuery()` Only works with Standard SQL
+
+Download results of query from a file via Storage
 }

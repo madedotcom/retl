@@ -318,11 +318,13 @@ s3GetFile.rds <- function(path, # nolint
 
 #' @rdname s3GetFile
 #' @export
+#' @param fread.fill boolean value to indicate if fill param should be used. Defaults to FALSE.
 #' @return `s3GetFile.zip` loads data from `.zip` files
 #' @importFrom utils unzip
 s3GetFile.zip <- function(path, # nolint
                           bucket = s3DefaultBucket(),
-                          root = s3DefaultRoot()) {
+                          root = s3DefaultRoot(),
+                          fread.fill = FALSE) {
   full.path <- paste0(root, path)
   tmp.file <- tempfile(fileext = ".zip")
   on.exit(unlink(tmp.file))
@@ -333,7 +335,7 @@ s3GetFile.zip <- function(path, # nolint
     file = tmp.file,
     check_region = FALSE
   )
-  dt <- fread(unzip(tmp.file), fill = TRUE)
+  dt <- fread(unzip(tmp.file), fill = fread.fill)
   names(dt) <- conformHeader(names(dt))
   invisible(dt)
 }
