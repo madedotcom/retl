@@ -1,6 +1,6 @@
 PackratFormat: 1.4
 PackratVersion: 0.5.0
-RVersion: 3.5.3
+RVersion: 3.6.1
 Repos: CRAN=https://cran.rstudio.com/
 
 Package: BH
@@ -53,8 +53,8 @@ Hash: d04e441a8d398e3d3a71f294c07fa94d
 
 Package: RcppArmadillo
 Source: CRAN
-Version: 0.7.700.0.0
-Hash: 91d0e1f8ce69fc3000e86a11974bfd75
+Version: 0.9.800.1.0
+Hash: d6b178338155965c4f90681fa048cdac
 Requires: Rcpp
 
 Package: assertthat
@@ -227,8 +227,8 @@ GithubSha1: 8c05dd0b7276cf464524f4e72cdd160370fb71e2
 
 Package: git2r
 Source: CRAN
-Version: 0.18.0
-Hash: 86f04e57ef4da3647c7d1830fcfdef3b
+Version: 0.26.1
+Hash: 744a0a12d9f4ac186b222f6795fab4fe
 
 Package: glue
 Source: github
@@ -300,14 +300,14 @@ Requires: R6, curl, jsonlite, mime, openssl
 
 Package: igraph
 Source: CRAN
-Version: 1.2.4
-Hash: cfd61842ae5c3055c7b56731f6c9cfac
+Version: 1.2.4.2
+Hash: 13fd902945ea53bda3f78d1b6c619bf6
 Requires: magrittr, pkgconfig
 
 Package: irlba
 Source: CRAN
 Version: 2.3.1
-Hash: 921127d7c67f42df2a8a43150b02f248
+Hash: 9b20b8070e912daec61af03f6c336bd5
 
 Package: jsonlite
 Source: CRAN
@@ -516,8 +516,8 @@ Hash: 99696dca58fc3a46f53eb616f53cf371
 
 Package: stringi
 Source: CRAN
-Version: 1.1.5
-Hash: b6308e49357a0b475f433599e0d8b5eb
+Version: 1.4.3
+Hash: ed2a82fc7cc668c1345223d938cdfaf2
 
 Package: stringr
 Source: CRAN
