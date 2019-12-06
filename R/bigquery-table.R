@@ -48,7 +48,6 @@ bqDeleteTable <- function(table, dataset = bqDefaultDataset()) {
 #' @importFrom jsonlite read_json
 #'
 #' @inheritParams bqCreateTable
-#' @param schema.file path to file with the table schema
 #' @param partition time partitioned table will be created if set to TRUE
 #' @seealso https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#schema.fields
 bqInitiateTable <- function(table,

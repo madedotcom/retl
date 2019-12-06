@@ -8,8 +8,7 @@
 \usage{
 bqProjectDatasets(project = bqDefaultProject())
 
-bqProjectTables(project = bqDefaultProject(),
-  datasets = bqProjectDatasets())
+bqProjectTables(project = bqDefaultProject(), datasets = bqProjectDatasets())
 }
 \arguments{
 \item{project}{name of the bigquery project}
@@ -18,10 +17,6 @@ bqProjectTables(project = bqDefaultProject(),
 }
 \description{
 Family of functions for common operations on projects
-
-Gets list of datasets for a given project
-
-Gets metadata of all tables of a project into a data.table
 }
 \details{
 Function queries __TABLES__ table for each dataset in the project

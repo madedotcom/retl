@@ -144,14 +144,11 @@ bqRefreshPartitionData <- function(table,
 #' @description `bqTransformPartition` creates new partitions for the missing dates
 #' @rdname bqTransformPartition
 #' @export
-#' @param table destination partition table where results of the query will be saved
 #' @param file path to the sql file that will be used for the transformation
 #' @param ...  parameters that will be passed via `sprintf` to build dynamic SQL.
 #'    partition date will be always passed first in format `yyyymmdd`
 #'    followed by arguments in `...`
 #' @param missing.dates dates for which to run this function for
-#' @param priority Default to INTERACTIVE
-#' @param use.legacy.sql Defaults to env variable if specified
 #' @inheritParams bqCreateTable
 bqTransformPartition <- function(table,
                                  file,

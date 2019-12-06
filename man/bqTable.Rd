@@ -13,8 +13,12 @@ bqTableExists(table, dataset = bqDefaultDataset())
 
 bqDeleteTable(table, dataset = bqDefaultDataset())
 
-bqInitiateTable(table, schema.file, partition = FALSE,
-  dataset = bqDefaultDataset())
+bqInitiateTable(
+  table,
+  schema.file,
+  partition = FALSE,
+  dataset = bqDefaultDataset()
+)
 
 bqPatchTable(table, schema.file, dataset = bqDefaultDataset())
 
@@ -25,7 +29,7 @@ bqTableSchema(table, dataset = bqDefaultDataset())
 
 \item{dataset}{name of the dataset}
 
-\item{schema.file}{path to file with the table schema}
+\item{schema.file}{sets path to schema file for initialisation}
 
 \item{partition}{time partitioned table will be created if set to TRUE}
 }

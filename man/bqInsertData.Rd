@@ -4,8 +4,14 @@
 \alias{bqInsertData}
 \title{Inserts data into BigQuery table}
 \usage{
-bqInsertData(table, data, dataset = bqDefaultDataset(), append = TRUE,
-  fields = NULL, schema.file = NULL)
+bqInsertData(
+  table,
+  data,
+  dataset = bqDefaultDataset(),
+  append = TRUE,
+  fields = NULL,
+  schema.file = NULL
+)
 }
 \arguments{
 \item{table}{name of the target table}

@@ -4,11 +4,17 @@
 \alias{bqTransformPartition}
 \title{Functions to transforms partitioned data form one table to another}
 \usage{
-bqTransformPartition(table, file, ..., missing.dates = NULL,
-  priority = "INTERACTIVE", use.legacy.sql = bqUseLegacySql())
+bqTransformPartition(
+  table,
+  file,
+  ...,
+  missing.dates = NULL,
+  priority = "INTERACTIVE",
+  use.legacy.sql = bqUseLegacySql()
+)
 }
 \arguments{
-\item{table}{destination partition table where results of the query will be saved}
+\item{table}{name of a table to be created}
 
 \item{file}{path to the sql file that will be used for the transformation}
 
@@ -18,9 +24,9 @@ followed by arguments in `...`}
 
 \item{missing.dates}{dates for which to run this function for}
 
-\item{priority}{Default to INTERACTIVE}
+\item{priority}{sets priority of job execution to INTERACTIVE or BATCH}
 
-\item{use.legacy.sql}{Defaults to env variable if specified}
+\item{use.legacy.sql}{sets SQL flavour}
 }
 \description{
 `bqTransformPartition` creates new partitions for the missing dates
