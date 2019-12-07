@@ -9,7 +9,7 @@ Authors@R: c(
     )
 Date: 2019-10-22
 Maintainer: Bulat Yapparov <byapparov@gmail.com>
-Description: Wrappers for connections with PostgreSQL, S3, BigQuery, InfluxDB, Doubleclick
+Description: Wrappers for connections to BigQuery, S3, PostgreSQL, InfluxDB, Doubleclick, Google Sheets
 License: file LICENSE
 LazyData: TRUE
 Suggests:
