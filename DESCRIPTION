@@ -2,8 +2,12 @@ Package: retl
 Type: Package
 Title: Support for common ETL operations and connections
 Version: 0.1.26
+Authors@R: c(
+    person("Bulat", "Yapparov", , "bulat.yapparov@made.com", c("aut", "cre")),
+    person("Dan", "Kruse", , "dan.kruse@made.com", "aut"),
+    person("Karim", "Zaoui", "karim.zaoui@made.com", "aut")
+    )
 Date: 2019-10-22
-Author: byapparov@gmail.com
 Maintainer: Bulat Yapparov <byapparov@gmail.com>
 Description: Wrappers for connections with PostgreSQL, S3, BigQuery, InfluxDB, Doubleclick
 License: file LICENSE
