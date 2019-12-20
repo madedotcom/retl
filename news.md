@@ -1,5 +1,10 @@
 # RETL Package Updates
 
+## 0.1.27
+
+* `gsLoadSheet()` - add verbose, lookup and visibility params which were taking default values and was causing issues when loading private sheet.
+* `gsLoadAll()` - add verbose, lookup and visibility params to be passed to `gsLoadSheet()`.
+
 ## 0.1.26
 
 * `s3GetFile.zip()` - add fread.fill param to function to prevent R session error on large files

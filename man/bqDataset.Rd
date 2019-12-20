@@ -11,8 +11,11 @@ bqDatasetExists(dataset = bqDefaultDataset(), project = bqDefaultProject())
 
 bqCreateDataset(dataset = bqDefaultDataset(), project = bqDefaultProject())
 
-bqDeleteDataset(dataset = bqDefaultDataset(), project = bqDefaultProject(),
-  delete.contents = FALSE)
+bqDeleteDataset(
+  dataset = bqDefaultDataset(),
+  project = bqDefaultProject(),
+  delete.contents = FALSE
+)
 
 bqDatasetTables(dataset = bqDefaultDataset(), project = bqDefaultProject())
 }

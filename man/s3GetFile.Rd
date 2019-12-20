@@ -11,15 +11,23 @@
 \usage{
 s3GetFile(path, bucket = s3DefaultBucket(), root = s3DefaultRoot(), ...)
 
-s3GetFile.csv(path, bucket = s3DefaultBucket(), root = s3DefaultRoot(),
-  header = TRUE)
+s3GetFile.csv(
+  path,
+  bucket = s3DefaultBucket(),
+  root = s3DefaultRoot(),
+  header = TRUE
+)
 
 s3GetFile.gz(path, bucket = s3DefaultBucket(), root = s3DefaultRoot())
 
 s3GetFile.rds(path, bucket = s3DefaultBucket(), root = s3DefaultRoot())
 
-s3GetFile.zip(path, bucket = s3DefaultBucket(), root = s3DefaultRoot(),
-  fread.fill = FALSE)
+s3GetFile.zip(
+  path,
+  bucket = s3DefaultBucket(),
+  root = s3DefaultRoot(),
+  fread.fill = FALSE
+)
 
 s3GetFile.json.gz(path, bucket = s3DefaultBucket(), root = s3DefaultRoot())
 }

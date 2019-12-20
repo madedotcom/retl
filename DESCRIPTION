@@ -1,7 +1,7 @@
 Package: retl
 Type: Package
 Title: Support for common ETL operations and connections
-Version: 0.1.26
+Version: 0.1.27
 Date: 2019-10-22
 Author: byapparov@gmail.com
 Maintainer: Bulat Yapparov <byapparov@gmail.com>
@@ -17,7 +17,7 @@ Suggests:
     sodium,
     googleAuthR,
     R.utils
-RoxygenNote: 6.1.1.9000
+RoxygenNote: 7.0.2
 Imports:
     aws.s3 (>= 0.3.2),
     bigrquery (>= 1.2.0),

@@ -4,8 +4,12 @@
 \alias{bqExtractTable}
 \title{Exports BigQuery table into Google Cloud Storage file}
 \usage{
-bqExtractTable(table, dataset = bqDefaultDataset(), format = "CSV",
-  compression = "GZIP")
+bqExtractTable(
+  table,
+  dataset = bqDefaultDataset(),
+  format = "CSV",
+  compression = "GZIP"
+)
 }
 \arguments{
 \item{table}{name of the table to extract}

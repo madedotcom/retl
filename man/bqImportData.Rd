@@ -4,8 +4,15 @@
 \alias{bqImportData}
 \title{Imports data from gs to BigQuery table}
 \usage{
-bqImportData(table, dataset = bqDefaultDataset(), path = "",
-  append = TRUE, format = "CSV", compression = "GZIP", nskip = 1)
+bqImportData(
+  table,
+  dataset = bqDefaultDataset(),
+  path = "",
+  append = TRUE,
+  format = "CSV",
+  compression = "GZIP",
+  nskip = 1
+)
 }
 \arguments{
 \item{table}{name of the table to extract}
