@@ -13,8 +13,12 @@ bqTableExists(table, dataset = bqDefaultDataset())
 
 bqDeleteTable(table, dataset = bqDefaultDataset())
 
-bqInitiateTable(table, schema.file, partition = FALSE,
-  dataset = bqDefaultDataset())
+bqInitiateTable(
+  table,
+  schema.file,
+  partition = FALSE,
+  dataset = bqDefaultDataset()
+)
 
 bqPatchTable(table, schema.file, dataset = bqDefaultDataset())
 

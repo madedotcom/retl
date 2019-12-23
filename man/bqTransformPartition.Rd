@@ -4,8 +4,14 @@
 \alias{bqTransformPartition}
 \title{Functions to transforms partitioned data form one table to another}
 \usage{
-bqTransformPartition(table, file, ..., missing.dates = NULL,
-  priority = "INTERACTIVE", use.legacy.sql = bqUseLegacySql())
+bqTransformPartition(
+  table,
+  file,
+  ...,
+  missing.dates = NULL,
+  priority = "INTERACTIVE",
+  use.legacy.sql = bqUseLegacySql()
+)
 }
 \arguments{
 \item{table}{destination partition table where results of the query will be saved}

@@ -4,8 +4,13 @@
 \alias{bqRefreshPartitionData}
 \title{Functions to update existing partitions in the target table}
 \usage{
-bqRefreshPartitionData(table, file, ..., priority = "BATCH",
-  use.legacy.sql = bqUseLegacySql())
+bqRefreshPartitionData(
+  table,
+  file,
+  ...,
+  priority = "BATCH",
+  use.legacy.sql = bqUseLegacySql()
+)
 }
 \arguments{
 \item{table}{destination partition table where results of the query will be saved}

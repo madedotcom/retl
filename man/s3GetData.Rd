@@ -4,8 +4,14 @@
 \alias{s3GetData}
 \title{Loads data from several files in S3 based on the path prefix}
 \usage{
-s3GetData(path, header = TRUE, bucket = s3DefaultBucket(),
-  root = s3DefaultRoot(), s3.get.fun = s3GetFile, fill = TRUE)
+s3GetData(
+  path,
+  header = TRUE,
+  bucket = s3DefaultBucket(),
+  root = s3DefaultRoot(),
+  s3.get.fun = s3GetFile,
+  fill = TRUE
+)
 }
 \arguments{
 \item{path}{is the path to the S3 object}
