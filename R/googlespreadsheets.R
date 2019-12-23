@@ -34,7 +34,7 @@ gsLoadSheet <- function(key,
   gsAuth()
   gap <- gs_key(
     x = key,
-    verbose = TRUE,
+    verbose = verbose,
     lookup = lookup,
     visibility = visibility
     )
