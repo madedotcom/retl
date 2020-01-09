@@ -24,3 +24,30 @@ getMissingDates <- function(start.date,
   res <- setdiff(dates, existing.dates.formated)
   return(res)
 }
+
+#' Checks that there are no duplicates in the "id" column, the table's primary key
+#'
+#' @export
+#' @param table name of the table
+#' @param dataset name of the dataset
+#' @return TRUE if the table's primary key has no duplicates
+bqTablePkIsUnique <- function(table, dataset = bqDefaultDataset()) {
+  duplicate.order.lines <- bqExecuteQuery(
+    "SELECT
+       id,
+       COUNT(*) AS numrows
+     FROM
+       %1$s.%2$s
+     GROUP BY
+       id
+     HAVING numrows > 1",
+    dataset,
+    table,
+    use.legacy.sql = FALSE
+  )
+  
+  assert_that(
+    nrow(duplicate.order.lines) == 0,
+    msg = paste0("Uniqueness check failed,  ", nrow(duplicate.order.lines), " duplicate id's found in ", dataset, ".", table)
+  )
+}
