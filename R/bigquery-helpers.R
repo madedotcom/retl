@@ -48,6 +48,6 @@ bqTablePkIsUnique <- function(table, dataset = bqDefaultDataset()) {
   
   assert_that(
     nrow(duplicate.order.lines) == 0,
-    msg = paste0("Uniqueness check failed,  ", nrow(duplicate.order.lines), " duplicate id's found in ", dataset, ".", table)
+    msg = paste0("Uniqueness check failed, duplicate id's found in ", dataset, ".", table)
   )
 }
