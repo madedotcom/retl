@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.28
+
+* `bqCheckUniqueness()` - New function, returns TRUE if the table has no duplicate rows when grouped by keys, else returns error with the number of duplicate rows.
+
 ## 0.1.27
 
 * `gsLoadSheet()` - add verbose, lookup and visibility params which were taking default values and was causing issues when loading private sheet.

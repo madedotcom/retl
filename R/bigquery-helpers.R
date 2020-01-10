@@ -27,11 +27,12 @@ getMissingDates <- function(start.date,
 
 #' Checks that there are no duplicates in a table's key(s)
 #'
+#'
 #' @export
 #' @param table name of the table
 #' @param dataset name of the dataset
 #' @param ... comma separated list of key columns
-#' @return TRUE if the table's primary key has no duplicates
+#' @return TRUE if the table has no duplicate rows when grouped by keys
 bqCheckUniqueness <- function(table, dataset = bqDefaultDataset(), ...) {
   keys.string <- paste(list(...), collapse=", ")    # eg keys.string = "key1, key2, key3"
   dup.query <- bqExecuteQuery(
@@ -51,11 +52,11 @@ bqCheckUniqueness <- function(table, dataset = bqDefaultDataset(), ...) {
     table,
     use.legacy.sql = FALSE
   )
-  
+
   if (is.na(dup.query$dup.sum)) {
     dup.query$dup.sum = "NA"
   }
-  
+
   assert_that(
     dup.query$dup.sum == 0,
     msg = sprintf("%1$s duplicate rows when %2$s.%3$s is grouped by %4$s",
