@@ -25,29 +25,41 @@ getMissingDates <- function(start.date,
   return(res)
 }
 
-#' Checks that there are no duplicates in the "id" column, the table's primary key
+#' Checks that there are no duplicates in a table's key(s)
 #'
 #' @export
 #' @param table name of the table
 #' @param dataset name of the dataset
+#' @param ... comma separated list of key columns
 #' @return TRUE if the table's primary key has no duplicates
-bqTablePkIsUnique <- function(table, dataset = bqDefaultDataset()) {
-  duplicate.order.lines <- bqExecuteQuery(
+bqCheckUniqueness <- function(table, dataset = bqDefaultDataset(), ...) {
+  keys.string <- paste(list(...), collapse=", ")    # eg keys.string = "key1, key2, key3"
+  dup.query <- bqExecuteQuery(
     "SELECT
-       id,
-       COUNT(*) AS numrows
-     FROM
-       %1$s.%2$s
-     GROUP BY
-       id
-     HAVING numrows > 1",
+      SUM(dup_count) AS dup_sum
+    FROM (
+      SELECT
+        %1$s,
+        (COUNT(*) - 1) AS dup_count
+      FROM
+        %2$s.%3$s
+      GROUP BY
+        %1$s
+    ) s",
+    keys.string,
     dataset,
     table,
     use.legacy.sql = FALSE
   )
   
+  if (is.na(dup.query$dup.sum)) {
+    dup.query$dup.sum = "NA"
+  }
+  
   assert_that(
-    nrow(duplicate.order.lines) == 0,
-    msg = paste0("Uniqueness check failed, duplicate id's found in ", dataset, ".", table)
+    dup.query$dup.sum == 0,
+    msg = sprintf("%1$s duplicate rows when %2$s.%3$s is grouped by %4$s",
+                  dup.query$dup.sum, dataset, table, keys.string)
   )
 }
+
