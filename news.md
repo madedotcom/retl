@@ -1,5 +1,10 @@
 # RETL Package Updates
 
+## 0.1.28
+
+* `bqAssertUnique()` - New function, throws exception if duplicates are found on primary key
+* `bqCountDuplicates()` - New function, returns count of duplicate rows when grouped by key(s).
+
 ## 0.1.27
 
 * `gsLoadSheet()` - add verbose, lookup and visibility params which were taking default values and was causing issues when loading private sheet.

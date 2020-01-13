@@ -13,6 +13,8 @@ suppressPackageStartupMessages({
 # BIGQUERY_TEST_PROJECT
 # BIGQUERY_ACCESS_TOKEN_PATH
 # BIGQUERY_DATASET
-# The access token file needs to be in the testthat folder
+
+# check that you have `sodium` package installed for tests to work locally
+
 # devtools::install_github("jimhester/lintr")
 test_check("retl")
