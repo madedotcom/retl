@@ -15,7 +15,6 @@ Suggests:
     lintr,
     withr,
     sodium,
-    googleAuthR,
     R.utils
 RoxygenNote: 7.0.2
 Imports:
