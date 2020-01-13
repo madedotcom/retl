@@ -2,7 +2,7 @@
 
 ## 0.1.28
 
-* `bqCheckUniqueness()` - New function, returns TRUE if the table has no duplicate rows when grouped by keys, else returns error with the number of duplicate rows.
+* `bqCountDuplicates()` - New function, returns count of duplicate rows when grouped by key(s).
 
 ## 0.1.27
 
