@@ -25,42 +25,34 @@ getMissingDates <- function(start.date,
   return(res)
 }
 
-#' Checks that there are no duplicates in a table's key(s)
-#'
+#' Counts any duplicate rows in a table when grouped by key(s)
 #'
 #' @export
 #' @param table name of the table
 #' @param dataset name of the dataset
-#' @param ... comma separated list of key columns
-#' @return TRUE if the table has no duplicate rows when grouped by keys
-bqCheckUniqueness <- function(table, dataset = bqDefaultDataset(), ...) {
-  keys.string <- paste(list(...), collapse=", ")    # eg keys.string = "key1, key2, key3"
-  dup.query <- bqExecuteQuery(
-    "SELECT
-      SUM(dup_count) AS dup_sum
-    FROM (
-      SELECT
-        %1$s,
-        (COUNT(*) - 1) AS dup_count
-      FROM
-        %2$s.%3$s
-      GROUP BY
-        %1$s
-    ) s",
+#' @param keys vector of key columns
+#' @return Total number of duplicate rows when grouped by keys
+bqCountDuplicates <- function(table, dataset = bqDefaultDataset(), keys) {
+  keys.string <- paste(keys, collapse=", ")
+  sql <- "
+  SELECT
+    SUM(dup_count) AS total
+  FROM (
+    SELECT
+      %1$s,
+      (COUNT(*) - 1) AS dup_count
+    FROM
+      %2$s.%3$s
+    GROUP BY
+      %1$s
+  ) s"
+  duplicate_count <- bqExecuteQuery(
+    sql,
     keys.string,
     dataset,
     table,
     use.legacy.sql = FALSE
   )
-
-  if (is.na(dup.query$dup.sum)) {
-    dup.query$dup.sum = "NA"
-  }
-
-  assert_that(
-    dup.query$dup.sum == 0,
-    msg = sprintf("%1$s duplicate rows when %2$s.%3$s is grouped by %4$s",
-                  dup.query$dup.sum, dataset, table, keys.string)
-  )
+  res <- duplicate_count$total
+  return(res)
 }
-
