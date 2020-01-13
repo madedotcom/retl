@@ -2,7 +2,7 @@
 % Please edit documentation in R/bigquery-helpers.R
 \name{bqAssertUnique}
 \alias{bqAssertUnique}
-\title{Counts any duplicate rows in a table when grouped by key(s)}
+\title{Checks for duplicates found on primary key}
 \usage{
 bqAssertUnique(table, dataset = bqDefaultDataset(), keys)
 }
@@ -17,5 +17,5 @@ bqAssertUnique(table, dataset = bqDefaultDataset(), keys)
 Throws exception if duplicates are found on primary key
 }
 \description{
-Counts any duplicate rows in a table when grouped by key(s)
+Checks for duplicates found on primary key
 }
