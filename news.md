@@ -2,6 +2,7 @@
 
 ## 0.1.28
 
+* `bqAssertUnique()` - New function, throws exception if duplicates are found on primary key
 * `bqCountDuplicates()` - New function, returns count of duplicate rows when grouped by key(s).
 
 ## 0.1.27

@@ -26,7 +26,7 @@ getMissingDates <- function(start.date,
 }
 
 
-#' Counts any duplicate rows in a table when grouped by key(s)
+#' Checks for duplicates found on primary key
 #'
 #' @export
 #' @param table name of the table
