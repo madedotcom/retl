@@ -94,8 +94,7 @@
       "RemoteRepo": "bigrquery",
       "RemoteUsername": "byapparov",
       "RemoteRef": "master",
-      "RemoteSha": "bca8581dd257582c10585549dff8e9685142a1e6",
-      "Hash": "96e4a80685390ad67a9ced16151ce5b2"
+      "RemoteSha": "5e7b5bc14849f0797e7bde3e43c7cb166a358b40"
     },
     "bit": {
       "Package": "bit",
