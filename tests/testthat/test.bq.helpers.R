@@ -1,15 +1,15 @@
 context("BigQuery Helpers")
 
 test_that("bqCountDuplicates function counts duplicate appearances in primary key", {
-  test_data = data.frame(
+  test.data <- data.frame(
     id = c(1L, 2L, 3L, 4L),
-    order_reference = c("101", "101", "202", "202"),
+    order.reference = c("101", "101", "202", "202"),
     sku = c("A-UK", "A-UK", "A-UK", "B-ME")
   )
 
   bqInsertData(
     table = "bq_count_duplicates",
-    data = test_data,
+    data = test.data,
     append = FALSE
   )
 
