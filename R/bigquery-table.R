@@ -54,7 +54,8 @@ bqDeleteTable <- function(table, dataset = bqDefaultDataset()) {
 bqInitiateTable <- function(table,
                             schema.file,
                             partition = FALSE,
-                            dataset = bqDefaultDataset()) {
+                            dataset = bqDefaultDataset(),
+                            clustering = NULL) {
   bqAuth()
 
   if (!bqTableExists(table = table, dataset = dataset)) {
@@ -64,18 +65,15 @@ bqInitiateTable <- function(table,
       table = table
     )
 
-    if (partition) {
-      bigrquery::bq_table_create(
-        tbl,
-        fields = read_json(schema.file),
-        timePartitioning = list(type = "DAY")
-      )
-    } else {
-      bigrquery::bq_table_create(
-        tbl,
-        fields = read_json(schema.file)
-      )
-    }
+    day.partitioning <- NULL
+    if (partition) day.partitioning <- list(type = "DAY")
+
+    bigrquery::bq_table_create(
+      tbl,
+      fields = read_json(schema.file),
+      timePartitioning = day.partitioning,
+      clustering = clustering
+    )
   }
   else {
     warning(paste0("Table already exists: [", dataset, ".", table, "], attempting patch."))
