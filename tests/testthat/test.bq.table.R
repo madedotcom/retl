@@ -20,6 +20,8 @@ test_that("table is created from schema file", {
   expected.partition <- TRUE
 
   expect_s3_class(res, "bq_table")
+  meta <- bq_table_meta(res)
+  expect_equal(meta$timePartitioning$type, "DAY")
 })
 
 test_that("correct schema is generated for a given dataset", {
@@ -67,4 +69,5 @@ test_that("Table with cluster can be created", {
   )
 
   expect_s3_class(res, "bq_table")
+  expect_equal(meta$clustering$fields[[1]], "first_name")
 })
