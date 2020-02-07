@@ -57,3 +57,14 @@ test_that("Table can be patched", {
   )
 
 })
+
+test_that("Table with cluster can be created", {
+  res <- bqInitiateTable(
+    table = "test_table_cluster",
+    schema.file = "bq-table-schema.json",
+    partition = TRUE,
+    clustering = list(fields = list("first_name"))
+  )
+
+  expect_s3_class(res, "bq_table")
+})

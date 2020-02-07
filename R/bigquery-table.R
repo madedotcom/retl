@@ -50,6 +50,7 @@ bqDeleteTable <- function(table, dataset = bqDefaultDataset()) {
 #' @inheritParams bqCreateTable
 #' @param schema.file path to file with the table schema
 #' @param partition time partitioned table will be created if set to TRUE
+#' @param clustering list with fields that will be used for clustering
 #' @seealso https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#schema.fields
 bqInitiateTable <- function(table,
                             schema.file,
