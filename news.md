@@ -1,5 +1,10 @@
 # RETL Package Updates
 
+## 0.1.29
+
+* `bqInitiateTable()` - accepts `partitioning` parameter that allows to partition table with a list of field names.
+
+
 ## 0.1.28
 
 * `bqAssertUnique()` - New function, throws exception if duplicates are found on primary key
