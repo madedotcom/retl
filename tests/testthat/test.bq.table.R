@@ -69,5 +69,6 @@ test_that("Table with cluster can be created", {
   )
 
   expect_s3_class(res, "bq_table")
+  meta <- bq_table_meta(res)
   expect_equal(meta$clustering$fields[[1]], "first_name")
 })
