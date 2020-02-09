@@ -103,3 +103,41 @@ dcWriteCustomMetics <- function(clickId, conversionId, timestamp, metrics) {
   )
   dcWriteConversion(the_body = body)
 }
+
+#' @seealso https://stackoverflow.com/a/40059757/599911
+currentEpochMillis <- function() {
+  as.numeric(round(Sys.time(), "secs")) * 1000
+}
+
+#' Updates availability of data in SA360 platform to the current time
+#'
+#' @export
+#' @param agency.id agencyId, e.g. `12300000000000456`
+#' @param advertiser.id advertiserId e.g. `45600000000010291`
+#' @param segmentation.type segmentationType e.g. `FLOODLIGHT`
+#' @param segmentation.id segmentationId e.g. `25700000001464142`
+#' @param segmentationName segmentationName e.g. `Test`
+#'
+#' @seealso https://developers.google.com/search-ads/v2/how-tos/conversions/offline-conversions#send-a-conversion.updateavailability-request
+dcUpdateAvailability <- function(agency.id,
+                                 advertiser.id,
+                                 segmentation.type = "FLOODLIGHT",
+                                 segmentation.id,
+                                 segmentation.name) {
+
+  availabilities <- list(
+    agencyId = agency.id,
+    advertiserId = advertiser.id,
+    segmentationType = segmentation.type,
+    segmentationId = segmentation.id,
+    segmentationName = segmentation.name,
+    availabilityTimestamp = currentEpochMillis()
+  )
+
+  updateAvailability <- gar_api_generator(
+    baseURI = "https://www.googleapis.com/doubleclicksearch/v2/conversion/updateAvailability",
+    http_header = "POST",
+    data_parse_function = function(x) x
+  )
+  updateAvailability(availabilities)
+}

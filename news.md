@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.30 
+
+* `dcUpdateAvailability()` updates data availability in SA360 platform through the doublecklick conversion API. See https://developers.google.com/search-ads/v2/how-tos/conversions/offline-conversions.
+
 ## 0.1.29
 
 * `bqInitiateTable()` - accepts `partitioning` parameter that allows to partition table with a list of field names.
