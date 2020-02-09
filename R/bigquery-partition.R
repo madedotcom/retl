@@ -149,7 +149,6 @@ bqRefreshPartitionData <- function(table,
 #'    partition date will be always passed first in format `yyyymmdd`
 #'    followed by arguments in `...`
 #' @param missing.dates dates for which to run this function for
-#' @param priority Default to INTERACTIVE
 #' @param use.legacy.sql Defaults to env variable if specified
 #' @inheritParams bqCreateTable
 bqTransformPartition <- function(table,

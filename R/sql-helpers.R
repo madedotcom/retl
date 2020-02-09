@@ -55,7 +55,6 @@ sqlRangeLabel <- function(field, limits, labels = rangeLabel) {
 #' @description
 #' Creates CASE statement that turns index for the range field
 #'
-#' @inheritParams sqlRangeLabel
 #' @export
 #' @rdname sqlRange
 sqlRangeIndex <- function(field, limits, labels = rangeIndex) {
