@@ -102,8 +102,10 @@ bqExecuteDml <- function(query, ...,
   )
 
   if (length(params) > 0) {
-    cat("parameters applied to the template: \n")
-    message(jsonlite::toJSON(params, auto_unbox = TRUE, force = TRUE))
+    message(
+      "parameters applied to the template: \n",
+      jsonlite::toJSON(params, auto_unbox = TRUE, force = TRUE)
+    )
   }
 
   ds <- bq_dataset(
