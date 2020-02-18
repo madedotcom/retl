@@ -1,5 +1,11 @@
 # RETL Package Updates
 
+## 0.1.30
+
+* `dcWriteCustomMetrics()` - added `revenue` and `currency.code` as arguments
+* `dcPredictionBody()` - added `revenue` and `currency.code` as arguments
+* `dcListConversions()` - added `revenue` and `currency.code` as arguments
+
 ## 0.1.29
 
 * `bqInitiateTable()` - accepts `partitioning` parameter that allows to partition table with a list of field names.
