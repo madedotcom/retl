@@ -92,6 +92,7 @@ bqProtectedDataset <- function(dataset, project) {
 #' Copies all tables from one dataset to another
 #' through schema definitions
 #'
+#' @export
 #' @param from dataset object created by bigrquery::bq_dataset()
 #' @param to dataset object created by bigrquery::bq_dataset()
 bqCopyDatasetSchema <- function(from, to) {
@@ -102,18 +103,4 @@ bqCopyDatasetSchema <- function(from, to) {
     bqCopyTableSchema(x, to)
   })
 
-}
-
-#' Copies table through schema defintion
-#'
-#' @param from dataset object created by bigrquery::bq_table()
-#' @param to dataset object created by bigrquery::bq_table()
-bqCopyTableSchema <- function(from, to) {
-  meta <- bq_table_meta(from)
-  bq_table_create(
-    to,
-    fields = meta$schema$fields,
-    timePartitioning = meta$timePartitioning,
-    clustering = meta$clustering
-  )
 }
