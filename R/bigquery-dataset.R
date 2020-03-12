@@ -112,6 +112,8 @@ bqCopyTableSchema <- function(from, to) {
   meta <- bq_table_meta(from)
   bq_table_create(
     to,
-    fields = meta$schema$fields
+    fields = meta$schema$fields,
+    timePartitioning = meta$timePartitioning,
+    clustering = meta$clustering
   )
 }
