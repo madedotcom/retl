@@ -18,3 +18,32 @@ test_that("Check that dataset can be created", {
   res <- bqDatasetExists(ds)
   expect_false(res)
 })
+
+test_that("Dataset schema is copied", {
+  table.name <- "sample_data"
+
+  ds.from.name <- "ds_copy_from"
+  bqDeleteTable(
+    table = table.name,
+    dataset = ds.from.name
+  )
+  bqDeleteDataset(ds.from.name)
+  ds.from <- bqCreateDataset(ds.from.name)
+  bqInitiateTable(
+    table.name,
+    dataset = ds.from.name,
+    schema.file = "bq-table-schema.json"
+  )
+
+  ds.to.name <- "ds_to"
+  bqDeleteTable(
+    table = table.name,
+    dataset = ds.to.name
+  )
+  bqDeleteDataset(ds.to.name)
+  ds.to <- bqCreateDataset(ds.to.name)
+
+  bqCopyDatasetSchema(ds.from, ds.to)
+
+  expect_true(bqTableExists(table.name, ds.to.name))
+})
