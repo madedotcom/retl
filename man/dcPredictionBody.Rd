@@ -4,7 +4,14 @@
 \alias{dcPredictionBody}
 \title{Creates list for the DoubleClick API call from prediction variables}
 \usage{
-dcPredictionBody(clickId, conversionId, datetime, custom.metrics)
+dcPredictionBody(
+  clickId,
+  conversionId,
+  datetime,
+  custom.metrics,
+  revenue,
+  currency.code
+)
 }
 \arguments{
 \item{clickId}{gclid for the DoubleClick match for the session}
@@ -14,6 +21,10 @@ dcPredictionBody(clickId, conversionId, datetime, custom.metrics)
 \item{datetime}{POSIX timestamp in milliseconds}
 
 \item{custom.metrics}{list with named vectors of custom metric values}
+
+\item{revenue}{data to be loaded to Revenue}
+
+\item{currency.code}{currency associated to the Revenue}
 }
 \description{
 Creates list for the DoubleClick API call from prediction variables
