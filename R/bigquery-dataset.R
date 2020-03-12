@@ -36,15 +36,20 @@ bqDeleteDataset <- function(dataset = bqDefaultDataset(),
                             delete.contents = FALSE) {
   bqAuth()
 
-  assert_that(!bqProtectedDataset(dataset, project))
+  if (bqDatasetExists(dataset, project)) {
+    assert_that(!bqProtectedDataset(dataset, project))
 
-  bq_dataset_delete(
-    bq_dataset(
-      project = project,
-      dataset = dataset
-    ),
-    delete_contents = delete.contents
-  )
+    bq_dataset_delete(
+      bq_dataset(
+        project = project,
+        dataset = dataset
+      ),
+      delete_contents = delete.contents
+    )
+  } else {
+    message("Dataset does not exist and will not be deleted: ", dataset)
+  }
+
 }
 
 #' Gets list of tables for a given dataset
@@ -82,4 +87,33 @@ bqProtectedDataset <- function(dataset, project) {
   else {
     FALSE
   }
+}
+
+#' Copies all tables from one dataset to another
+#' through schema definitions
+#'
+#' @param from dataset object created by bigrquery::bq_dataset()
+#' @param to dataset object created by bigrquery::bq_dataset()
+bqCopyDatasetSchema <- function(from, to) {
+
+  tables <- bq_dataset_tables(from)
+  lapply(tables, function(x) {
+    to <- bq_table(to$project, to$dataset, x$table)
+    bqCopyTableSchema(x, to)
+  })
+
+}
+
+#' Copies table through schema defintion
+#'
+#' @param from dataset object created by bigrquery::bq_table()
+#' @param to dataset object created by bigrquery::bq_table()
+bqCopyTableSchema <- function(from, to) {
+  meta <- bq_table_meta(from)
+  bq_table_create(
+    to,
+    fields = meta$schema$fields,
+    timePartitioning = meta$timePartitioning,
+    clustering = meta$clustering
+  )
 }
