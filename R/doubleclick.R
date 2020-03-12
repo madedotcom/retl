@@ -144,7 +144,7 @@ currentEpochMillis <- function() {
 #' @param advertiser.id advertiserId e.g. `45600000000010291`
 #' @param segmentation.type segmentationType e.g. `FLOODLIGHT`
 #' @param segmentation.id segmentationId e.g. `25700000001464142`
-#' @param segmentationName segmentationName e.g. `Test`
+#' @param segmentation.name segmentationName e.g. `Test`
 #'
 #' @seealso https://developers.google.com/search-ads/v2/how-tos/conversions/offline-conversions#send-a-conversion.updateavailability-request
 dcUpdateAvailability <- function(agency.id,

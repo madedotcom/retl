@@ -21,7 +21,7 @@ dcUpdateAvailability(
 
 \item{segmentation.id}{segmentationId e.g. `25700000001464142`}
 
-\item{segmentationName}{segmentationName e.g. `Test`}
+\item{segmentation.name}{segmentationName e.g. `Test`}
 }
 \description{
 Updates availability of data in SA360 platform to the current time
