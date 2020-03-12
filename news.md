@@ -1,10 +1,18 @@
 # RETL Package Updates
 
-## 0.1.30
+## 0.1.31
 
 * `dcWriteCustomMetrics()` - added `revenue` and `currency.code` as arguments
 * `dcPredictionBody()` - added `revenue` and `currency.code` as arguments
 * `dcListConversions()` - added `revenue` and `currency.code` as arguments
+
+## 0.1.30 
+
+* `bqCopyDatasetSchema()` - copies all tables from a given dataset to another one 
+using metada.
+
+* `bqCopyTableSchema()` - creates new empty table using metadata of existing table.
+
 
 ## 0.1.29
 

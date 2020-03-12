@@ -37,7 +37,11 @@ bqDeleteTable <- function(table, dataset = bqDefaultDataset()) {
     dataset = dataset,
     table = table
   )
-  bq_table_delete(bt)
+  if (bq_table_exists(bt)) {
+    bq_table_delete(bt)
+  } else {
+    message("BigQuery table does not exist and will not be deleted: ", bt)
+  }
 }
 
 #' @rdname bqTable
