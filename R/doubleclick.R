@@ -27,7 +27,9 @@ options(
 dcListConversions <- function(clickId,
                               conversionId,
                               datetime,
-                              custom.metrics) {
+                              custom.metrics,
+                              revenue,
+                              currency.code) {
   assert_that(length(clickId) == 1)
 
   list(
@@ -36,7 +38,9 @@ dcListConversions <- function(clickId,
     conversionTimestamp = as.character(datetime),
     segmentationType = getOption("segmentation.type"),
     segmentationName = getOption("segmentation.name"),
-    customMetric = metricsToList(custom.metrics)
+    customMetric = metricsToList(custom.metrics),
+    revenueMicros = revenue,
+    currencyCode = currency.code
   )
 }
 
@@ -46,7 +50,9 @@ dcListConversions <- function(clickId,
 #' @param conversionId unique identifier for the conversion
 #' @param datetime POSIX timestamp in milliseconds
 #' @param custom.metrics list with named vectors of custom metric values
-dcPredictionBody <- function(clickId, conversionId, datetime, custom.metrics) {
+#' @param revenue data to be loaded to Revenue
+#' @param currency.code currency associated to the Revenue
+dcPredictionBody <- function(clickId, conversionId, datetime, custom.metrics, revenue, currency.code) {
   assert_that(
     length(clickId) == length(conversionId),
     length(clickId) == length(datetime),
@@ -55,7 +61,12 @@ dcPredictionBody <- function(clickId, conversionId, datetime, custom.metrics) {
 
   conversion.list <- mapply(
     dcListConversions,
-    clickId, conversionId, datetime, custom.metrics,
+    clickId,
+    conversionId,
+    datetime,
+    custom.metrics,
+    revenue,
+    currency.code,
     USE.NAMES = FALSE,
     SIMPLIFY = FALSE
   )
@@ -92,10 +103,27 @@ metricsToList <- function(metrics) {
 #' @param conversionId unique identifier of the conversion
 #' @param timestamp POSIX timestamp in seconds as integer
 #' @param metrics named vector of custom metrics
+#' @param revenue data to be loaded to Revenue
+#' @param currency.code currency associated to the Revenue
 #' @return response from the call to DoubleClick search API.
-dcWriteCustomMetics <- function(clickId, conversionId, timestamp, metrics) {
+dcWriteCustomMetrics <- function(
+  clickId,
+  conversionId,
+  timestamp,
+  metrics,
+  revenue,
+  currency.code
+  ) {
   ts <- paste0(as.integer(timestamp) * 1000)
-  body <- dcPredictionBody(clickId, conversionId, datetime = ts, metrics)
+  r <- as.integer(revenue * 1000000)
+  body <- dcPredictionBody(
+    clickId,
+    conversionId,
+    datetime = ts,
+    metrics,
+    revenue = r,
+    currency.code = currency.code
+    )
   dcWriteConversion <- gar_api_generator(
     baseURI = "https://www.googleapis.com/doubleclicksearch/v2/conversion",
     http_header = "POST",

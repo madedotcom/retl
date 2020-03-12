@@ -20,7 +20,9 @@
      "name": "Predicted AOV",
      "value": 200
     }
-   ]
+   ],
+   "revenueMicros": 10,
+   "currencyCode": "EUR"
   }
  ]
 }
