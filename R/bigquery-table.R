@@ -158,3 +158,19 @@ bqCopyTable <- function(from, to, override = TRUE) {
 
   return(bqTableExists(to))
 }
+
+
+#' Copies table through schema defintion
+#'
+#' @export
+#' @param from dataset object created by bigrquery::bq_table()
+#' @param to dataset object created by bigrquery::bq_table()
+bqCopyTableSchema <- function(from, to) {
+  meta <- bq_table_meta(from)
+  bq_table_create(
+    to,
+    fields = meta$schema$fields,
+    timePartitioning = meta$timePartitioning,
+    clustering = meta$clustering
+  )
+}
