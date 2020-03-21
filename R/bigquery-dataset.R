@@ -18,12 +18,16 @@ bqDatasetExists <- function(dataset = bqDefaultDataset(),
 bqCreateDataset <- function(dataset = bqDefaultDataset(),
                             project = bqDefaultProject()) {
   bqAuth()
-  bq_dataset_create(
-    bq_dataset(
-      project = project,
-      dataset = dataset
+  if (!bqDatasetExists(dataset, project)) {
+    bq_dataset_create(
+      bq_dataset(
+        project = project,
+        dataset = dataset
+      )
     )
-  )
+  } else {
+    message("Dataset does already exist: ", dataset)
+  }
 }
 
 #' @rdname bqDataset

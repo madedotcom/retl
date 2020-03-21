@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.32
+
+* `bqCreateDataset()` - writes warning if data set already exists instead of throwing and error.
+
 ## 0.1.31
 
 * `dcWriteCustomMetrics()` - added `revenue` and `currency.code` as arguments
