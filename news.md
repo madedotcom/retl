@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.33 
+
+* `bqImportData()` - revive the function by removing references to S3 default root.
+
 ## 0.1.32
 
 * `bqCreateDataset()` - writes warning if data set already exists instead of throwing and error.
