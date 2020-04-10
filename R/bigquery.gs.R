@@ -76,11 +76,11 @@ bqImportData <- function(table,
 #' makes full path to the gs file from relative part
 #'
 #' @param path relative path to the gs object
-gsPathUri <- function(path) {
+#' @param bucket name of the GCS bucket, defaults to value in GCS_BUCKET env var
+gsPathUri <- function(path, bucket = Sys.getenv("GCS_BUCKET")) {
   paste0(
     "gs://",
-    googleCloudStorageR::gcs_get_global_bucket(), "/",
-    gsub("/", "", s3DefaultRoot()), "/",
+    bucket, "/",
     path
   )
 }
