@@ -9,3 +9,4 @@ access_token.json
 .RData
 R/.Rapp.history
 refresh_token.txt
+renv

@@ -1,5 +1,63 @@
 # RETL Package Updates
 
+## 0.1.33 
+
+* `bqImportData()` - revive the function by removing references to S3 default root.
+
+## 0.1.32
+
+* `bqCreateDataset()` - writes warning if data set already exists instead of throwing and error.
+
+## 0.1.31
+
+* `dcWriteCustomMetrics()` - added `revenue` and `currency.code` as arguments
+* `dcPredictionBody()` - added `revenue` and `currency.code` as arguments
+* `dcListConversions()` - added `revenue` and `currency.code` as arguments
+
+## 0.1.30 
+
+* `bqCopyDatasetSchema()` - copies all tables from a given dataset to another one 
+using metada.
+
+* `bqCopyTableSchema()` - creates new empty table using metadata of existing table.
+
+
+## 0.1.29
+
+* `bqInitiateTable()` - accepts `partitioning` parameter that allows to partition table with a list of field names.
+
+
+## 0.1.28
+
+* `bqAssertUnique()` - New function, throws exception if duplicates are found on primary key
+* `bqCountDuplicates()` - New function, returns count of duplicate rows when grouped by key(s).
+
+## 0.1.27
+
+* `gsLoadSheet()` - add verbose, lookup and visibility params which were taking default values and was causing issues when loading private sheet.
+* `gsLoadAll()` - add verbose, lookup and visibility params to be passed to `gsLoadSheet()`.
+
+## 0.1.26
+
+* `s3GetFile.zip()` - add fread.fill param to function to prevent R session error on large files
+
+## 0.1.25
+
+* `dcListConversions()` - use env variables DOUBLECLICK_SEGMENTATION_TYPE and DOUBLECLICK_SEGMENTATION_NAME to allow to push metrics to new Doubleclick activities
+
+## 0.1.24
+
+* `bqInsertData()` - add initiation capability via argument schema.file
+* `bqInsertLargeData()` - add initiation capability via argument schema.file
+
+## 0.1.23
+
+* `bqCreateTable()` - add initiation capability via argument schema.file
+
+## 0.1.22
+
+* `bqTransformPartition()` - made missing.dates parameter of the function
+
 ## 0.1.21
 
 * `bqDownloadQuery()` - allows to load data from BigQuery via Storage.

@@ -1,3 +1,4 @@
+
 #' Gets dates that are missing from the date range
 #'   for a give list of existing dates
 #'
@@ -21,6 +22,56 @@ getMissingDates <- function(start.date,
   # we need to convert existing dates to format, which is in 'format' parameter
   existing.dates.formated <- as.character(existing.dates.asdate, format)
   # now we can compare dates, as they are in the same format
-  res <- setdiff(dates, existing.dates.formated)
-  return(res)
+  setdiff(dates, existing.dates.formated)
 }
+
+
+#' Checks for duplicates found on primary key
+#'
+#' @export
+#' @param table name of the table
+#' @param dataset name of the dataset
+#' @param keys vector of column names
+#' @return Throws exception if duplicates are found on primary key
+bqAssertUnique <- function(table, dataset = bqDefaultDataset(), keys) {
+  duplicates <- bqCountDuplicates(
+    table,
+    dataset,
+    keys
+  )
+
+  assert_that(
+    duplicates == 0L,
+    msg = glue("Primary Key in {dataset}.{table} is not unique")
+  )
+}
+
+
+#' Counts any duplicate rows in a table when grouped by key(s)
+#'
+#' @export
+#' @inheritParams bqAssertUnique
+#' @return Total number of duplicate rows when grouped by keys
+bqCountDuplicates <- function(table, dataset = bqDefaultDataset(), keys) {
+  primary.key <- paste(keys, collapse=", ")
+  sql <- glue("
+  SELECT
+    COALESCE(SUM(s.dup_count), 0) AS total
+  FROM (
+    SELECT
+      {primary.key},
+      (COUNT(*) - 1) AS dup_count
+    FROM
+      {dataset}.{table}
+    GROUP BY
+      {primary.key}
+  ) s")
+
+  duplicate.count <- bqExecuteQuery(
+    sql,
+    use.legacy.sql = FALSE
+  )
+  duplicate.count$total
+}
+
+

@@ -16,12 +16,14 @@ NULL
 #' @param dataset name of the destination dataset
 #' @param append specifies if data should be appended or truncated
 #' @param chunks number of segments the data should be split into
+#' @param schema.file sets path to schema file for initialisation
 #' @return results of execution
 bqInsertLargeData <- function(table,
                               data,
                               dataset = bqDefaultDataset(),
                               chunks = 5,
-                              append = TRUE) {
+                              append = TRUE, 
+                              schema.file = NULL) {
 
   upload.list <- split(
     data,
@@ -36,7 +38,8 @@ bqInsertLargeData <- function(table,
       table = table,
       dataset = dataset,
       data = upload.list[[1]],
-      append = append
+      append = append,
+      schema.file = schema.file
   )
 
   lapply(upload.list[-1], function(dt) {
@@ -57,12 +60,14 @@ bqInsertLargeData <- function(table,
 #' @param dataset name of the destination dataset
 #' @param append specifies if data should be appended or truncated
 #' @param fields list of fields with names and types (as bq_fields)
+#' @param schema.file sets path to schema file for initialisation
 #' @return results of execution
 bqInsertData <- function(table,
                          data,
                          dataset = bqDefaultDataset(),
                          append = TRUE,
-                         fields = NULL) {
+                         fields = NULL,
+                         schema.file = NULL) {
   assert_that(
     nchar(dataset) > 0,
     msg = "Set dataset parameter or BIGQUERY_DATASET env var."
@@ -73,7 +78,27 @@ bqInsertData <- function(table,
     fields <- as_bq_fields(data)
   }
 
-  write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
+  write.disposition  <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
+
+  if (missing(schema.file) || is.null(schema.file)) {
+    message("No schema file was passed")
+  }
+  else {
+    message("Schema file passed. Initiating table.")
+    bqInitiateTable(table = table,
+                    schema.file = schema.file,
+                    dataset = dataset)
+    print("Initiated successfully")
+    if (append == FALSE) {
+      message("Truncating ", dataset, ".", table)
+      bqExecuteSql("DELETE FROM %1$s.%2$s WHERE 1=1",
+                   dataset,
+                   table,
+                   use.legacy.sql = FALSE)
+      write.disposition <- "WRITE_EMPTY"
+    }
+  }
+
   rows <- nrow(data)
 
   if (rows > 0) {

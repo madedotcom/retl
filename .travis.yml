@@ -6,9 +6,9 @@ sudo: false
 
 r_packages:
   - R.utils
+  - aws.s3
 
 r_github_packages:
-  - cloudyr/aws.s3
   - jimhester/covr
   - byapparov/bigrquery
   - r-lib/gargle

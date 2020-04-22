@@ -125,30 +125,36 @@ withr::with_envvar(
   test_that("shard tables from several datasets can
             be transformed in day partitioned tables", {
     datasets <- c(a = "ds_retl_test_1", b = "ds_retl_test_2")
-    lapply(datasets, function(ds) {
-      if (bqDatasetExists(ds)) {
-        bqDeleteTable("shard_20150101", ds)
-        bqDeleteTable("shard_20150102", ds)
-      } else {
+
+    for (ds in datasets) {
+
+      if (!bqDatasetExists(ds)) {
         bqCreateDataset(ds)
+        Sys.sleep(10)
       }
+
       bqCreateTable(
         sql = "SELECT 1 AS value",
         table = "shard_20150101",
-        dataset = ds
+        dataset = ds,
+        write.disposition = "WRITE_TRUNCATE"
       )
+
       bqCreateTable(
         sql = "SELECT 2 AS value",
         table = "shard_20150102",
-        dataset = ds
+        dataset = ds,
+        write.disposition = "WRITE_TRUNCATE"
       )
-    })
+
+    }
 
     bqInitiateTable(
       "partitioned_shards",
       schema.file = "test-schema.json",
       partition = TRUE
     )
+
     bqCreatePartitionTable(
       table = "partitioned_shards",
       datasets = datasets,

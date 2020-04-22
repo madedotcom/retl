@@ -37,7 +37,11 @@ bqDeleteTable <- function(table, dataset = bqDefaultDataset()) {
     dataset = dataset,
     table = table
   )
-  bq_table_delete(bt)
+  if (bq_table_exists(bt)) {
+    bq_table_delete(bt)
+  } else {
+    message("BigQuery table does not exist and will not be deleted: ", bt)
+  }
 }
 
 #' @rdname bqTable
@@ -50,11 +54,13 @@ bqDeleteTable <- function(table, dataset = bqDefaultDataset()) {
 #' @inheritParams bqCreateTable
 #' @param schema.file path to file with the table schema
 #' @param partition time partitioned table will be created if set to TRUE
+#' @param clustering list with fields that will be used for clustering
 #' @seealso https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#schema.fields
 bqInitiateTable <- function(table,
                             schema.file,
                             partition = FALSE,
-                            dataset = bqDefaultDataset()) {
+                            dataset = bqDefaultDataset(),
+                            clustering = NULL) {
   bqAuth()
 
   if (!bqTableExists(table = table, dataset = dataset)) {
@@ -64,18 +70,15 @@ bqInitiateTable <- function(table,
       table = table
     )
 
-    if (partition) {
-      bigrquery::bq_table_create(
-        tbl,
-        fields = read_json(schema.file),
-        timePartitioning = list(type = "DAY")
-      )
-    } else {
-      bigrquery::bq_table_create(
-        tbl,
-        fields = read_json(schema.file)
-      )
-    }
+    day.partitioning <- NULL
+    if (partition) day.partitioning <- list(type = "DAY")
+
+    bigrquery::bq_table_create(
+      tbl,
+      fields = read_json(schema.file),
+      timePartitioning = day.partitioning,
+      clustering = clustering
+    )
   }
   else {
     warning(paste0("Table already exists: [", dataset, ".", table, "], attempting patch."))
@@ -154,4 +157,20 @@ bqCopyTable <- function(from, to, override = TRUE) {
   )
 
   return(bqTableExists(to))
+}
+
+
+#' Copies table through schema defintion
+#'
+#' @export
+#' @param from dataset object created by bigrquery::bq_table()
+#' @param to dataset object created by bigrquery::bq_table()
+bqCopyTableSchema <- function(from, to) {
+  meta <- bq_table_meta(from)
+  bq_table_create(
+    to,
+    fields = meta$schema$fields,
+    timePartitioning = meta$timePartitioning,
+    clustering = meta$clustering
+  )
 }

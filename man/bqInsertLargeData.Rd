@@ -4,8 +4,14 @@
 \alias{bqInsertLargeData}
 \title{Inserts LARGE data into BigQuery table}
 \usage{
-bqInsertLargeData(table, data, dataset = bqDefaultDataset(),
-  chunks = 5, append = TRUE)
+bqInsertLargeData(
+  table,
+  data,
+  dataset = bqDefaultDataset(),
+  chunks = 5,
+  append = TRUE,
+  schema.file = NULL
+)
 }
 \arguments{
 \item{table}{name of the target table}
@@ -17,6 +23,8 @@ bqInsertLargeData(table, data, dataset = bqDefaultDataset(),
 \item{chunks}{number of segments the data should be split into}
 
 \item{append}{specifies if data should be appended or truncated}
+
+\item{schema.file}{sets path to schema file for initialisation}
 }
 \value{
 results of execution

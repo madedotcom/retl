@@ -8,8 +8,7 @@
 \usage{
 bqProjectDatasets(project = bqDefaultProject())
 
-bqProjectTables(project = bqDefaultProject(),
-  datasets = bqProjectDatasets())
+bqProjectTables(project = bqDefaultProject(), datasets = bqProjectDatasets())
 }
 \arguments{
 \item{project}{name of the bigquery project}

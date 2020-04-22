@@ -2,14 +2,15 @@
 % Please edit documentation in R/bigquery-partition.R
 \name{bqRefreshPartitionData}
 \alias{bqRefreshPartitionData}
-\alias{bqTransformPartition}
-\title{Functions to transforms partitioned data form one table to another}
+\title{Functions to update existing partitions in the target table}
 \usage{
-bqRefreshPartitionData(table, file, ..., priority = "BATCH",
-  use.legacy.sql = bqUseLegacySql())
-
-bqTransformPartition(table, file, ..., priority = "INTERACTIVE",
-  use.legacy.sql = bqUseLegacySql())
+bqRefreshPartitionData(
+  table,
+  file,
+  ...,
+  priority = "BATCH",
+  use.legacy.sql = bqUseLegacySql()
+)
 }
 \arguments{
 \item{table}{destination partition table where results of the query will be saved}
@@ -22,11 +23,8 @@ followed by arguments in `...`}
 
 \item{priority}{sets priority of job execution to INTERACTIVE or BATCH}
 
-\item{use.legacy.sql}{switches SQL dialect.
-Defaults to value set in `BIGQUERY_LEGACY_SQL` env.}
+\item{use.legacy.sql}{sets SQL flavour}
 }
 \description{
 `bqRefreshPartitionData` updates existing partitions in the target table
-
-`bqTransformPartition` creates new partitions for the missing dates
 }

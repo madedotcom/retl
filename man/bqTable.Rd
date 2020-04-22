@@ -13,8 +13,13 @@ bqTableExists(table, dataset = bqDefaultDataset())
 
 bqDeleteTable(table, dataset = bqDefaultDataset())
 
-bqInitiateTable(table, schema.file, partition = FALSE,
-  dataset = bqDefaultDataset())
+bqInitiateTable(
+  table,
+  schema.file,
+  partition = FALSE,
+  dataset = bqDefaultDataset(),
+  clustering = NULL
+)
 
 bqPatchTable(table, schema.file, dataset = bqDefaultDataset())
 
@@ -28,6 +33,8 @@ bqTableSchema(table, dataset = bqDefaultDataset())
 \item{schema.file}{path to file with the table schema}
 
 \item{partition}{time partitioned table will be created if set to TRUE}
+
+\item{clustering}{list with fields that will be used for clustering}
 }
 \value{
 `bqTableExists` TRUE if table exists

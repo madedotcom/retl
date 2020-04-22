@@ -1,11 +1,11 @@
 Package: retl
 Type: Package
 Title: Support for common ETL operations and connections
-Version: 0.1.21
-Date: 2019-09-26
+Version: 0.1.33
+Date: 2020-03-12
 Author: byapparov@gmail.com
 Maintainer: Bulat Yapparov <byapparov@gmail.com>
-Description: Wrappers for connections with PostgreSQL, S3, BigQuery, InfluxDB.
+Description: Wrappers for connections with PostgreSQL, S3, BigQuery, InfluxDB, Doubleclick.
 License: file LICENSE
 LazyData: TRUE
 Suggests:
@@ -15,9 +15,8 @@ Suggests:
     lintr,
     withr,
     sodium,
-    googleAuthR,
     R.utils
-RoxygenNote: 6.1.1.9000
+RoxygenNote: 7.0.2
 Imports:
     aws.s3 (>= 0.3.2),
     bigrquery (>= 1.2.0),
@@ -29,7 +28,6 @@ Imports:
     RPostgreSQL,
     googleAuthR,
     googlesheets (>= 0.2.2),
-    xts,
     jsonlite (>= 1.5),
     assertthat (>= 0.2.0),
     googleCloudStorageR (>= 0.5.1),

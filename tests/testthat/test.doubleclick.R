@@ -1,5 +1,10 @@
 context("DoubleClick Search API")
 
+options(
+  segmentation.type = "FLOODLIGHT",
+  segmentation.name = "ML"
+)
+
 test_that("DoubleClick call List to body works", {
   metrics <- c(
     "Predicted Revenue" = 20L,
@@ -12,7 +17,9 @@ test_that("DoubleClick call List to body works", {
     clickId = "CJPmyaSYmdMCFVcW0wodHMAE2w",
     conversionId = "23436345D",
     datetime = 1491819654000,
-    custom.metrics = list(metrics)
+    custom.metrics = list(metrics),
+    revenue = 10,
+    currency.code = 'EUR'
   )
   expect_equal(res, expect)
 
@@ -27,7 +34,9 @@ test_that("DoubleClick call List to body works", {
     clickId = c("CJPmyaSYmdMCFVcW0wodHMAE2w", "AJPmyaSYmdMCFVcW0wodHMAE3w"),
     conversionId = c("23436345D", "23436345A"),
     datetime = c(1491819654000, 1491819654002),
-    custom.metrics = list(metrics, metric2)
+    custom.metrics = list(metrics, metric2),
+    revenue = 10,
+    currency.code = 'EUR'
   )
   expect <- read_json("dc-conversion-multiple-insert.json")
   expect_equal(res, expect)
