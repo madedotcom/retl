@@ -17,7 +17,7 @@ with_mock_bigquery <- function(x, data.query.path) { # nolint
 #'
 #' @param data.query.path path to the file with stub data query
 #' @noRd
-make_bq_dataset_query_stub <- function(data.query.path) {
+make_bq_dataset_query_stub <- function(data.query.path) { # nolint
   function(query) {
     paste0(
       "WITH ",
