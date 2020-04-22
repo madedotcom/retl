@@ -5,8 +5,8 @@ library(testthat)
 #' @param x query to execute
 #' @param data.query.path path to a query with stub data
 #' @export
-with_mock_bigquery <- function(x, data.query.path) {
-  with_mock(
+with_mock_bigquery <- function(x, data.query.path) { # nolint
+  testthat::with_mock(
     `bqPrepareQuery` = make_bq_dataset_query_stub(data.query.path),
     eval(x, envir = parent.frame())
   )
@@ -16,6 +16,7 @@ with_mock_bigquery <- function(x, data.query.path) {
 #' Creates a function that wraps a given query into a query with stub data
 #'
 #' @param data.query.path path to the file with stub data query
+#' @noRd
 make_bq_dataset_query_stub <- function(data.query.path) {
   function(query) {
     paste0(
