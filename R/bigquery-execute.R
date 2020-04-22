@@ -15,6 +15,11 @@ bqExecuteFile <- function(file, ...) {
   bqExecuteSql(sql, ...)
 }
 
+#'
+bqPrepareQuery <- function(query) {
+  query
+}
+
 #' @rdname bqQuery
 #'
 #' @export
@@ -71,7 +76,7 @@ bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
   )
   tb <- bigrquery::bq_dataset_query(
     x = ds,
-    query = sql,
+    query = bqPrepareQuery(sql),
     billing = bqBillingProject(),
     use_legacy_sql = use.legacy.sql,
     parameters = params

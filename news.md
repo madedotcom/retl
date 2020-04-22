@@ -1,5 +1,10 @@
 # RETL Package Updates
 
+## 0.1.34 
+
+* `with_mock_bigquery()` - test execution wrapper allows you to call `bqExecuteQuery()` in tests seemlesly 
+  while targeting stub data in a give query file.
+
 ## 0.1.33 
 
 * `bqImportData()` - revive the function by removing references to S3 default root.
