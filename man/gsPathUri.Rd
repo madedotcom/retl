@@ -4,7 +4,7 @@
 \alias{gsPathUri}
 \title{makes full path to the gs file from relative part}
 \usage{
-gsPathUri(path, bucket = Sys.getenv("GCS_BUCKET"))
+gsPathUri(path, bucket = Sys.getenv("GCS_DEFAULT_BUCKET"))
 }
 \arguments{
 \item{path}{relative path to the gs object}
