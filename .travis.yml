@@ -5,6 +5,7 @@ cache: packages
 sudo: false
 
 r_packages:
+  - testthat
   - R.utils
   - aws.s3
 
