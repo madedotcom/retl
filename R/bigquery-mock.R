@@ -7,7 +7,7 @@ library(testthat)
 #' @export
 with_mock_bigquery <- function(x, data.query.path) { # nolint
   testthat::with_mock(
-    `bqPrepareQuery` = make_bq_dataset_query_stub(data.query.path),
+    `retl::bqPrepareQuery` = make_bq_dataset_query_stub(data.query.path),
     eval(x, envir = parent.frame())
   )
 }
