@@ -1,4 +1,3 @@
-library(data.table)
 context("Test mocking")
 
 test_that("Query can be executed against the data stub with standard SQL", {
