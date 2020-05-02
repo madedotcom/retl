@@ -83,7 +83,7 @@ s3PutFile.csv <- function(dt, # nolint
   )
 
   full.path <- paste0(root, path)
-  put_object(
+  aws.s3::put_object(
     file = tmp.file,
     object = full.path,
     bucket = bucket,
@@ -159,7 +159,7 @@ s3GetFile.csv <- function(path, # nolint
                           root = s3DefaultRoot(),
                           header = TRUE) {
   full.path <- paste0(root, path)
-  raw.data <- get_object(
+  raw.data <- aws.s3::get_object(
     object = full.path,
     bucket = bucket,
     check_region = FALSE
