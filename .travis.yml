@@ -4,7 +4,6 @@ language: r
 r:
   - release
 os:
-  - windows
   - osx
 
 arch: arm64
