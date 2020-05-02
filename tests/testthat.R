@@ -3,7 +3,6 @@ suppressPackageStartupMessages({
   library(jsonlite)
   library(withr)
   library(testthat)
-  library(devtools)
   library(mockery)
   library(R.utils)
   library(retl)
