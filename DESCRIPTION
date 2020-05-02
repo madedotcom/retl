@@ -10,7 +10,6 @@ License: file LICENSE
 LazyData: TRUE
 Suggests:
     testthat (>= 2.0.0),
-    devtools,
     mockery (>= 0.4.0),
     lintr,
     withr,
