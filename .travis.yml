@@ -3,8 +3,10 @@
 language: r
 r:
   - release
-os: linux
-dist: xenial
+os:
+  - linux
+  - osx
+
 arch: arm64
 
 cache:
