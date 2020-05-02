@@ -3,6 +3,9 @@
 language: r
 r:
   - release
+os: linux
+dist: xenial
+arch: arm64
 
 cache:
   directories:
@@ -12,22 +15,6 @@ cache:
 install:
   - Rscript -e "if (!requireNamespace('renv', quietly = TRUE)) install.packages('renv')"
   - Rscript -e "renv::restore()"
-
-os: linux
-dist: xenial
-arch: arm64
-
-r_packages:
-  - testthat
-  - R.utils
-  - aws.s3
-
-r_github_packages:
-  - jimhester/covr
-  - byapparov/bigrquery
-  - r-lib/gargle
-  - jimhester/lintr
-  - cloudyr/googleCloudStorageR
 
 after_success:
   - Rscript -e 'covr::codecov()'
