@@ -20,6 +20,7 @@ Imports:
     bigrquery (>= 1.2.0),
     gargle (>= 0.3.0),
     data.table (>= 1.12.2),
+    R.utils,
     stringr (>= 1.2.0),
     httr,
     DBI,

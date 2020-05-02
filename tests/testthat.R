@@ -4,6 +4,7 @@ suppressPackageStartupMessages({
   library(withr)
   library(testthat)
   library(mockery)
+  library(R.utils)
   library(retl)
 })
 
