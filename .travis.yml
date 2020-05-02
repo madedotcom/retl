@@ -2,7 +2,9 @@
 
 language: r
 cache: packages
-sudo: false
+os: linux
+dist: xenial
+arch: arm64
 
 r_packages:
   - testthat
