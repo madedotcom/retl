@@ -77,7 +77,7 @@ bqImportData <- function(table,
 #'
 #' @param path relative path to the gs object
 #' @param bucket name of the GCS bucket, defaults to value in GCS_BUCKET env var
-gsPathUri <- function(path, bucket = Sys.getenv("GCS_BUCKET")) {
+gsPathUri <- function(path, bucket = Sys.getenv("GCS_DEFAULT_BUCKET")) {
   paste0(
     "gs://",
     bucket, "/",

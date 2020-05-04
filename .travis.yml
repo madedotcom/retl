@@ -1,19 +1,21 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: r
-cache: packages
-sudo: false
+r:
+  - release
+os:
+  - osx
 
-r_packages:
-  - R.utils
-  - aws.s3
+arch: arm64
 
-r_github_packages:
-  - jimhester/covr
-  - byapparov/bigrquery
-  - r-lib/gargle
-  - jimhester/lintr
-  - cloudyr/googleCloudStorageR
+cache:
+  directories:
+  - $HOME/.local/share/renv
+  - $TRAVIS_BUILD_DIR/renv/library
+
+install:
+  - Rscript -e "if (!requireNamespace('renv', quietly = TRUE)) install.packages('renv')"
+  - Rscript -e "renv::restore()"
 
 after_success:
   - Rscript -e 'covr::codecov()'

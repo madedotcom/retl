@@ -150,7 +150,6 @@ bqRefreshPartitionData <- function(table,
 #'    followed by arguments in `...`
 #' @param missing.dates dates for which to run this function for
 #' @param use.legacy.sql Defaults to env variable if specified
-#' @inheritParams bqCreateTable
 bqTransformPartition <- function(table,
                                  file,
                                  ...,

@@ -1,7 +1,13 @@
 # RETL Package Updates
 
-## 0.1.34
+## Unreleased
+
 * `dcUpdateAvailability()` updates data availability in SA360 platform through the doublecklick conversion API. See https://developers.google.com/search-ads/v2/how-tos/conversions/offline-conversions.
+
+## 0.1.34 
+
+* `with_mock_bigquery()` - test execution wrapper allows you to call `bqExecuteQuery()` in tests seemlesly 
+  while targeting stub data in a give query file.
 
 ## 0.1.33 
 
