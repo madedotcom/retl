@@ -1,5 +1,11 @@
 # RETL Package Updates
 
+## 0.1.35
+
+* `bqAlterTable()` - allows to set table options.
+
+* `bqUpdateTableDescription()` - updates `description` option on the table.
+
 ## 0.1.34 
 
 * `with_mock_bigquery()` - test execution wrapper allows you to call `bqExecuteQuery()` in tests seemlesly 

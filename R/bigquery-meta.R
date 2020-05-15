@@ -5,6 +5,8 @@
 #' @param description character scalar with table description
 #' @param dataset name of the dataset
 #' @param project name of the project
+#'
+#' @export
 bqUpdateTableDescription <- function(table, description, dataset = bqDefaultDataset(), project = bqDefaultProject()) {
   bqAlterTable(
     bigrquery::bq_table(
@@ -25,6 +27,8 @@ bqUpdateTableDescription <- function(table, description, dataset = bqDefaultData
 #' @param value value of the option
 #'
 #' @seealso https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language#alter_table_set_options_statement
+#'
+#' @export
 bqAlterTable <- function(x, name, value) {
   dml <- glue(
     "ALTER TABLE `{project}.{dataset}.{table}`
