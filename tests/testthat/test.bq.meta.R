@@ -1,6 +1,5 @@
 context("BigQuery Meta")
 
-load
 test_that("Table description is updated", {
   tbl <- bqInitiateTable(
     table = "test_description_update",
