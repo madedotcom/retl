@@ -5,7 +5,6 @@ r:
   - release
 os:
   - osx
-
 arch: arm64
 
 cache:
