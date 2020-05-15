@@ -7,7 +7,7 @@
 bqUpdateTableDescription(
   table,
   description,
-  dataset = bqDeleteDataset(),
+  dataset = bqDefaultDataset(),
   project = bqDefaultProject()
 )
 }
