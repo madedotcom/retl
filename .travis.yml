@@ -5,7 +5,8 @@ r:
   - release
 os:
   - osx
-
+# macOS 10.12 version
+osx_image: xcode9.2
 arch: arm64
 
 cache:
