@@ -4,7 +4,7 @@ language: r
 r:
   - release
 os:
-  - osx
+  - linux
 arch: arm64
 
 cache:
