@@ -22,6 +22,33 @@ test_that("Data is inserted correctly without metadata", {
   )
 })
 
+
+test_that("Inserting data into existing table with schema, udpates descriptions", {
+
+  x <- bqInsertData(
+    "test_table_insert_descriptions_update",
+     data.table(id = c(1L), first_name = "Bob")
+  )
+
+  bqInsertData(
+    "test_table_insert_descriptions_update",
+    data = data.table(id = c(2L), first_name = "Dan"),
+    schema.file = "bq-table-schema.json",
+    append = FALSE
+  )
+
+  meta = bq_table_meta(
+    bq_table(
+      project = Sys.getenv("BIGQUERY_PROJECT"),
+      dataset = Sys.getenv("BIGQUERY_DATASET"),
+      table = "test_table_insert_descriptions_update"
+    )
+  )
+
+  expect_equal(meta$schema$fields[[2]]$description, "First name")
+
+})
+
 test_that("Large dataset is inserted correctly", {
   res <- bqInsertLargeData("test_table_insert_empty", data.table())
 
