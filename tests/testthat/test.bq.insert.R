@@ -22,6 +22,37 @@ test_that("Data is inserted correctly without metadata", {
   )
 })
 
+
+test_that("Inserting data into existing table with schema, udpates descriptions", {
+
+  x <- bqInsertData(
+    "test_table_insert_descriptions_update",
+     data.table(id = c(1L), first_name = "Bob")
+  )
+
+  expect_warning(
+    bqInsertData(
+      "test_table_insert_descriptions_update",
+      data = data.table(id = c(2L), first_name = "Dan"),
+      schema.file = "bq-table-schema.json",
+      append = FALSE
+    ),
+    regexp = "attempting patch"
+  )
+
+
+  meta <- bq_table_meta(
+    bq_table(
+      project = Sys.getenv("BIGQUERY_PROJECT"),
+      dataset = Sys.getenv("BIGQUERY_DATASET"),
+      table = "test_table_insert_descriptions_update"
+    )
+  )
+
+  expect_equal(meta$schema$fields[[2]]$description, "First name")
+
+})
+
 test_that("Large dataset is inserted correctly", {
   res <- bqInsertLargeData("test_table_insert_empty", data.table())
 
@@ -39,8 +70,8 @@ test_that("Large dataset is inserted correctly", {
   colnames(dt.test) <- tolower(colnames(dt.test))
   iris.bq[, species := as.factor(species)]
   expect_equal(
-    iris.bq[order(sepal.length, sepal.width, petal.length, petal.width)],
-    dt.test[order(sepal.length, sepal.width, petal.length, petal.width)]
+    iris.bq[order(sepal.length, sepal.width, petal.length, petal.width), .(sepal.length, sepal.width, petal.length, petal.width)],
+    dt.test[order(sepal.length, sepal.width, petal.length, petal.width), .(sepal.length, sepal.width, petal.length, petal.width)]
   )
 })
 
@@ -84,6 +115,7 @@ test_that("partitioned table can be created and data is added", {
   )
   Sys.setenv(BIGQUERY_START_DATE = "2014-12-30")
   Sys.setenv(BIGQUERY_END_DATE = "2015-01-04")
+
   bqTransformPartition(
     table = "table_partion_transformation",
     file = "partition-transform.sql",

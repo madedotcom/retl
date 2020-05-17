@@ -7,6 +7,7 @@
 bqCreateTable(
   sql,
   table,
+  ...,
   dataset = bqDefaultDataset(),
   write.disposition = "WRITE_APPEND",
   priority = "INTERACTIVE",
@@ -18,6 +19,9 @@ bqCreateTable(
 \item{sql}{string with sql statement or query template}
 
 \item{table}{name of a table to be created}
+
+\item{...}{list of parameters for query template. With Standard sql all parameters must be named.
+With Legacy SQL ` sprintf()` will be applied for the query template.}
 
 \item{dataset}{name of the destination dataset}
 

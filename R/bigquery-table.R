@@ -103,14 +103,12 @@ bqPatchTable <- function(table, schema.file, dataset = bqDefaultDataset()) {
 
   assert_that(length(removed.fields) == 0L)
 
-  if (length(new.fields) > 0L) {
-    table <- bq_table(
-      project = bqDefaultProject(),
-      dataset = dataset,
-      table = table
-    )
-    bq_table_patch(table, code.schema)
-  }
+  table <- bq_table(
+    project = bqDefaultProject(),
+    dataset = dataset,
+    table = table
+  )
+  bq_table_patch(table, code.schema)
 }
 
 #' @export

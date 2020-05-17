@@ -179,7 +179,7 @@ bqTransformPartition <- function(table,
     sql.exec <- readSql(file, partition, ...)
 
     bqCreateTable(
-      sql.exec,
+      sql = sql.exec,
       table = destination.partition,
       write.disposition = "WRITE_TRUNCATE",
       priority = priority,

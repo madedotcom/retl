@@ -39,13 +39,16 @@ bqExtractTable <- function(table,
 #' @param append defines whether data can be appended to the table with data
 #' @param nskip number of rows to skip on importing the file
 #' @param path path to the file in gs, defaults to {default-bucket}/{default-dataset}/table-name.csv.gz.
+#' @param bucket name of the GCS bucket from where data will be loaded
 bqImportData <- function(table,
                          dataset = bqDefaultDataset(),
                          path = "",
                          append = TRUE,
                          format = "CSV",
                          compression = "GZIP",
-                         nskip = 1) {
+                         nskip = 1,
+                         bucket = Sys.getenv("GCS_DEFAULT_BUCKET")) {
+
   write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
   x <- bq_table(
     project = bqDefaultProject(),
@@ -65,7 +68,7 @@ bqImportData <- function(table,
 
   bigrquery::bq_table_load(
     x,
-    source_uris = gsPathUri(path),
+    source_uris = gsPathUri(path, bucket),
     source_format = format,
     write_disposition = write.disposition,
     nskip = 1,

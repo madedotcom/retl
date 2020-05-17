@@ -10,12 +10,12 @@
 #' @param file file with sql statement
 bqExecuteFile <- function(file, ...) {
   # Function to load data from BigQuery using file with SQL.
-
   sql <- paste(readLines(file), collapse = "\n")
   bqExecuteSql(sql, ...)
 }
 
-#'
+#' This is a helper function to support `with_mock_bigquery()`
+#' @noRd
 bqPrepareQuery <- function(query) {
   query
 }
@@ -59,11 +59,8 @@ bqExecuteSql <- function(sql, ..., use.legacy.sql = bqUseLegacySql()) {
   }
 
 
-  if (!use.legacy.sql & length(params) > 0) {
-    message(
-      "parameters applied to the template: \n",
-      jsonlite::toJSON(params, auto_unbox = TRUE, force = TRUE)
-    )
+  if (!use.legacy.sql) {
+    message_params(params)
   } else {
     params <- NULL
   }
@@ -108,12 +105,7 @@ bqExecuteDml <- function(query, ...,
     msg = "All parameters must be named."
   )
 
-  if (length(params) > 0) {
-    message(
-      "parameters applied to the template: \n",
-      jsonlite::toJSON(params, auto_unbox = TRUE, force = TRUE)
-    )
-  }
+  message_params(params)
 
   ds <- bq_dataset(
     project = bqDefaultProject(),
@@ -200,7 +192,8 @@ bqDownloadQueryFile <- function(file, ...) {
 namedArguments <- function(args, reserved) {
   args.names <- names(args)
   args.names <- args.names[nchar(args.names) > 0 & !(args.names %in% reserved)]
-  args[args.names]
+  params <- args[args.names]
+  params
 }
 
 #' Counts number of items in the list that don't have names
@@ -216,6 +209,8 @@ nonameItemsCount <- function(x) {
 #' @export
 #' @param table name of a table to be created
 #' @param dataset name of the destination dataset
+#' @param ... list of parameters for query template. With Standard sql all parameters must be named.
+#'  With Legacy SQL ` sprintf()` will be applied for the query template.
 #' @param write.disposition defines whether records will be appended
 #' @param priority sets priority of job execution to INTERACTIVE or BATCH
 #' @param use.legacy.sql sets SQL flavour
@@ -224,55 +219,126 @@ nonameItemsCount <- function(x) {
 #' @return results of the execution as returned by bigrquery::query_exec
 bqCreateTable <- function(sql,
                           table,
+                          ...,
                           dataset = bqDefaultDataset(),
                           write.disposition = "WRITE_APPEND",
                           priority = "INTERACTIVE",
                           use.legacy.sql = bqUseLegacySql(),
                           schema.file = NULL) {
   bqAuth()
+
+  if (missing(schema.file) || is.null(schema.file)) {
+    message("No schema file was passed")
+  } else {
+    message("Schema file passed. Initiating table.")
+    bqInitiateTable(
+      table = table,
+      schema.file = schema.file,
+      dataset = dataset
+    )
+    message("Initiated successfully")
+  }
+
+  args <- c(as.list(environment()), list(...))
+
+  if (use.legacy.sql) {
+    job <- bqCreateTableLegacy(
+      sql = sql,
+      table = table,
+      dataset = dataset,
+      write.disposition = write.disposition,
+      priority = priority
+    )
+  } else {
+
+    # Extract named arguments and turn them into query params
+    args.reserved <- c(
+      "query",
+      "table",
+      "dataset",
+      "write.disposition",
+      "priority",
+      "use.legacy.sql",
+      "schema.file"
+    )
+    params <- namedArguments(args, args.reserved)
+
+    assert_that(
+      !(length(params) > 0L & nonameItemsCount(args) > 0L),
+      msg = "All parameters must be named."
+    )
+    message_params(params)
+
+    tbl <- bq_table(
+      project = bqDefaultProject(),
+      dataset = dataset,
+      table = table
+    )
+
+    ds <- bq_dataset(
+      project = bqDefaultProject(),
+      dataset = dataset
+    )
+
+    job <- bq_perform_query(
+      query = sql,
+      billing = bqBillingProject(),
+      destination_table = tbl,
+      default_dataset = ds,
+      create_disposition = "CREATE_IF_NEEDED",
+      write_disposition = write.disposition,
+      use_legacy_sql = FALSE,
+      priority = priority,
+      parameters = params
+    )
+  }
+
+  if (priority == "INTERACTIVE") {
+    bq_job_wait(job)
+  }
+  else {
+    job
+  }
+}
+
+
+#' This is helper function to create table from legacy SQL query
+#' @noRd
+bqCreateTableLegacy <- function(sql,
+                                table,
+                                dataset,
+                                write.disposition,
+                                priority) {
+
   tbl <- bq_table(
     project = bqDefaultProject(),
     dataset = dataset,
     table = table
   )
+
   ds <- bq_dataset(
     project = bqDefaultProject(),
     dataset = dataset
   )
 
-  if (missing(schema.file) || is.null(schema.file)) {
-    message("No schema file was passed")
-  }
-  else {
-    message("Schema file passed. Initiating table.")
-    bqInitiateTable(table = table,
-                    schema.file = schema.file,
-                    dataset = dataset)
-    print("Initiated successfully")
-    if (write.disposition == "WRITE_TRUNCATE") {
-      message("Truncating ", dataset, ".", table)
-      bqExecuteSql("DELETE FROM %1$s.%2$s WHERE 1=1",
-                   dataset,
-                   table,
-                   use.legacy.sql = FALSE)
-      write.disposition <- "WRITE_EMPTY"
-    }
-  }
-
-  job <- bq_perform_query(
+  bq_perform_query(
     query = sql,
     billing = bqBillingProject(),
     destination_table = tbl,
     default_dataset = ds,
     create_disposition = "CREATE_IF_NEEDED",
     write_disposition = write.disposition,
-    use_legacy_sql = use.legacy.sql,
+    use_legacy_sql = TRUE,
     priority = priority
   )
-  if (priority == "INTERACTIVE") {
-    bq_job_wait(job)
-  }
-  else {
-    job
+}
+
+
+message_params <- function(x) { # nolint
+  if (length(x) > 0) {
+    message(
+      "parameters applied to the template: \n",
+      jsonlite::toJSON(x, auto_unbox = TRUE, force = TRUE)
+    )
   }
 }

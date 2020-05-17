@@ -17,6 +17,7 @@ install:
   - Rscript -e "renv::restore()"
 
 after_success:
+  - Rscript -e "if (!requireNamespace('covr', quietly = TRUE)) install.packages('covr')"
   - Rscript -e 'covr::codecov()'
 
 addons:
