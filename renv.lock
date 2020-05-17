@@ -79,6 +79,18 @@
       "Repository": "CRAN",
       "Hash": "50c838a310445e954bc13f26f26a6ecf"
     },
+    "aws.s3": {
+      "Package": "aws.s3",
+      "Version": "0.3.21",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
+    "aws.signature": {
+      "Package": "aws.signature",
+      "Version": "0.5.2",
+      "Source": "Repository",
+      "Repository": "CRAN"
+    },
     "backports": {
       "Package": "backports",
       "Version": "1.1.5",
