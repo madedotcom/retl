@@ -22,7 +22,7 @@ bqInsertLargeData <- function(table,
                               data,
                               dataset = bqDefaultDataset(),
                               chunks = 5,
-                              append = TRUE, 
+                              append = TRUE,
                               schema.file = NULL) {
 
   upload.list <- split(
@@ -34,12 +34,18 @@ bqInsertLargeData <- function(table,
     return(NULL)
   }
 
+
+  bq_perform_load(
+    source_uris =
+
+  )
+
   bqInsertData(
-      table = table,
-      dataset = dataset,
-      data = upload.list[[1]],
-      append = append,
-      schema.file = schema.file
+    table = table,
+    dataset = dataset,
+    data = upload.list[[1]],
+    append = append,
+    schema.file = schema.file
   )
 
   lapply(upload.list[-1], function(dt) {
@@ -88,7 +94,7 @@ bqInsertData <- function(table,
     bqInitiateTable(table = table,
                     schema.file = schema.file,
                     dataset = dataset)
-    print("Initiated successfully")
+    message("Initiated successfully")
     if (append == FALSE) {
       message("Truncating ", dataset, ".", table)
       bqExecuteSql("DELETE FROM %1$s.%2$s WHERE 1=1",
