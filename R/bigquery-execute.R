@@ -239,11 +239,12 @@ bqCreateTable <- function(sql,
     message("Initiated successfully")
   }
 
+  args <- c(as.list(environment()), list(...))
+
   if (use.legacy.sql) {
     job <- bqCreateTableLegacy(
       sql = sql,
       table = table,
-      ... = ...,
       dataset = dataset,
       write.disposition = write.disposition,
       priority = priority
@@ -251,7 +252,6 @@ bqCreateTable <- function(sql,
   } else {
 
     # Extract named arguments and turn them into query params
-    args <- c(as.list(environment()), list(...))
     args.reserved <- c(
       "query",
       "table",
@@ -301,22 +301,14 @@ bqCreateTable <- function(sql,
   }
 }
 
+
 #' This is helper function to create table from legacy SQL query
 #' @noRd
 bqCreateTableLegacy <- function(sql,
                                 table,
-                                ...,
                                 dataset,
                                 write.disposition,
                                 priority) {
-
-  args <- c(as.list(environment()), list(...))
-
-  assert_that(
-    length(args) == 0L,
-    msg = "`bqCreateTable()` does not support query templates with legacy SQL.
-    Switch to Standard dialect or process template in advance."
-  )
 
   tbl <- bq_table(
     project = bqDefaultProject(),

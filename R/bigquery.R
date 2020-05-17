@@ -17,45 +17,55 @@ NULL
 #' @param append specifies if data should be appended or truncated
 #' @param chunks number of segments the data should be split into
 #' @param schema.file sets path to schema file for initialisation
+#' @param bucket name of the GCS bucket where data will be saved in temp file.
+#'   Defaults to value of environment variable `GCS_DEFAULT_BUCKET`
 #' @return results of execution
 bqInsertLargeData <- function(table,
                               data,
                               dataset = bqDefaultDataset(),
                               chunks = 5,
                               append = TRUE,
-                              schema.file = NULL) {
+                              schema.file = NULL,
+                              bucket = Sys.getenv("GCS_DEFAULT_BUCKET")) {
 
-  upload.list <- split(
-    data,
-    f = sort(sample(1:chunks, size = nrow(data), replace = TRUE))
-  )
-
-  if (length(upload.list) == 0) {
+  if (nrow(data) == 0L) {
     return(NULL)
   }
 
+  if (ncol(data) > 0) {
+    colnames(data) <- conformHeader(colnames(data), "_")
+    fields <- as_bq_fields(data)
+  }
 
-  bq_perform_load(
-    source_uris =
+  temp.filename <- tempfile(pattern = "file", tmpdir = tempdir(), fileext = ".json")
+  temp.object <- tempfile(pattern = "data_import_", tmpdir = "tmp", fileext = ".json")
 
-  )
-
-  bqInsertData(
-    table = table,
-    dataset = dataset,
-    data = upload.list[[1]],
-    append = append,
-    schema.file = schema.file
-  )
-
-  lapply(upload.list[-1], function(dt) {
-    bqInsertData(
-      table = table,
-      dataset = dataset,
-      data = dt,
-      append = TRUE
+  on.exit({
+    unlink(temp.filename)
+    googleCloudStorageR::gcs_delete_object(
+      bucket = bucket,
+      object_name = temp.object
     )
   })
+
+  # Save data to local temporary file
+  jsonlite::stream_out(data, file(temp.filename))
+
+  googleCloudStorageR::gcs_upload(
+    file = temp.filename,
+    bucket = bucket,
+    name = temp.object,
+    predefinedAcl = "projectPrivate"
+  )
+
+  bqImportData(
+    table = table,
+    dataset = dataset,
+    path = temp.object,
+    append = append,
+    format = "NEWLINE_DELIMITED_JSON",
+    bucket = bucket
+  )
 }
 
 #' Inserts data into BigQuery table

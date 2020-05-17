@@ -70,8 +70,8 @@ test_that("Large dataset is inserted correctly", {
   colnames(dt.test) <- tolower(colnames(dt.test))
   iris.bq[, species := as.factor(species)]
   expect_equal(
-    iris.bq[order(sepal.length, sepal.width, petal.length, petal.width)],
-    dt.test[order(sepal.length, sepal.width, petal.length, petal.width)]
+    iris.bq[order(sepal.length, sepal.width, petal.length, petal.width), .(sepal.length, sepal.width, petal.length, petal.width)],
+    dt.test[order(sepal.length, sepal.width, petal.length, petal.width), .(sepal.length, sepal.width, petal.length, petal.width)]
   )
 })
 
@@ -115,6 +115,7 @@ test_that("partitioned table can be created and data is added", {
   )
   Sys.setenv(BIGQUERY_START_DATE = "2014-12-30")
   Sys.setenv(BIGQUERY_END_DATE = "2015-01-04")
+
   bqTransformPartition(
     table = "table_partion_transformation",
     file = "partition-transform.sql",

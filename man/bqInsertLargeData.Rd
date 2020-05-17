@@ -10,7 +10,8 @@ bqInsertLargeData(
   dataset = bqDefaultDataset(),
   chunks = 5,
   append = TRUE,
-  schema.file = NULL
+  schema.file = NULL,
+  bucket = Sys.getenv("GCS_DEFAULT_BUCKET")
 )
 }
 \arguments{
@@ -25,6 +26,9 @@ bqInsertLargeData(
 \item{append}{specifies if data should be appended or truncated}
 
 \item{schema.file}{sets path to schema file for initialisation}
+
+\item{bucket}{name of the GCS bucket where data will be saved in temp file.
+Defaults to value of environment variable `GCS_DEFAULT_BUCKET`}
 }
 \value{
 results of execution
