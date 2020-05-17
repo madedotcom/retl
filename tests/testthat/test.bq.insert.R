@@ -41,7 +41,7 @@ test_that("Inserting data into existing table with schema, udpates descriptions"
   )
 
 
-  meta = bq_table_meta(
+  meta <- bq_table_meta(
     bq_table(
       project = Sys.getenv("BIGQUERY_PROJECT"),
       dataset = Sys.getenv("BIGQUERY_DATASET"),

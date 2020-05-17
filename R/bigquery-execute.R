@@ -304,11 +304,11 @@ bqCreateTable <- function(sql,
 #' This is helper function to create table from legacy SQL query
 #' @noRd
 bqCreateTableLegacy <- function(sql,
-                    table,
-                    ...,
-                    dataset,
-                    write.disposition,
-                    priority) {
+                                table,
+                                ...,
+                                dataset,
+                                write.disposition,
+                                priority) {
 
   if (nonameItemsCount(args) > 0L) {
     # template requires parameters.
@@ -341,7 +341,7 @@ bqCreateTableLegacy <- function(sql,
 }
 
 
-message_params <- function(x) {
+message_params <- function(x) { # nolint
   if (length(x) > 0) {
     message(
       "parameters applied to the template: \n",
