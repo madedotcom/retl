@@ -1,8 +1,26 @@
 # RETL Package Updates
 
+
 ## Unreleased
 
 * `dcUpdateAvailability()` updates data availability in SA360 platform through the doublecklick conversion API. See https://developers.google.com/search-ads/v2/how-tos/conversions/offline-conversions.
+
+## 0.1.36
+
+This version has minor bug fixes and refactoring within functions.
+
+* `bqCreateTable()` refactor the way the function works to separate parameterised query behavior between legacy and standard sql.
+  Legacy sql does not take any parameters anymore and query template should be pre-processed before the function call.
+  
+* `bqInsertLargeData()` - is refactored to load data through temporary file in GCP. 
+
+* `bqCreateTable()` - now if field description in the schema file is updated, table will be patched accordingly.
+
+## 0.1.35
+
+* `bqAlterTable()` - allows to set table options.
+
+* `bqUpdateTableDescription()` - updates `description` option on the table.
 
 ## 0.1.34 
 

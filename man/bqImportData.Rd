@@ -11,7 +11,8 @@ bqImportData(
   append = TRUE,
   format = "CSV",
   compression = "GZIP",
-  nskip = 1
+  nskip = 1,
+  bucket = Sys.getenv("GCS_DEFAULT_BUCKET")
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ values include "GZIP", "DEFLATE", "SNAPPY", and "NONE". "DEFLATE" and
 "SNAPPY" are only supported for Avro.}
 
 \item{nskip}{number of rows to skip on importing the file}
+
+\item{bucket}{name of the GCS bucket from where data will be loaded}
 }
 \value{
 object of `bq_job`
