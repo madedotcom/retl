@@ -1,5 +1,16 @@
 # RETL Package Updates
 
+## 0.1.36
+
+This version has minor bug fixes and refactoring within functions.
+
+* `bqCreateTable()` refactor the way the function works to separate parameterised query behavior between legacy and standard sql.
+  Legacy sql does not take any parameters anymore and query template should be pre-processed before the function call.
+  
+* `bqInsertLargeData()` - is refactored to load data through temporary file in GCP. 
+
+* `bqCreateTable()` - now if field description in the schema file is updated, table will be patched accordingly.
+
 ## 0.1.35
 
 * `bqAlterTable()` - allows to set table options.
