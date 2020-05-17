@@ -310,19 +310,20 @@ bqCreateTableLegacy <- function(sql,
                                 write.disposition,
                                 priority) {
 
-  if (nonameItemsCount(args) > 0L) {
-    # template requires parameters.
-    sql <- sprintf(sql, ...)
-  } else {
-    # template does not have parameteres.
-    sql <- sql
-  }
+  args <- c(as.list(environment()), list(...))
+
+  assert_that(
+    length(args) == 0L,
+    msg = "`bqCreateTable()` does not support query templates with legacy SQL.
+    Switch to Standard dialect or process template in advance."
+  )
 
   tbl <- bq_table(
     project = bqDefaultProject(),
     dataset = dataset,
     table = table
   )
+
   ds <- bq_dataset(
     project = bqDefaultProject(),
     dataset = dataset
