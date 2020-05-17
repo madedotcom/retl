@@ -15,7 +15,7 @@ NULL
 #' @param data data to be inserted
 #' @param dataset name of the destination dataset
 #' @param append specifies if data should be appended or truncated
-#' @param chunks number of segments the data should be split into
+#' @param chunks deprecated
 #' @param schema.file sets path to schema file for initialisation
 #' @param bucket name of the GCS bucket where data will be saved in temp file.
 #'   Defaults to value of environment variable `GCS_DEFAULT_BUCKET`
@@ -23,10 +23,14 @@ NULL
 bqInsertLargeData <- function(table,
                               data,
                               dataset = bqDefaultDataset(),
-                              chunks = 5,
+                              chunks = NA_integer_,
                               append = TRUE,
                               schema.file = NULL,
                               bucket = Sys.getenv("GCS_DEFAULT_BUCKET")) {
+
+  if (!is.na(chunks)) {
+    message("`chunks` parameter is deprecated.")
+  }
 
   if (nrow(data) == 0L) {
     return(NULL)
@@ -35,6 +39,14 @@ bqInsertLargeData <- function(table,
   if (ncol(data) > 0) {
     colnames(data) <- conformHeader(colnames(data), "_")
     fields <- as_bq_fields(data)
+  }
+
+  if (!missing(schema.file)) {
+    bqInitiateTable(
+      table = table,
+      dataset = dataset,
+      schema.file = schema.file
+    )
   }
 
   temp.filename <- tempfile(pattern = "file", tmpdir = tempdir(), fileext = ".json")
