@@ -30,12 +30,16 @@ test_that("Inserting data into existing table with schema, udpates descriptions"
      data.table(id = c(1L), first_name = "Bob")
   )
 
-  bqInsertData(
-    "test_table_insert_descriptions_update",
-    data = data.table(id = c(2L), first_name = "Dan"),
-    schema.file = "bq-table-schema.json",
-    append = FALSE
+  expect_warning(
+    bqInsertData(
+      "test_table_insert_descriptions_update",
+      data = data.table(id = c(2L), first_name = "Dan"),
+      schema.file = "bq-table-schema.json",
+      append = FALSE
+    ),
+    regexp = "attempting patch"
   )
+
 
   meta = bq_table_meta(
     bq_table(

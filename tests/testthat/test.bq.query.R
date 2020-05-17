@@ -110,3 +110,41 @@ test_that("Download query output via Storage", {
   res <- bqDownloadQuery("SELECT 1 as field_name")
   expect_equal(res$field.name, 1L)
 })
+
+test_that("Table can be created from query", {
+  bqCreateTable(
+    sql = "SELECT CAST(@value AS INT64) AS id",
+    table = "test_create_table_params",
+    use.legacy.sql = FALSE,
+    schema.file = "bq-table-schema.json",
+    value = 1
+  )
+
+  res <- bqExecuteQuery(
+    query = "SELECT * FROM test_create_table_params"
+  )
+  expect_equal(res$id, 1L)
+
+  # By default records are appended
+  expect_warning(
+    bqCreateTable(
+      sql = "SELECT CAST(@value AS INT64) AS id",
+      table = "test_create_table_params",
+      use.legacy.sql = FALSE,
+      schema.file = "bq-table-schema.json",
+      value = 2
+    ),
+    regexp = "attempting patch"
+  )
+
+  res <- bqExecuteQuery(
+    query =
+      "SELECT *
+      FROM
+        test_create_table_params
+      ORDER BY
+        id"
+  )
+  expect_equal(res$id, c(1L, 2L))
+
+})
