@@ -8,7 +8,7 @@ bqInsertLargeData(
   table,
   data,
   dataset = bqDefaultDataset(),
-  chunks = 5,
+  chunks = NA_integer_,
   append = TRUE,
   schema.file = NULL,
   bucket = Sys.getenv("GCS_DEFAULT_BUCKET")
@@ -21,7 +21,7 @@ bqInsertLargeData(
 
 \item{dataset}{name of the destination dataset}
 
-\item{chunks}{number of segments the data should be split into}
+\item{chunks}{deprecated}
 
 \item{append}{specifies if data should be appended or truncated}
 
