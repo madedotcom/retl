@@ -18,7 +18,7 @@ NULL
 #' @param chunks deprecated
 #' @param schema.file sets path to schema file for initialisation
 #' @param bucket name of the GCS bucket where data will be saved in temp file.
-#'   Defaults to value of environment variable `GCS_DEFAULT_BUCKET`
+#'   Defaults to value of environment variable `GCS_BUCKET`
 #' @return results of execution
 bqInsertLargeData <- function(table,
                               data,
@@ -26,7 +26,7 @@ bqInsertLargeData <- function(table,
                               chunks = NA_integer_,
                               append = TRUE,
                               schema.file = NULL,
-                              bucket = Sys.getenv("GCS_DEFAULT_BUCKET")) {
+                              bucket = Sys.getenv("GCS_BUCKET")) {
 
   if (!is.na(chunks)) {
     message("`chunks` parameter is deprecated.")
