@@ -5,7 +5,7 @@ if (gargle:::secret_can_decrypt("retl")) {
   googleCloudStorageR::gcs_auth(json_file = rawToChar(json))
 
   ds <- bigrquery::bq_test_dataset()
-  Sys.setenv(GCS_DEFAULT_BUCKET = "madecom-test-retl")
+  Sys.setenv(GCS_BUCKET = "madecom-test-retl")
   Sys.setenv(BIGQUERY_DATASET = ds$dataset)
   Sys.setenv(BIGQUERY_PROJECT = Sys.getenv("BIGQUERY_TEST_PROJECT"))
   Sys.setenv(DOUBLECLICK_SEGMATATION_TYPE = "FLOODLIGHT")

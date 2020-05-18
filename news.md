@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.37
+
+* `GCS_DEFAULT_BUCKET` envar changed to previous `GCS_BUCKET` as it is already being used.
+
 ## 0.1.36
 
 This version has minor bug fixes and refactoring within functions.
