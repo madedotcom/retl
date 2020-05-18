@@ -12,7 +12,7 @@ bqImportData(
   format = "CSV",
   compression = "GZIP",
   nskip = 1,
-  bucket = Sys.getenv("GCS_DEFAULT_BUCKET")
+  bucket = Sys.getenv("GCS_BUCKET")
 )
 }
 \arguments{
