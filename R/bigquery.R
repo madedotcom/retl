@@ -61,7 +61,11 @@ bqInsertLargeData <- function(table,
   })
 
   # Save data to local temporary file
-  jsonlite::stream_out(data, file(temp.filename))
+  jsonlite::stream_out(
+    x = data,
+    con = file(temp.filename),
+    POSIXt = "ISO8601"
+  )
 
   googleCloudStorageR::gcs_upload(
     file = temp.filename,
