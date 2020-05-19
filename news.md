@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.38
+
+* `bqInsertLargeData()` - lock json output for POSIXt to ISO8601 format.
+
 ## 0.1.37
 
 * `GCS_DEFAULT_BUCKET` envar changed to previous `GCS_BUCKET` as it is already being used.
