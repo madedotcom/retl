@@ -78,7 +78,7 @@ You can protect dataset from programmatic deletion by adding `delete:never` labe
 You will need to provide environment variables to support GCS processing:
 
 ```
-GCS_DEFAULT_BUCKET={gcs bucket where tables will exported to}
+GCS_BUCKET={gcs bucket where tables will exported to}
 GCS_AUTH_FILE={path to json file with service token}
 ```
 
@@ -167,24 +167,39 @@ dt <- s3GetData("path/to/myfile_")
 
 `.Renviron` file is needed and need to be configured as below:
 
-```
-RETL_PASSWORD=
+```apacheconf
+# Required for BigQuery access
 BIGQUERY_ACCESS_TOKEN_PATH=
-BIGQUERY_TEST_PROJECT=
-BIGQUERY_METADATA_DATASET=
+BIGQUERY_PROJECT
+BIGQUERY_DATASET
 BIGQUERY_START_DATE=
 BIGQUERY_END_DATE=
 
+# Required for functions that transfer data through
+# Google Cloud Storage
 GCS_AUTH_FILE=
-GCS_DEFAULT_BUCKET=
+GCS_BUCKET=
 
-GITHUB_PAT=
-
+# Required to access aws
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 AWS_DEFAULT_REGION=
 AWS_S3_BUCKET=
 AWS_S3_ROOT=
+
+GITHUB_PAT=
+```
+
+### Testing
+
+Package is setup for automated tests on Travis.
+
+To test locally, you will need to create access tocken file through `gargle`
+
+```apacheconf
+#.Renviron
+BIGQUERY_TEST_PROJECT=
+RETL_PASSWORD=
 ```
 
 ### Steps to follow ###

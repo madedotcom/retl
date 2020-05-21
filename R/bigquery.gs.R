@@ -47,7 +47,7 @@ bqImportData <- function(table,
                          format = "CSV",
                          compression = "GZIP",
                          nskip = 1,
-                         bucket = Sys.getenv("GCS_DEFAULT_BUCKET")) {
+                         bucket = Sys.getenv("GCS_BUCKET")) {
 
   write.disposition <- ifelse(append, "WRITE_APPEND", "WRITE_TRUNCATE")
   x <- bq_table(
@@ -80,7 +80,7 @@ bqImportData <- function(table,
 #'
 #' @param path relative path to the gs object
 #' @param bucket name of the GCS bucket, defaults to value in GCS_BUCKET env var
-gsPathUri <- function(path, bucket = Sys.getenv("GCS_DEFAULT_BUCKET")) {
+gsPathUri <- function(path, bucket = Sys.getenv("GCS_BUCKET")) {
   paste0(
     "gs://",
     bucket, "/",

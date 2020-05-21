@@ -5,6 +5,15 @@
 
 * `dcUpdateAvailability()` updates data availability in SA360 platform through the doublecklick conversion API. See https://developers.google.com/search-ads/v2/how-tos/conversions/offline-conversions.
 
+## 0.1.38
+
+* `bqInsertLargeData()` - lock json output for POSIXt to ISO8601 format.
+
+## 0.1.37
+
+* `GCS_DEFAULT_BUCKET` envar changed to previous `GCS_BUCKET` as it is already being used.
+
+
 ## 0.1.36
 
 This version has minor bug fixes and refactoring within functions.
