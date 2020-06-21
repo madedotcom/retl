@@ -1,5 +1,12 @@
 # RETL Package Updates
 
+## 0.1.39
+
+* `bqCreateTable()` - Now keeps field descriptions on `WRITE_TRUNCATE` desponsition through a workaround.
+  See: https://cloud.google.com/bigquery/docs/reference/rest/v2/Job
+  
+  > schemaUpdateOptions[]: For normal tables, WRITE_TRUNCATE will always overwrite the schema.
+
 ## 0.1.38
 
 * `bqInsertLargeData()` - lock json output for POSIXt to ISO8601 format.
