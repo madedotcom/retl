@@ -184,15 +184,12 @@ test_that("Table can be created from query", {
 
 
   # Truncate table and insert new data from query without schema file
-  expect_warning(
-    bqCreateTable(
-      sql = "SELECT CAST(@value AS INT64) AS id",
-      table = table.test.create$table,
-      write.disposition = "WRITE_TRUNCATE",
-      use.legacy.sql = FALSE,
-      value = 2
-    ),
-    regexp = "attempting patch"
+  bqCreateTable(
+    sql = "SELECT CAST(@value AS INT64) AS id",
+    table = table.test.create$table,
+    write.disposition = "WRITE_TRUNCATE",
+    use.legacy.sql = FALSE,
+    value = 2
   )
 
   # Check that field descriptions persist with `WRITE_TRUNCATE` option
@@ -211,6 +208,7 @@ test_that("Table can be created from query", {
       use.legacy.sql = FALSE,
       value = 2
     ),
+    class = "bigrquery_invalid",
     regexp = "new_field is missing"
   )
 })
