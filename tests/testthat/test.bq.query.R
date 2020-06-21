@@ -181,4 +181,22 @@ test_that("Table can be created from query", {
   meta <- bq_table_meta(table.test.create)
   expect_equal(meta$schema$fields[[1]]$description, "Unique Identifier")
   expect_equal(meta$numRows, "1") # check that table was truncated
+
+
+  # Truncate table and insert new data from query without schema file
+  expect_warning(
+    bqCreateTable(
+      sql = "SELECT CAST(@value AS INT64) AS id",
+      table = table.test.create$table,
+      write.disposition = "WRITE_TRUNCATE",
+      use.legacy.sql = FALSE,
+      value = 2
+    ),
+    regexp = "attempting patch"
+  )
+
+  # Check that field descriptions persist with `WRITE_TRUNCATE` option
+  meta <- bq_table_meta(table.test.create)
+  expect_equal(meta$schema$fields[[1]]$description, "Unique Identifier")
+  expect_equal(meta$numRows, "1") # check that table was truncated
 })
