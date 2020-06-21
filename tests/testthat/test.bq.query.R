@@ -199,4 +199,18 @@ test_that("Table can be created from query", {
   meta <- bq_table_meta(table.test.create)
   expect_equal(meta$schema$fields[[1]]$description, "Unique Identifier")
   expect_equal(meta$numRows, "1") # check that table was truncated
+
+
+  # Truncate table and query with wrong schema will fail
+  # This confirms that we can change breaking schema changes initiated by sql
+  expect_error(
+    bqCreateTable(
+      sql = "SELECT CAST(@value AS INT64) AS new_field",
+      table = table.test.create$table,
+      write.disposition = "WRITE_TRUNCATE",
+      use.legacy.sql = FALSE,
+      value = 2
+    ),
+    regexp = "new_field is missing"
+  )
 })
