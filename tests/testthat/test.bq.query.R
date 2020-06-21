@@ -127,7 +127,7 @@ test_that("Table can be created from query", {
 
   # By default records are appended
   expect_warning(
-    bqCreateTable(
+    job <- bqCreateTable(
       sql = "SELECT CAST(@value AS INT64) AS id",
       table = "test_create_table_params",
       use.legacy.sql = FALSE,
@@ -146,5 +146,33 @@ test_that("Table can be created from query", {
         id"
   )
   expect_equal(res$id, c(1L, 2L))
+
+  # Check that metadata is correct and table has two fields per schema definition
+
+  meta <- bq_table_meta(
+    bq_table(
+      project = Sys.getenv("BIGQUERY_PROJECT"),
+      dataset = Sys.getenv("BIGQUERY_DATASET"),
+      table = "test_create_table_params"
+    )
+  )
+
+  expect_equal(meta$schema$fields[[1]]$description, "Unique Identifier")
+
+  # Truncate table and insert new data from query
+  expect_warning(
+    job <- bqCreateTable(
+      sql = "SELECT CAST(@value AS INT64) AS id",
+      table = "test_create_table_params",
+      write.disposition = "WRITE_TRUNCATE",
+      use.legacy.sql = FALSE,
+      schema.file = "bq-table-schema.json",
+      value = 2
+    ),
+    regexp = "attempting patch"
+  )
+
+  # Check that field descriptions persist
+  expect_equal(meta$schema$fields[[1]]$description, "Unique Identifier")
 
 })

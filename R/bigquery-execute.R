@@ -253,7 +253,7 @@ bqCreateTable <- function(sql,
 
     # Extract named arguments and turn them into query params
     args.reserved <- c(
-      "query",
+      "sql",
       "table",
       "dataset",
       "write.disposition",
