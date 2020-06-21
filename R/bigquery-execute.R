@@ -239,33 +239,6 @@ bqCreateTable <- function(sql,
     message("Initiated successfully")
   }
 
-  if (write.disposition == "WRITE_TRUNCATE" && !contains_partition(table)) {
-    # https://cloud.google.com/bigquery/docs/reference/rest/v2/Job
-    # > schemaUpdateOptions[]: For normal tables, WRITE_TRUNCATE will always overwrite the schema.
-
-    # Partition tables are excluded from this flow as schema is not affected
-    # by query results being saved into a partition.
-
-    bq.table <-  bq_table(
-      project = Sys.getenv("BIGQUERY_PROJECT"),
-      dataset = dataset,
-      table = table
-    )
-    table.meta <- bq_table_meta(bq.table)
-    on.exit(
-      # compensate for unwanted behaviour of BigQuery
-      bq_table_patch(bq.table, table.meta$schema$fields)
-
-      # This is not ideal as it will not fail early and table
-      # can be overwritten with wrong schema and fail on patch (which is too late)
-
-      # @byapparov:
-      # I have also tried `CREATE OR REPLACE  DML approach:
-      # https://stackoverflow.com/a/58538111/599911
-      # This does not work for partitioned tables hence was abondoned.
-    )
-  }
-
   args <- c(as.list(environment()), list(...))
 
   if (use.legacy.sql) {
@@ -295,6 +268,33 @@ bqCreateTable <- function(sql,
       msg = "All parameters must be named."
     )
     message_params(params)
+
+    if (write.disposition == "WRITE_TRUNCATE" && !contains_partition(table)) {
+      # https://cloud.google.com/bigquery/docs/reference/rest/v2/Job
+      # > schemaUpdateOptions[]: For normal tables, WRITE_TRUNCATE will always overwrite the schema.
+
+      # Partition tables are excluded from this flow as schema is not affected
+      # by query results being saved into a partition.
+
+      bq.table <-  bq_table(
+        project = Sys.getenv("BIGQUERY_PROJECT"),
+        dataset = dataset,
+        table = table
+      )
+      table.meta <- bq_table_meta(bq.table)
+      on.exit(
+        # compensate for unwanted behaviour of BigQuery
+        bq_table_patch(bq.table, table.meta$schema$fields)
+
+        # This is not ideal as it will not fail early and table
+        # can be overwritten with wrong schema and fail on patch (which is too late)
+
+        # @byapparov:
+        # I have also tried `CREATE OR REPLACE  DML approach:
+        # https://stackoverflow.com/a/58538111/599911
+        # This does not work for partitioned tables hence was abondoned.
+      )
+    }
 
     tbl <- bq_table(
       project = bqDefaultProject(),
