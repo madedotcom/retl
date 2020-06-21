@@ -112,24 +112,34 @@ test_that("Download query output via Storage", {
 })
 
 test_that("Table can be created from query", {
+  table.test.create <- bq_table(
+    project = Sys.getenv("BIGQUERY_PROJECT"),
+    dataset = Sys.getenv("BIGQUERY_DATASET"),
+    table = "test_create_table_params"
+  )
+
+
   bqCreateTable(
     sql = "SELECT CAST(@value AS INT64) AS id",
-    table = "test_create_table_params",
+    table = table.test.create$table,
     use.legacy.sql = FALSE,
     schema.file = "bq-table-schema.json",
     value = 1
   )
 
   res <- bqExecuteQuery(
-    query = "SELECT * FROM test_create_table_params"
+    query = glue(
+      "SELECT * FROM {table}",
+      table = table.test.create$table
+    )
   )
   expect_equal(res$id, 1L)
 
   # By default records are appended
   expect_warning(
-    job <- bqCreateTable(
+    bqCreateTable(
       sql = "SELECT CAST(@value AS INT64) AS id",
-      table = "test_create_table_params",
+      table = table.test.create$table,
       use.legacy.sql = FALSE,
       schema.file = "bq-table-schema.json",
       value = 2
@@ -139,31 +149,26 @@ test_that("Table can be created from query", {
 
   res <- bqExecuteQuery(
     query =
-      "SELECT *
-      FROM
-        test_create_table_params
-      ORDER BY
-        id"
+      glue(
+        "SELECT *
+        FROM
+          {table}
+        ORDER BY
+          id",
+        table = table.test.create$table
+      )
   )
   expect_equal(res$id, c(1L, 2L))
 
   # Check that metadata is correct and table has two fields per schema definition
-
-  meta <- bq_table_meta(
-    bq_table(
-      project = Sys.getenv("BIGQUERY_PROJECT"),
-      dataset = Sys.getenv("BIGQUERY_DATASET"),
-      table = "test_create_table_params"
-    )
-  )
-
+  meta <- bq_table_meta(table.test.create)
   expect_equal(meta$schema$fields[[1]]$description, "Unique Identifier")
 
   # Truncate table and insert new data from query
   expect_warning(
-    job <- bqCreateTable(
+    bqCreateTable(
       sql = "SELECT CAST(@value AS INT64) AS id",
-      table = "test_create_table_params",
+      table = table.test.create$table,
       write.disposition = "WRITE_TRUNCATE",
       use.legacy.sql = FALSE,
       schema.file = "bq-table-schema.json",
@@ -172,7 +177,8 @@ test_that("Table can be created from query", {
     regexp = "attempting patch"
   )
 
-  # Check that field descriptions persist
+  # Check that field descriptions persist with `WRITE_TRUNCATE` option
+  meta <- bq_table_meta(table.test.create)
   expect_equal(meta$schema$fields[[1]]$description, "Unique Identifier")
 
 })
