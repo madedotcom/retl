@@ -180,5 +180,5 @@ test_that("Table can be created from query", {
   # Check that field descriptions persist with `WRITE_TRUNCATE` option
   meta <- bq_table_meta(table.test.create)
   expect_equal(meta$schema$fields[[1]]$description, "Unique Identifier")
-
+  expect_equal(meta$numRows, "1") # check that table was truncated
 })
