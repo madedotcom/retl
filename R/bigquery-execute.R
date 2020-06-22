@@ -281,19 +281,21 @@ bqCreateTable <- function(sql,
         dataset = dataset,
         table = table
       )
-      table.meta <- bq_table_meta(bq.table)
-      on.exit(
-        # compensate for unwanted behaviour of BigQuery
-        bq_table_patch(bq.table, table.meta$schema$fields)
+      if (bq_table_exists(bq.table)) {
+        table.meta <- bq_table_meta(bq.table)
+        on.exit(
+          # compensate for unwanted behaviour of BigQuery
+          bq_table_patch(bq.table, table.meta$schema$fields)
 
-        # This is not ideal as it will not fail early and table
-        # can be overwritten with wrong schema and fail on patch (which is too late)
+          # This is not ideal as it will not fail early and table
+          # can be overwritten with wrong schema and fail on patch (which is too late)
 
-        # @byapparov:
-        # I have also tried `CREATE OR REPLACE  DML approach:
-        # https://stackoverflow.com/a/58538111/599911
-        # This does not work for partitioned tables hence was abondoned.
-      )
+          # @byapparov:
+          # I have also tried `CREATE OR REPLACE  DML approach:
+          # https://stackoverflow.com/a/58538111/599911
+          # This does not work for partitioned tables hence was abondoned.
+        )
+      }
     }
 
     tbl <- bq_table(
