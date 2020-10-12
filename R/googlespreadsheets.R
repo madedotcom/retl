@@ -65,6 +65,7 @@ gsLoadAll <- function(key,
       verbose = verbose,
       lookup = lookup,
       visibility = visibility)
+    Sys.sleep(6)
   })
   names(sheets) <- tabs
   sheets
