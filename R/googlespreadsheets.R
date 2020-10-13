@@ -59,13 +59,13 @@ gsLoadAll <- function(key,
   gsAuth()
   tabs <- gs_key(key)$ws$ws_title
   sheets <- lapply(tabs, function(sheet) {
+    Sys.sleep(6)
     gsLoadSheet(
       key = key,
       tab = sheet,
       verbose = verbose,
       lookup = lookup,
       visibility = visibility)
-    Sys.sleep(6)
   })
   names(sheets) <- tabs
   sheets

@@ -2,7 +2,7 @@
 
 ## 0.1.40
 
-* `gsLoadSheet()` - Added `Sys.sleep(6)` after each call
+* `gsLoadAll()` - Added `Sys.sleep(6)` before each call
 
 ## 0.1.39
 
