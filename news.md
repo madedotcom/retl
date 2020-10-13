@@ -1,8 +1,14 @@
 # RETL Package Updates
 
+# RETL Package Updates
+
+## 0.1.41
+
+* `gsLoadAll()` - Fixed `Sys.sleep(6)` for each call
+
 ## 0.1.40
 
-* `gsLoadSheet()` - Added `Sys.sleep(6)` after each call
+* `gsLoadAll()` - Added `Sys.sleep(6)` after each call
 
 ## 0.1.39
 
