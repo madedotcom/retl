@@ -9,7 +9,6 @@
 #' @export
 #' @param table name of the destination table
 #' @param datasets list of Google Analytics properties to populate table for
-#' @param sql sql to use a source of the data
 #' @param file if sql is not provided it will be read from the file
 #' @param existing.dates dates that should be skipped
 #' @param missing.dates dates calculation for which will be enforced
@@ -150,7 +149,6 @@ bqRefreshPartitionData <- function(table,
 #'    partition date will be always passed first in format `yyyymmdd`
 #'    followed by arguments in `...`
 #' @param missing.dates dates for which to run this function for
-#' @param priority Default to INTERACTIVE
 #' @param use.legacy.sql Defaults to env variable if specified
 bqTransformPartition <- function(table,
                                  file,

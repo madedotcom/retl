@@ -24,7 +24,7 @@ followed by arguments in `...`}
 
 \item{missing.dates}{dates for which to run this function for}
 
-\item{priority}{Default to INTERACTIVE}
+\item{priority}{sets priority of job execution to INTERACTIVE or BATCH}
 
 \item{use.legacy.sql}{Defaults to env variable if specified}
 }

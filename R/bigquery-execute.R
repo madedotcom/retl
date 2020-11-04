@@ -213,7 +213,6 @@ nonameItemsCount <- function(x) {
 #'  With Legacy SQL ` sprintf()` will be applied for the query template.
 #' @param write.disposition defines whether records will be appended
 #' @param priority sets priority of job execution to INTERACTIVE or BATCH
-#' @param use.legacy.sql sets SQL flavour
 #' @param schema.file sets path to schema file for initialisation
 #' @inheritParams bqExecuteSql
 #' @return results of the execution as returned by bigrquery::query_exec

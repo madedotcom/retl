@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## Unreleased
+
+* `dcUpdateAvailability()` updates data availability in SA360 platform through the doublecklick conversion API. See https://developers.google.com/search-ads/v2/how-tos/conversions/offline-conversions.
+
 ## 0.1.40
 
 * `gsLoadAll()` - Added `Sys.sleep(6)` before each call
@@ -18,6 +22,7 @@
 ## 0.1.37
 
 * `GCS_DEFAULT_BUCKET` envar changed to previous `GCS_BUCKET` as it is already being used.
+
 
 ## 0.1.36
 
@@ -61,7 +66,6 @@ This version has minor bug fixes and refactoring within functions.
 using metada.
 
 * `bqCopyTableSchema()` - creates new empty table using metadata of existing table.
-
 
 ## 0.1.29
 

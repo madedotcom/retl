@@ -20,7 +20,7 @@ bqCreatePartitionTable(
 
 \item{datasets}{list of Google Analytics properties to populate table for}
 
-\item{sql}{sql to use a source of the data}
+\item{sql}{string with sql statement or query template}
 
 \item{file}{if sql is not provided it will be read from the file}
 

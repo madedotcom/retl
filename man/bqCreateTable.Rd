@@ -29,7 +29,8 @@ With Legacy SQL ` sprintf()` will be applied for the query template.}
 
 \item{priority}{sets priority of job execution to INTERACTIVE or BATCH}
 
-\item{use.legacy.sql}{sets SQL flavour}
+\item{use.legacy.sql}{switches SQL dialect.
+Defaults to value set in `BIGQUERY_LEGACY_SQL` env.}
 
 \item{schema.file}{sets path to schema file for initialisation}
 }
