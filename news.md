@@ -1,9 +1,19 @@
 # RETL Package Updates
 
-
 ## Unreleased
 
 * `dcUpdateAvailability()` updates data availability in SA360 platform through the doublecklick conversion API. See https://developers.google.com/search-ads/v2/how-tos/conversions/offline-conversions.
+
+## 0.1.40
+
+* `gsLoadAll()` - Added `Sys.sleep(6)` before each call
+
+## 0.1.39
+
+* `bqCreateTable()` - Now keeps field descriptions on `WRITE_TRUNCATE` desponsition through a workaround.
+  See: https://cloud.google.com/bigquery/docs/reference/rest/v2/Job
+  
+  > schemaUpdateOptions[]: For normal tables, WRITE_TRUNCATE will always overwrite the schema.
 
 ## 0.1.38
 

@@ -112,16 +112,26 @@ test_that("Download query output via Storage", {
 })
 
 test_that("Table can be created from query", {
+  table.test.create <- bq_table(
+    project = Sys.getenv("BIGQUERY_PROJECT"),
+    dataset = Sys.getenv("BIGQUERY_DATASET"),
+    table = "test_create_table_params"
+  )
+
+
   bqCreateTable(
     sql = "SELECT CAST(@value AS INT64) AS id",
-    table = "test_create_table_params",
+    table = table.test.create$table,
     use.legacy.sql = FALSE,
     schema.file = "bq-table-schema.json",
     value = 1
   )
 
   res <- bqExecuteQuery(
-    query = "SELECT * FROM test_create_table_params"
+    query = glue(
+      "SELECT * FROM {table}",
+      table = table.test.create$table
+    )
   )
   expect_equal(res$id, 1L)
 
@@ -129,7 +139,7 @@ test_that("Table can be created from query", {
   expect_warning(
     bqCreateTable(
       sql = "SELECT CAST(@value AS INT64) AS id",
-      table = "test_create_table_params",
+      table = table.test.create$table,
       use.legacy.sql = FALSE,
       schema.file = "bq-table-schema.json",
       value = 2
@@ -139,12 +149,66 @@ test_that("Table can be created from query", {
 
   res <- bqExecuteQuery(
     query =
-      "SELECT *
-      FROM
-        test_create_table_params
-      ORDER BY
-        id"
+      glue(
+        "SELECT *
+        FROM
+          {table}
+        ORDER BY
+          id",
+        table = table.test.create$table
+      )
   )
   expect_equal(res$id, c(1L, 2L))
 
+  # Check that metadata is correct and table has two fields per schema definition
+  meta <- bq_table_meta(table.test.create)
+  expect_equal(meta$schema$fields[[1]]$description, "Unique Identifier")
+
+  # Truncate table and insert new data from query
+  expect_warning(
+    bqCreateTable(
+      sql = "SELECT CAST(@value AS INT64) AS id",
+      table = table.test.create$table,
+      write.disposition = "WRITE_TRUNCATE",
+      use.legacy.sql = FALSE,
+      schema.file = "bq-table-schema.json",
+      value = 2
+    ),
+    regexp = "attempting patch"
+  )
+
+  # Check that field descriptions persist with `WRITE_TRUNCATE` option
+  meta <- bq_table_meta(table.test.create)
+  expect_equal(meta$schema$fields[[1]]$description, "Unique Identifier")
+  expect_equal(meta$numRows, "1") # check that table was truncated
+
+
+  # Truncate table and insert new data from query without schema file
+  bqCreateTable(
+    sql = "SELECT CAST(@value AS INT64) AS id",
+    table = table.test.create$table,
+    write.disposition = "WRITE_TRUNCATE",
+    use.legacy.sql = FALSE,
+    value = 2
+  )
+
+  # Check that field descriptions persist with `WRITE_TRUNCATE` option
+  meta <- bq_table_meta(table.test.create)
+  expect_equal(meta$schema$fields[[1]]$description, "Unique Identifier")
+  expect_equal(meta$numRows, "1") # check that table was truncated
+
+
+  # Truncate table and query with wrong schema will fail
+  # This confirms that we can change breaking schema changes initiated by sql
+  expect_error(
+    bqCreateTable(
+      sql = "SELECT CAST(@value AS INT64) AS new_field",
+      table = table.test.create$table,
+      write.disposition = "WRITE_TRUNCATE",
+      use.legacy.sql = FALSE,
+      value = 2
+    ),
+    class = "bigrquery_invalid",
+    regexp = "new_field is missing"
+  )
 })

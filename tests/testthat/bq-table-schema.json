@@ -1,7 +1,8 @@
 [
   {
     "name": "id",
-    "type": "INTEGER"
+    "type": "INTEGER",
+    "description": "Unique Identifier"
   },
   {
     "name": "first_name",

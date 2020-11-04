@@ -1,32 +1,36 @@
 [![Build Status](https://travis-ci.org/madedotcom/retl.svg?branch=master)](https://travis-ci.org/madedotcom/retl)
 [![codecov.io](https://codecov.io/github/madedotcom/retl/coverage.svg?branch=master)](https://codecov.io/github/madedotcom/retl?branch=master)
 
-## Purpose ##
+## Purpose
 
 ETL project provides means to:
 
 - exchange data with different sources through packages: 
     * [bigrquery](https://github.com/r-dbi/bigrquery)
     * [aws.s3](https://github.com/cloudyr/aws.s3)
-- defensive data transformations that preserve original granularity or total of a metric.
+- defensive data transformations that preserve original granularity or total of a metric
+    * `safeLookup()` function for example is an alternative to `merge()` which enforces safe left join.
 
-## BigQuery ##
+## BigQuery
 
 To access BigQuery you will need following environment variables:
 
-- `BIGQUERY_PROJECT` - name of the project in BigQuery. Default project cannot be changed in the code.
-- `BIGQUERY_DATASET` - name of the default dataset in BigQuery. You can override default dataset in most functions.
-- `BIGQUERY_ACCESS_TOKEN_PATH` - path to the json token file.
-- `BIGQUERY_LEGACY_SQL` - query will be executed with legacy flavour if set to `TRUE`.
+```apacheconf
+#.Renviron
+BIGQUERY_PROJECT # name of the project in BigQuery. Default project cannot be changed in the code.
+BIGQUERY_DATASET # name of the default dataset in BigQuery. You can override default dataset in most functions.
+BIGQUERY_ACCESS_TOKEN_PATH # path to the json token file.
+BIGQUERY_LEGACY_SQL # query will be executed with legacy flavour if set to `TRUE`.
+```
 
 BigQuery functions wrap `bigrquery` functions to provide higher level API removing boilerplate instructions of the lower level API.
 
-### query data
+### Query data
 
 You can parameterise your SQL using positional matching (`sprintf`) if you don't name arguments in the call to `bqExecuteQuery()`:
 
 ```R
-# Running query to get the sie of group A
+# Running query to get the size of group A in Legacy dialect
 dt <- bqExecuteQuery("SELECT COUNT(*) as size FROM my_table WHERE group = `%1$s`", "A")
 
 # You can also save template of the query in a file and get results like this
@@ -36,7 +40,7 @@ dt <-  bqExecuteFile("group-size.sql", "A")
 You can use [parameters](https://cloud.google.com/bigquery/docs/parameterized-queries) in the query template with standard SQL. You have to give matching names to arguments in `bqExecuteQuery()` call:
 
 ```R
-# Running query to get the sie of group A
+# Running query to get the size of group A
 dt <- bqExecuteQuery(
   sql = "SELECT COUNT(*) as size FROM my_table WHERE group = @group", 
   group = "A",
@@ -56,7 +60,32 @@ WHERE
   group = 'A' -- parameter is replaced by matching argument in the call
 ```
 
-### dataset
+You can also pass array into query like this:
+
+```R
+# Running query to get the size of groups A and B
+dt <- bqExecuteQuery(
+  sql = "SELECT COUNT(*) as size FROM my_table WHERE group IN UNNEST(@group)", 
+  group = c("A", "B"),
+  use.legacy.sql = FALSE
+)
+```
+
+Sometimes you don't know in advance the length of the vector that will be passed into a query.
+`UNNEST` in the query above is expecting array which is not created for scalars. 
+
+To avoid an error in dynamic scripts (shiny), you can enforce array with `bq_param_array()` like this:
+
+```R
+# Running query to get the size of groups A and B
+dt <- bqExecuteQuery(
+  sql = "SELECT COUNT(*) as size FROM my_table WHERE group IN UNNEST(@group)", 
+  group = bq_param_array(input$groups),
+  use.legacy.sql = FALSE
+)
+```
+
+### Working with datasets
 
 ```R
 # Check if default dataset exists
@@ -77,12 +106,13 @@ You can protect dataset from programmatic deletion by adding `delete:never` labe
 
 You will need to provide environment variables to support GCS processing:
 
-```
-GCS_BUCKET={gcs bucket where tables will exported to}
-GCS_AUTH_FILE={path to json file with service token}
+```apacheconf
+# .Renviron
+GCS_AUTH_FILE= # path to json file with service token
+GCS_BUCKET= # gcs bucket where tables will exported to
 ```
 
-### transform partitioned data
+### Transform partitioned data
 
 If your raw data is in daily partitioned tables you can transform
 data into a new partitioned table with transformation defined in the
@@ -97,6 +127,14 @@ SELECT COUNT(*) AS rows FROM my_table$%1$s
 ```R
 # etl.R
 bqTransformPartition("my_new_table_1", "transformation_count.sql")
+```
+
+Range of dates that will be backfilled is limited between these envvars:
+
+```apacheconf
+# .Renviron
+BIGQUERY_START_DATE=
+BIGQUERY_END_DATE=
 ```
 
 ### Create tables
@@ -118,16 +156,37 @@ bqInsertData("my_table", cars)
 bqInsertData("my_table", cars)
 ```
 
-## AWS S3 ##
+You can also use `bqInsertLargeData()` function.
 
-To access AWS S3 storage provide following environment variables:
+This will load data into BigQuery table through the temp file in Google Cloud Storage:
 
-- `AWS_ACCESS_KEY_ID` - Access key
-- `AWS_SECRET_ACCESS_KEY` - Secret key
-- `AWS_DEFAULT_REGION` - Default region (e.g. `us-east-1`)
-- `AWS_S3_BUCKET` - Name of the S3 bucket
-- `AWS_S3_ROOT` - Root path which will be added to your path. If you full path is "myproject/data/file_a.csv", you can access it as `s3GetFile("data/file_a.csv")` if root variable is set to `myproject/`.
+```R
+# Note: you need to load googleCloudStorageR in your pipeline
+#       for authentication.
+library(googleCloudStorageR)
+bqInsertLargeData("my_table", cars)
+``` 
 
+Two additional environment variable are required for connection with Cloud Storage:
+
+```apacheconf
+# .Renviron
+GCS_AUTH_FILE= # path to json token file to access Cloud Storage
+GCS_BUCKET= # bucket where temporary json file with data will be created
+```
+
+## AWS S3
+
+To access AWS S3 storage provide the following environment variables:
+
+```apacheconf
+# .Renviron
+AWS_ACCESS_KEY_ID # Access key
+AWS_SECRET_ACCESS_KEY # Secret key
+AWS_DEFAULT_REGION # Default region (e.g. `us-east-1`)
+AWS_S3_BUCKET # Name of the S3 bucket
+AWS_S3_ROOT # Root path, see examples bellow.
+```
 
 ### Load and save data
 
@@ -161,34 +220,20 @@ dt <- s3PutFile(dt, "path/to/myfile.csv")
 dt <- s3GetData("path/to/myfile_")
 ```
 
-## Release process ##
+## Contributing
 
-### .Renviron ###
+### .Renviron
 
-`.Renviron` file is needed and need to be configured as below:
+`.Renviron` file is needed should be configured to set up envars.
+
+Here is a small example with two variables:
 
 ```apacheconf
-# Required for BigQuery access
-BIGQUERY_ACCESS_TOKEN_PATH=
-BIGQUERY_PROJECT
-BIGQUERY_DATASET
-BIGQUERY_START_DATE=
-BIGQUERY_END_DATE=
-
-# Required for functions that transfer data through
-# Google Cloud Storage
-GCS_AUTH_FILE=
-GCS_BUCKET=
-
-# Required to access aws
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-AWS_DEFAULT_REGION=
-AWS_S3_BUCKET=
-AWS_S3_ROOT=
-
-GITHUB_PAT=
+GCS_AUTH_FILE=access_token.json
+GCS_BUCKET=my-bucket
 ```
+
+Full details on environment in R seessions can be found here: `help(Startup)`
 
 ### Testing
 
@@ -202,7 +247,7 @@ BIGQUERY_TEST_PROJECT=
 RETL_PASSWORD=
 ```
 
-### Steps to follow ###
+### Release Steps
 
 1. Modify/Add the function in the appropriate .R file in the R/ folder. 
 2. Update news.md (version, description)
