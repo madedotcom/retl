@@ -9,11 +9,11 @@ gsLoadAll(key, verbose = TRUE, lookup = TRUE, visibility = "private")
 \arguments{
 \item{key}{sheet-identifying information; a character vector of length one holding sheet title, key, browser URL or worksheets feed OR, in the case of gs_gs only, a googlesheet object}
 
-\item{verbose}{logical; do you want informative messages?}
+\item{verbose}{OBSOLETE}
 
-\item{lookup}{logical, optional. Controls whether googlesheets will place authorized API requests during registration. If unspecified, will be set to TRUE if authorization has previously been used in this R session, if working directory contains a file named .httr-oauth, or if x is a worksheets feed or googlesheet object that specifies "public" visibility.}
+\item{lookup}{OBSOLETE}
 
-\item{visibility}{character, either "public" or "private". Consulted during explicit construction of a worksheets feed from a key, which happens only when lookup = FALSE and googlesheets is prevented from looking up information in the spreadsheets feed. If unspecified, will be set to "public" if lookup = FALSE and "private" if lookup = TRUE. Consult the API docs for more info about visibility}
+\item{visibility}{OBSOLETE}
 }
 \description{
 Loads all sheets from a google spreadsheet into a list with the tab name as the list element name.

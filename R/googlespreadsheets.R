@@ -1,5 +1,5 @@
 #' @import googleAuthR
-#' @import googlesheets
+#' @import googlesheets4
 NULL
 
 gs.env <- new.env(parent = emptyenv())
@@ -20,52 +20,44 @@ gsAuth <- function() {
 
 #' Loads google spreadsheet via key
 #' @export
-#' @import googlesheets
-#' @param key sheet-identifying information; a character vector of length one holding sheet title, key, browser URL or worksheets feed OR, in the case of gs_gs only, a googlesheet object
-#' @param tab name of the tab from which data will be loaded
-#' @param verbose logical; do you want informative messages?
-#' @param lookup logical, optional. Controls whether googlesheets will place authorized API requests during registration. If unspecified, will be set to TRUE if authorization has previously been used in this R session, if working directory contains a file named .httr-oauth, or if x is a worksheets feed or googlesheet object that specifies "public" visibility.
-#' @param visibility character, either "public" or "private". Consulted during explicit construction of a worksheets feed from a key, which happens only when lookup = FALSE and googlesheets is prevented from looking up information in the spreadsheets feed. If unspecified, will be set to "public" if lookup = FALSE and "private" if lookup = TRUE. Consult the API docs for more info about visibility
+#' @import googlesheets4
+#' @param key Something that identifies a Google Sheet: its file ID, a URL from which we can recover the ID, an instance of googlesheets4_spreadsheet (returned by gs4_get()), or a dribble, which is how googledrive represents Drive files. Processed through as_sheets_id().
+#' @param tab Sheet to read, in the sense of "worksheet" or "tab". You can identify a sheet by name, with a string, or by position, with a number. Ignored if the sheet is specified via range. If neither argument specifies the sheet, defaults to the first visible sheet.
+#' @param verbose OBSOLETE
+#' @param lookup OBSOLETE
+#' @param visibility OBSOLETE
 gsLoadSheet <- function(key,
                         tab,
                         verbose = TRUE,
                         lookup = TRUE,
                         visibility = "private") {
   gsAuth()
-  gap <- gs_key(
-    x = key,
-    verbose = verbose,
-    lookup = lookup,
-    visibility = visibility
-    )
-  res <- gs_read(
-    ss = gap,
-    ws = tab
+  res <- read_sheet(
+    ss = key,
+    sheet = tab
     )
   data.table(res)
 }
 
 #' Loads all sheets from a google spreadsheet into a list with the tab name as the list element name.
 #' @export
-#' @import googlesheets
+#' @import googlesheets4
 #' @param key sheet-identifying information; a character vector of length one holding sheet title, key, browser URL or worksheets feed OR, in the case of gs_gs only, a googlesheet object
-#' @param verbose logical; do you want informative messages?
-#' @param lookup logical, optional. Controls whether googlesheets will place authorized API requests during registration. If unspecified, will be set to TRUE if authorization has previously been used in this R session, if working directory contains a file named .httr-oauth, or if x is a worksheets feed or googlesheet object that specifies "public" visibility.
-#' @param visibility character, either "public" or "private". Consulted during explicit construction of a worksheets feed from a key, which happens only when lookup = FALSE and googlesheets is prevented from looking up information in the spreadsheets feed. If unspecified, will be set to "public" if lookup = FALSE and "private" if lookup = TRUE. Consult the API docs for more info about visibility
+#' @param verbose OBSOLETE
+#' @param lookup OBSOLETE
+#' @param visibility OBSOLETE
 gsLoadAll <- function(key,
                       verbose = TRUE,
                       lookup = TRUE,
                       visibility = "private") {
   gsAuth()
-  tabs <- gs_key(key)$ws$ws_title
+  tabs <- sheets_get(key)$sheets
   sheets <- lapply(tabs, function(sheet) {
     Sys.sleep(6)
     gsLoadSheet(
       key = key,
-      tab = sheet,
-      verbose = verbose,
-      lookup = lookup,
-      visibility = visibility)
+      tab = sheet
+    )
   })
   names(sheets) <- tabs
   sheets

@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.41
+
+* upgrade Google Sheets functions to v4
+
 ## 0.1.40
 
 * `gsLoadAll()` - Added `Sys.sleep(6)` before each call
