@@ -2,19 +2,17 @@
 #' @import googlesheets4
 NULL
 
-gs.env <- new.env(parent = emptyenv())
 
 #' Authentication for google sheets. Requires access_token.json path as env. var.
 gsAuth <- function() {
-  if (is.null(gs.env$access.cred)) {
-    service.token <- gar_auth_service(
-      json_file = Sys.getenv("BIGQUERY_ACCESS_TOKEN_PATH"),
+  if (!googlesheets4::gs4_has_token()) {
+    googlesheets4::gs4_auth(
+      path = bqTokenFile(),
       scope = c(
         "https://www.googleapis.com/auth/drive",
         "https://spreadsheets.google.com/feeds"
       )
     )
-    gs.env$access.cred <- gs_auth(token = service.token)
   }
 }
 
@@ -35,8 +33,9 @@ gsLoadSheet <- function(key,
   res <- read_sheet(
     ss = key,
     sheet = tab
-    )
+  )
   data.table(res)
+
 }
 
 #' Loads all sheets from a google spreadsheet into a list with the tab name as the list element name.
