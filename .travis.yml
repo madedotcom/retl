@@ -22,6 +22,9 @@ after_success:
 after_failure:
   - cat /home/travis/build/madedotcom/retl/retl.Rcheck/00install.out
 
+r_packages:
+  - testthat
+
 addons:
   apt:
     sources:
