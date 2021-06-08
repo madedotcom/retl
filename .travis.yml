@@ -20,7 +20,7 @@ after_success:
   - Rscript -e 'covr::codecov()'
 
 after_failure:
-  - cat MSBuild_*.failure.txt
+  - cat /home/travis/build/madedotcom/retl/retl.Rcheck/00install.out
 
 addons:
   apt:
