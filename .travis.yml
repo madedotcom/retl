@@ -19,6 +19,9 @@ after_success:
   - Rscript -e "if (!requireNamespace('covr', quietly = TRUE)) install.packages('covr')"
   - Rscript -e 'covr::codecov()'
 
+after_failure:
+  - cat MSBuild_*.failure.txt
+
 addons:
   apt:
     sources:
