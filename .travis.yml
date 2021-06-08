@@ -2,11 +2,8 @@
 
 language: r
 r:
-  - oldrel
   - release
-  - devel
-os:
-  - osx
+osx_image: xcode10.3
 arch: arm64
 
 cache:
