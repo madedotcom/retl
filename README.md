@@ -237,14 +237,14 @@ Full details on environment in R seessions can be found here: `help(Startup)`
 
 ### Testing
 
-Package is setup for automated tests on Travis.
+Retl is setup for automated tests on Travis. 
 
-To test locally, you will need to create access tocken file through `gargle`
+Some of the tests relies on authentification to the GCP project `madecom-test-retl` using an encrypted token stored in `inst/secret/retl-testing.json`. The token is decrypted using a password that need to be stored in your `.Renviron` file (`RETL_PASSWORD`), which can be fetched in the vault (`secret/bi/retl_password`).
 
 ```apacheconf
 #.Renviron
-BIGQUERY_TEST_PROJECT=
-RETL_PASSWORD=
+BIGQUERY_TEST_PROJECT=madecom-test-retl
+RETL_PASSWORD={FETCH VALUE FROM VAULT}
 ```
 
 ### Release Steps
