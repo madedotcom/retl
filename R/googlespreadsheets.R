@@ -10,7 +10,7 @@ gsAuth <- function() {
       path = bqTokenFile(),
       scope = c(
         "https://www.googleapis.com/auth/drive",
-        "https://spreadsheets.google.com/feeds"
+        "https://www.googleapis.com/auth/spreadsheets"
       )
     )
   }
