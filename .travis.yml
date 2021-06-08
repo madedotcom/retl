@@ -3,7 +3,7 @@
 language: r
 r:
   - release
-osx_image: xcode10.3
+osx_image: xcode12.5
 arch: amd64
 
 cache:
@@ -13,17 +13,11 @@ cache:
 
 install:
   - Rscript -e "if (!requireNamespace('renv', quietly = TRUE)) install.packages('renv')"
-  - Rscript -e "renv::restore()"
+  - Rscript -e "renv::restore(clean=TRUE)"
 
 after_success:
   - Rscript -e "if (!requireNamespace('covr', quietly = TRUE)) install.packages('covr')"
   - Rscript -e 'covr::codecov()'
-
-after_failure:
-  - cat /home/travis/build/madedotcom/retl/retl.Rcheck/00install.out
-
-r_packages:
-  - testthat
 
 addons:
   apt:
