@@ -4,18 +4,12 @@
 \alias{gsLoadSheet}
 \title{Loads google spreadsheet via key}
 \usage{
-gsLoadSheet(key, tab, verbose = TRUE, lookup = TRUE, visibility = "private")
+gsLoadSheet(key, tab)
 }
 \arguments{
 \item{key}{Something that identifies a Google Sheet: its file ID, a URL from which we can recover the ID, an instance of googlesheets4_spreadsheet (returned by gs4_get()), or a dribble, which is how googledrive represents Drive files. Processed through as_sheets_id().}
 
 \item{tab}{Sheet to read, in the sense of "worksheet" or "tab". You can identify a sheet by name, with a string, or by position, with a number. Ignored if the sheet is specified via range. If neither argument specifies the sheet, defaults to the first visible sheet.}
-
-\item{verbose}{OBSOLETE}
-
-\item{lookup}{OBSOLETE}
-
-\item{visibility}{OBSOLETE}
 }
 \description{
 Loads google spreadsheet via key

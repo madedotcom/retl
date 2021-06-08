@@ -4,16 +4,10 @@
 \alias{gsLoadAll}
 \title{Loads all sheets from a google spreadsheet into a list with the tab name as the list element name.}
 \usage{
-gsLoadAll(key, verbose = TRUE, lookup = TRUE, visibility = "private")
+gsLoadAll(key)
 }
 \arguments{
-\item{key}{sheet-identifying information; a character vector of length one holding sheet title, key, browser URL or worksheets feed OR, in the case of gs_gs only, a googlesheet object}
-
-\item{verbose}{OBSOLETE}
-
-\item{lookup}{OBSOLETE}
-
-\item{visibility}{OBSOLETE}
+\item{key}{Something that identifies a Google Sheet: its file ID, a URL from which we can recover the ID, an instance of googlesheets4_spreadsheet (returned by gs4_get()), or a dribble, which is how googledrive represents Drive files. Processed through as_sheets_id().}
 }
 \description{
 Loads all sheets from a google spreadsheet into a list with the tab name as the list element name.
