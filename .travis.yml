@@ -4,7 +4,7 @@ language: r
 r:
   - release
 osx_image: xcode10.3
-arch: arm64
+arch: amd64
 
 cache:
   directories:
