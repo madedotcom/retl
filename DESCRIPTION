@@ -31,4 +31,3 @@ Imports:
     assertthat (>= 0.2.0),
     googleCloudStorageR (>= 0.5.1),
     glue,
-    testthat (>= 2.0.0),
