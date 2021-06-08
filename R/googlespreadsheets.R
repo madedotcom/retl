@@ -21,14 +21,7 @@ gsAuth <- function() {
 #' @import googlesheets4
 #' @param key Something that identifies a Google Sheet: its file ID, a URL from which we can recover the ID, an instance of googlesheets4_spreadsheet (returned by gs4_get()), or a dribble, which is how googledrive represents Drive files. Processed through as_sheets_id().
 #' @param tab Sheet to read, in the sense of "worksheet" or "tab". You can identify a sheet by name, with a string, or by position, with a number. Ignored if the sheet is specified via range. If neither argument specifies the sheet, defaults to the first visible sheet.
-#' @param verbose OBSOLETE
-#' @param lookup OBSOLETE
-#' @param visibility OBSOLETE
-gsLoadSheet <- function(key,
-                        tab,
-                        verbose = TRUE,
-                        lookup = TRUE,
-                        visibility = "private") {
+gsLoadSheet <- function(key, tab) {
   gsAuth()
   res <- read_sheet(
     ss = key,
