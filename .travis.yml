@@ -13,7 +13,7 @@ cache:
 
 install:
   - Rscript -e "if (!requireNamespace('renv', quietly = TRUE)) install.packages('renv')"
-  - Rscript -e "renv::restore(clean=TRUE)"
+  - Rscript -e "renv::restore()"
 
 after_success:
   - Rscript -e "if (!requireNamespace('covr', quietly = TRUE)) install.packages('covr')"
