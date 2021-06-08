@@ -7,6 +7,7 @@ options(error = function() {
   }
 })
 
+renv::activate()
 suppressPackageStartupMessages({
   library(googleAuthR)
   library(jsonlite)
