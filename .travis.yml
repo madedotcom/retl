@@ -2,7 +2,9 @@
 
 language: r
 r:
+  - oldrel
   - release
+  - devel
 os:
   - osx
 arch: arm64
