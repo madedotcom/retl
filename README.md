@@ -253,4 +253,6 @@ RETL_PASSWORD=
 2. Update news.md (version, description)
 3. Updated DESCRIPTION (version, data, Suggests and Imports if needed)
 4. Run devtools::document().
-5. Push your changes and create a PR against master branch. 
+5. Push your changes and create a PR against master branch.
+
+
