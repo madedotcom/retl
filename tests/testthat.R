@@ -1,3 +1,5 @@
+print("hello")
+
 suppressPackageStartupMessages({
   library(googleAuthR)
   library(jsonlite)
