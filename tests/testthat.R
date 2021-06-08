@@ -1,4 +1,11 @@
-print("hello")
+options(error = function() {
+  sink(stderr())
+  on.exit(sink(NULL))
+  traceback(3, max.lines = 1L)
+  if (!interactive()) {
+    q(status = 1)
+  }
+})
 
 suppressPackageStartupMessages({
   library(googleAuthR)
