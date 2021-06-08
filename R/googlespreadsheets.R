@@ -35,22 +35,15 @@ gsLoadSheet <- function(key,
     sheet = tab
   )
   data.table(res)
-
 }
 
 #' Loads all sheets from a google spreadsheet into a list with the tab name as the list element name.
 #' @export
 #' @import googlesheets4
-#' @param key sheet-identifying information; a character vector of length one holding sheet title, key, browser URL or worksheets feed OR, in the case of gs_gs only, a googlesheet object
-#' @param verbose OBSOLETE
-#' @param lookup OBSOLETE
-#' @param visibility OBSOLETE
-gsLoadAll <- function(key,
-                      verbose = TRUE,
-                      lookup = TRUE,
-                      visibility = "private") {
+#' @param key Something that identifies a Google Sheet: its file ID, a URL from which we can recover the ID, an instance of googlesheets4_spreadsheet (returned by gs4_get()), or a dribble, which is how googledrive represents Drive files. Processed through as_sheets_id().
+gsLoadAll <- function(key) {
   gsAuth()
-  tabs <- sheets_get(key)$sheets
+  tabs <- gs4_get(key)$sheets$name
   sheets <- lapply(tabs, function(sheet) {
     Sys.sleep(6)
     gsLoadSheet(
