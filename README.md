@@ -255,4 +255,3 @@ RETL_PASSWORD=
 4. Run devtools::document().
 5. Push your changes and create a PR against master branch.
 
-
