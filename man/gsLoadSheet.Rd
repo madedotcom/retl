@@ -4,18 +4,12 @@
 \alias{gsLoadSheet}
 \title{Loads google spreadsheet via key}
 \usage{
-gsLoadSheet(key, tab, verbose = TRUE, lookup = TRUE, visibility = "private")
+gsLoadSheet(key, tab)
 }
 \arguments{
-\item{key}{sheet-identifying information; a character vector of length one holding sheet title, key, browser URL or worksheets feed OR, in the case of gs_gs only, a googlesheet object}
+\item{key}{Something that identifies a Google Sheet: its file ID, a URL from which we can recover the ID, an instance of googlesheets4_spreadsheet (returned by gs4_get()), or a dribble, which is how googledrive represents Drive files. Processed through as_sheets_id().}
 
-\item{tab}{name of the tab from which data will be loaded}
-
-\item{verbose}{logical; do you want informative messages?}
-
-\item{lookup}{logical, optional. Controls whether googlesheets will place authorized API requests during registration. If unspecified, will be set to TRUE if authorization has previously been used in this R session, if working directory contains a file named .httr-oauth, or if x is a worksheets feed or googlesheet object that specifies "public" visibility.}
-
-\item{visibility}{character, either "public" or "private". Consulted during explicit construction of a worksheets feed from a key, which happens only when lookup = FALSE and googlesheets is prevented from looking up information in the spreadsheets feed. If unspecified, will be set to "public" if lookup = FALSE and "private" if lookup = TRUE. Consult the API docs for more info about visibility}
+\item{tab}{Sheet to read, in the sense of "worksheet" or "tab". You can identify a sheet by name, with a string, or by position, with a number. Ignored if the sheet is specified via range. If neither argument specifies the sheet, defaults to the first visible sheet.}
 }
 \description{
 Loads google spreadsheet via key

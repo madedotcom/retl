@@ -3,6 +3,7 @@ if (gargle:::secret_can_decrypt("retl")) {
   json <- gargle:::secret_read(package = "retl", name = "retl-testing.json")
   bigrquery::bq_auth(path = rawToChar(json))
   googleCloudStorageR::gcs_auth(json_file = rawToChar(json))
+  googlesheets4::gs4_auth(path = rawToChar(json))
 
   ds <- bigrquery::bq_test_dataset()
   Sys.setenv(GCS_BUCKET = "madecom-test-retl")

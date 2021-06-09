@@ -3,9 +3,8 @@
 language: r
 r:
   - release
-os:
-  - osx
-arch: arm64
+osx_image: xcode12.5
+arch: amd64
 
 cache:
   directories:

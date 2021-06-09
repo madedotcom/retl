@@ -1,5 +1,16 @@
 # RETL Package Updates
 
+## 0.1.41
+
+* `gsAuth()` - Upgraded to use `googlesheet4` instead of `googlesheet`.
+
+* `gsLoadSheet()` - Upgraded function to use `googlesheet4` instead of `googlesheet`. The parameters `verbose`, `lookup` and `visibility` are removed as not available/required in `googlesheet4`.
+
+* `gsLoadAll()` - Upgraded function to use `googlesheet4` instead of `googlesheet`. The parameters `verbose`, `lookup` and `visibility` are removed as not available/required in `googlesheet4`.
+
+* Created `test.googlesheet.R` to test googlesheet functions based on a Google Sheet shared with the encrypted token.
+
+
 ## 0.1.40
 
 * `gsLoadAll()` - Added `Sys.sleep(6)` before each call

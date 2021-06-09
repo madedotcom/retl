@@ -1,71 +1,48 @@
 #' @import googleAuthR
-#' @import googlesheets
+#' @import googlesheets4
 NULL
 
-gs.env <- new.env(parent = emptyenv())
 
 #' Authentication for google sheets. Requires access_token.json path as env. var.
 gsAuth <- function() {
-  if (is.null(gs.env$access.cred)) {
-    service.token <- gar_auth_service(
-      json_file = Sys.getenv("BIGQUERY_ACCESS_TOKEN_PATH"),
+  if (!googlesheets4::gs4_has_token()) {
+    googlesheets4::gs4_auth(
+      path = bqTokenFile(),
       scope = c(
         "https://www.googleapis.com/auth/drive",
-        "https://spreadsheets.google.com/feeds"
+        "https://www.googleapis.com/auth/spreadsheets"
       )
     )
-    gs.env$access.cred <- gs_auth(token = service.token)
   }
 }
 
 #' Loads google spreadsheet via key
 #' @export
-#' @import googlesheets
-#' @param key sheet-identifying information; a character vector of length one holding sheet title, key, browser URL or worksheets feed OR, in the case of gs_gs only, a googlesheet object
-#' @param tab name of the tab from which data will be loaded
-#' @param verbose logical; do you want informative messages?
-#' @param lookup logical, optional. Controls whether googlesheets will place authorized API requests during registration. If unspecified, will be set to TRUE if authorization has previously been used in this R session, if working directory contains a file named .httr-oauth, or if x is a worksheets feed or googlesheet object that specifies "public" visibility.
-#' @param visibility character, either "public" or "private". Consulted during explicit construction of a worksheets feed from a key, which happens only when lookup = FALSE and googlesheets is prevented from looking up information in the spreadsheets feed. If unspecified, will be set to "public" if lookup = FALSE and "private" if lookup = TRUE. Consult the API docs for more info about visibility
-gsLoadSheet <- function(key,
-                        tab,
-                        verbose = TRUE,
-                        lookup = TRUE,
-                        visibility = "private") {
+#' @import googlesheets4
+#' @param key Something that identifies a Google Sheet: its file ID, a URL from which we can recover the ID, an instance of googlesheets4_spreadsheet (returned by gs4_get()), or a dribble, which is how googledrive represents Drive files. Processed through as_sheets_id().
+#' @param tab Sheet to read, in the sense of "worksheet" or "tab". You can identify a sheet by name, with a string, or by position, with a number. Ignored if the sheet is specified via range. If neither argument specifies the sheet, defaults to the first visible sheet.
+gsLoadSheet <- function(key, tab) {
   gsAuth()
-  gap <- gs_key(
-    x = key,
-    verbose = verbose,
-    lookup = lookup,
-    visibility = visibility
-    )
-  res <- gs_read(
-    ss = gap,
-    ws = tab
-    )
+  res <- read_sheet(
+    ss = key,
+    sheet = tab
+  )
   data.table(res)
 }
 
 #' Loads all sheets from a google spreadsheet into a list with the tab name as the list element name.
 #' @export
-#' @import googlesheets
-#' @param key sheet-identifying information; a character vector of length one holding sheet title, key, browser URL or worksheets feed OR, in the case of gs_gs only, a googlesheet object
-#' @param verbose logical; do you want informative messages?
-#' @param lookup logical, optional. Controls whether googlesheets will place authorized API requests during registration. If unspecified, will be set to TRUE if authorization has previously been used in this R session, if working directory contains a file named .httr-oauth, or if x is a worksheets feed or googlesheet object that specifies "public" visibility.
-#' @param visibility character, either "public" or "private". Consulted during explicit construction of a worksheets feed from a key, which happens only when lookup = FALSE and googlesheets is prevented from looking up information in the spreadsheets feed. If unspecified, will be set to "public" if lookup = FALSE and "private" if lookup = TRUE. Consult the API docs for more info about visibility
-gsLoadAll <- function(key,
-                      verbose = TRUE,
-                      lookup = TRUE,
-                      visibility = "private") {
+#' @import googlesheets4
+#' @param key Something that identifies a Google Sheet: its file ID, a URL from which we can recover the ID, an instance of googlesheets4_spreadsheet (returned by gs4_get()), or a dribble, which is how googledrive represents Drive files. Processed through as_sheets_id().
+gsLoadAll <- function(key) {
   gsAuth()
-  tabs <- gs_key(key)$ws$ws_title
+  tabs <- gs4_get(key)$sheets$name
   sheets <- lapply(tabs, function(sheet) {
     Sys.sleep(6)
     gsLoadSheet(
       key = key,
-      tab = sheet,
-      verbose = verbose,
-      lookup = lookup,
-      visibility = visibility)
+      tab = sheet
+    )
   })
   names(sheets) <- tabs
   sheets
