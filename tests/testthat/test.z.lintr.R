@@ -11,7 +11,9 @@ if (requireNamespace("lintr", quietly = TRUE)) {
         lintr::closed_curly_linter,
         lintr::absolute_path_linter,
         lintr::object_name_linter(c("camelCase", "dotted.case"))
-      )
+      ),
+      relative_path = TRUE,
+      path = "."
     )
   })
 }
