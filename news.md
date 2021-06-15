@@ -1,5 +1,9 @@
 # RETL Package Updates
 
+## 0.1.42
+
+* `logModelPerformance()` - removed from the package.
+
 ## 0.1.41
 
 * `gsAuth()` - Upgraded to use `googlesheet4` instead of `googlesheet`.
