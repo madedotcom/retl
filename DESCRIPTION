@@ -12,13 +12,13 @@ Encoding: UTF-8
 Depends: 
     R (>= 3.2)
 Suggests:
-    testthat (>= 2.0.0),
     mockery (>= 0.4.0),
     lintr,
     withr,
     sodium
 RoxygenNote: 7.1.1
 Imports:
+    testthat (>= 2.0.0),
     aws.s3 (>= 0.3.2),
     bigrquery (>= 1.2.0),
     gargle (>= 0.3.0),
