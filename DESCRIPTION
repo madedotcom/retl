@@ -8,6 +8,8 @@ Maintainer: Bulat Yapparov <byapparov@gmail.com>
 Description: Wrappers for connections with PostgreSQL, S3, BigQuery, InfluxDB, Doubleclick.
 License: file LICENSE
 LazyData: TRUE
+Depends: 
+    R (>= 3.2)
 Suggests:
     testthat (>= 2.0.0),
     mockery (>= 0.4.0),
@@ -30,5 +32,4 @@ Imports:
     jsonlite (>= 1.5),
     assertthat (>= 0.2.0),
     googleCloudStorageR (>= 0.5.1),
-    glue,
-    testthat (>= 2.0.0)
+    glue
